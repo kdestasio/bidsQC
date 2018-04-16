@@ -1,0 +1,4 @@
+sub001_suffix,wave1
+sub001_suffix,wave2
+sub002_suffix,wave1
+sub002_suffix,wave2
