@@ -96,16 +96,15 @@ def write_to_errorlog(message):
     print(message)
 
 
-
-# Main function for explosion of awesome
+# Main function 
 def main():
     """
     Run the things.
     """
     subjectdirs = get_subjectdirs()
     for subject in subjectdirs:
-        write_to_errorlog("-"*20 + "\n" + subject + "\n" + "-"*20)
-        write_to_outputlog("-"*20 + "\n" + subject + "\n" + "-"*20)
+        write_to_errorlog("\n" + "-"*20 + "\n" + subject + "\n" + "-"*20)
+        write_to_outputlog("\n" + "-"*20 + "\n" + subject + "\n" + "-"*20)
         timepoints = get_timepoints(subject)
         check_timepoint_count(timepoints, expected_timepoints, subject)
         for timepoint in timepoints:
@@ -114,13 +113,13 @@ def main():
             if len(expected_timepoint) == 1:
                 check_sequence_folder_count(sequence_folder_names, expected_timepoint[0].sequences, subject, timepoint)
             else:
-                write_to_errorlog("TIMEPOINT ERROR! " + timepoint + " missing or user entered duplicate or non-existant timepoint.")
+                write_to_errorlog("TIMEPOINT ERROR! %s missing or user entered duplicate or non-existant timepoint." % (timepoint))
             for sequence_folder_name in sequence_folder_names:
                 expected_sequence = [es for es in expected_timepoint[0].sequences if es.name == sequence_folder_name]
                 if len(expected_sequence) == 1:
                     check_sequence_files(subject, timepoint, sequence_folder_name, expected_sequence[0])
                 else:
-                    write_to_errorlog("SEQUENCE DIRECTORY ERROR! " + sequence_folder_name + " missing or user entered duplicate or non-existant sequence folder name.")
+                    write_to_errorlog("SEQUENCE DIRECTORY ERROR! %s missing or user entered duplicate or non-existant sequence folder name." % (sequence_folder_name))
 
 
 # Check for subject directories
@@ -165,11 +164,11 @@ def check_timepoint_count(timepoints: list, expected_timepoints: list, subject: 
     @param subject:                         subject folder name
     """
     number_timepoints_exist = len(timepoints)
-    log_message = subject + " has " + str(number_timepoints_exist) + " ses-wave directories."
+    log_message =  "%s has %s ses-wave directories." % (subject, str(number_timepoints_exist))
     if len(expected_timepoints) != number_timepoints_exist:
-        write_to_errorlog("TIMEPOINT ERROR! " + log_message + " Expected " + str(len(expected_timepoints)))
+        write_to_errorlog("\n TIMEPOINT ERROR! %s Expected %s \n" % (log_message, str(len(expected_timepoints))))
     else:
-        write_to_outputlog(log_message)
+        write_to_outputlog("\n EXIST: %s \n" % (log_message))
 
 
 # Get sequences
@@ -205,11 +204,11 @@ def check_sequence_folder_count(sequence_folder_names: list, expected_sequences:
     @param timepoint:                       Timepoint folder name
     """
     number_sequences_exist = len(sequence_folder_names)
-    log_message = subject + " " + timepoint + " has " + str(number_sequences_exist) + " total sequence directories."
+    log_message =  "%s %s has %s total sequence directories" % (subject, timepoint, str(number_sequences_exist))
     if len(expected_sequences) != number_sequences_exist:
-        write_to_errorlog("SEQUENCE DIRECTORY ERROR! " + log_message + " Expected " + str(len(expected_sequences)))
+        write_to_errorlog("\n SEQUENCE DIRECTORY ERROR! %s Expected %s.\n" % (log_message, str(len(expected_sequences))))
     else:
-        write_to_outputlog(log_message)
+        write_to_outputlog("\n EXIST: %s. \n" % (log_message))
 
 
 # Check files
@@ -228,9 +227,9 @@ def check_sequence_files(subject: str, timepoint: str, sequence: str, expected_s
     """
     sequence_fullpath = os.path.join(bidsdir, subject, timepoint, sequence)
     if not os.path.isdir(sequence_fullpath):
-        write_to_errorlog("FOLDER ERROR! " + sequence + " folder missing for " + subject)
+        write_to_errorlog("\n FOLDER ERROR! %s folder missing for %s \n" % (sequence, subject))
     else:
-        write_to_outputlog(sequence + " folder exists for subject " + subject)
+        write_to_outputlog("\n EXISTS: %s folder for subject %s \n" % (sequence, subject))
     for key in expected_sequence.files.keys():
         fix_files(sequence_fullpath, key, expected_sequence.files[key], "json", subject, timepoint)
         fix_files(sequence_fullpath, key, expected_sequence.files[key], "nii.gz", subject, timepoint)
@@ -260,14 +259,15 @@ def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, e
     sequence_files = os.listdir(sequence_fullpath)
     found_files = [file for file in sequence_files if file_group in file and file.endswith(extension)]
     if len(found_files) == expected_numfiles:
-        write_to_outputlog( "%s has correct # of %s %s files in %s." % (subject, file_group, extension, timepoint))
+        write_to_outputlog("OK: %s has correct number of %s %s files in %s." % (subject, file_group, extension, timepoint))
         return
     if len(found_files) < expected_numfiles:
-        write_to_errorlog( "FILE ERROR! %s MISSING %s %s files in %s." % (subject, file_group, extension, timepoint))
+        write_to_errorlog("FILE ERROR! %s MISSING %s %s files in %s." % (subject, file_group, extension, timepoint))
         return
     if len(found_files) > expected_numfiles:
         difference = len(found_files) - expected_numfiles
         found_files.sort()
+        write_to_outputlog("\n FIXING FILES: %s \n" % (extension))
         for found_file in found_files:
             run_index = found_file.index("_run-")
             run_number = found_file[run_index+ 5:run_index + 7]
@@ -278,17 +278,24 @@ def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, e
                 if not os.path.isdir(tempdir_fullpath):
                     os.mkdir(tempdir_fullpath)
                 shutil.move(target_file, tempdir_fullpath)
+                (filepath, target_filename) = os.path.split(target_file)
+                write_to_outputlog("MOVED: %s to %s" % (target_filename, tempdir_fullpath))
             elif run_int > difference:
                 if expected_numfiles == 1:
                     new_filename = found_file.replace("_run-" + run_number, '')
                     new_filename_path = os.path.join(sequence_fullpath, new_filename)
                     os.rename(target_file, new_filename_path)
+                    (filepath, target_filename) = os.path.split(target_file)
+                    write_to_outputlog("RENAMED: %s to %s" % (target_filename, new_filename))
                 elif expected_numfiles > 1:
                     new_int = run_int - difference
                     int_str = str(new_int)
                     new_filename = found_file.replace("_run-" + run_number, "_run-" + int_str.zfill(2))
                     new_filename_path = os.path.join(sequence_fullpath, new_filename)
                     os.rename(target_file, new_filename_path)
+                    (filepath, target_filename) = os.path.split(target_file)
+                    write_to_outputlog("RENAMED: %s to %s" % (target_filename, new_filename))
+
 
 
 # Call main
