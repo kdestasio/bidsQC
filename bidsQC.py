@@ -3,23 +3,23 @@
 ##################################
 
 # Import libraries
-import os
 import fnmatch
+import os
 import os.path
-from datetime import datetime
 import shutil
-import re
+from datetime import datetime
 
 # Set study info (change these for your study)
 group = "sanlab"
 study = "REV"
 
 # Set directories (Check these for your study)
+
 # logdir = os.getcwd() + "/logs_bidsQC"
-# bidsdir = "/projects/" + group + "/shared/" + study + "bids_data"
+# bidsdir = "/projects/" + group + "/shared/" + study + "/bids_data_copy"
 # tempdir = bidsdir + "/tmp_dcm2bids"
-# outputlog = logdir + "/outputlog_bidsQC.txt"
-# errorlog = logdir + "/errorlog_bidsQC.txt"
+# outputlog = logdir + "/outputlog_bidsQC" + datetime.now().strftime("%Y%m%d-%H%M%S") + ".txt"
+# errorlog = logdir + "/errorlog_bidsQC" + datetime.now().strftime("%Y%m%d-%H%M%S") + ".txt"
 # derivatives = bidsdir + "/derivatives"
 
 # Set directories for local testing
@@ -35,14 +35,20 @@ derivatives = bidsdir + "/derivatives"
 
 class TimePoint:
     def __init__(self, name: str, sequences: list):
-        self.name = name 
-        self.sequences = sequences 
+        self.name = name
+        self.sequences = sequences
 
 
 class Sequence:
     def __init__(self, name: str, files: dict):
-        self.name = name 
-        self.files = files 
+        self.name = name
+        self.files = files
+
+    def get_filecount(self):
+        filecount = 0
+        for key in self.files.keys():
+            filecount = filecount + self.files[key]
+        return filecount
 
 
 # Create a dictionary (the thing below) for each timepoint in your study where the pairs are "sequence_directory_name" : "expected_number_runs"
@@ -52,7 +58,7 @@ sequence3 = Sequence("anat", {"T1w":1})
 sequence4 = Sequence("fmap", {"magnitude1":2, "magnitude2":2, "phasediff":2 })
 timepoint1 = TimePoint("ses-wave1", [sequence1, sequence3, sequence4])
 timepoint2 = TimePoint("ses-wave2", [sequence2, sequence3, sequence4])
-expected_timepoints = [timepoint1, timepoint2]  
+expected_timepoints = [timepoint1, timepoint2]
 
 
 # Define a function to create files
@@ -80,10 +86,6 @@ if not os.path.isfile(errorlog):
 
 
 # Functions to write to log files
-######################################################
-######### Give log file name date and time #########
-######################################################
-
 def write_to_outputlog(message):
     with open(outputlog, 'a') as logfile:
         logfile.write(message + os.linesep)
@@ -96,12 +98,13 @@ def write_to_errorlog(message):
     print(message)
 
 
-# Main function 
+# Main function
 def main():
     """
     Run the things.
     """
     subjectdirs = get_subjectdirs()
+    write_to_outputlog("\nScript ran on %i subject directories\n" % (len(subjectdirs)))
     for subject in subjectdirs:
         write_to_errorlog("\n" + "-"*20 + "\n" + subject + "\n" + "-"*20)
         write_to_outputlog("\n" + "-"*20 + "\n" + subject + "\n" + "-"*20)
@@ -131,9 +134,10 @@ def get_subjectdirs() -> list:
     @return: list of bidsdir directories that start with the prefix sub
     """
     bidsdir_contents = os.listdir(bidsdir)
-    has_sub_prefix = [file for file in bidsdir_contents if file.startswith('sub-')]
-    return [file for file in has_sub_prefix if os.path.isdir(bidsdir + '/' + file)] # get subject directories
-
+    has_sub_prefix = [subdir for subdir in bidsdir_contents if subdir.startswith('sub-')]
+    subjectdirs = [subdir for subdir in has_sub_prefix if os.path.isdir(os.path.join(bidsdir, subdir))] # get subject directories
+    subjectdirs.sort()
+    return subjectdirs
 
 # Get the timepoints
 def get_timepoints(subject: str) -> list:
@@ -168,16 +172,16 @@ def check_timepoint_count(timepoints: list, expected_timepoints: list, subject: 
     if len(expected_timepoints) != number_timepoints_exist:
         write_to_errorlog("\n TIMEPOINT ERROR! %s Expected %s \n" % (log_message, str(len(expected_timepoints))))
     else:
-        write_to_outputlog("\n EXIST: %s \n" % (log_message))
+        write_to_outputlog("\n EXISTS: %s \n" % (log_message))
 
 
 # Get sequences
 def get_sequences(subject: str, timepoint: str) -> list:
     """
     Returns a list of sequence directory names (e.g. anat, fmap, etc.) in a participant's directory at a given timepoint.
-    
+
     @type subject:              string
-    @param subject:             Subject folder name    
+    @param subject:             Subject folder name
     @type timepoint:            string
     @param timepoint:           Timepoint folder name
 
@@ -215,9 +219,9 @@ def check_sequence_folder_count(sequence_folder_names: list, expected_sequences:
 def check_sequence_files(subject: str, timepoint: str, sequence: str, expected_sequence: object):
     """
     Compare the contents of a given sequence folder to the expected contents.
-    
+
     @type subject:                          string
-    @param subject:                         Subject folder name   
+    @param subject:                         Subject folder name
     @type timepoint:                        string
     @param timepoint:                       Name of timepoint
     @type sequence:                         str
@@ -225,15 +229,26 @@ def check_sequence_files(subject: str, timepoint: str, sequence: str, expected_s
     @type expected_sequence:                object
     @param expected_sequence:               The expected sequence
     """
+    extension_json = "json"
+    extension_nifti = "nii.gz"
     sequence_fullpath = os.path.join(bidsdir, subject, timepoint, sequence)
     if not os.path.isdir(sequence_fullpath):
         write_to_errorlog("\n FOLDER ERROR! %s folder missing for %s \n" % (sequence, subject))
     else:
         write_to_outputlog("\n EXISTS: %s folder for subject %s \n" % (sequence, subject))
+    validate_sequencefilecount(expected_sequence, sequence_fullpath, extension_json, timepoint, subject)
+    validate_sequencefilecount(expected_sequence, sequence_fullpath, extension_nifti, timepoint, subject)
     for key in expected_sequence.files.keys():
-        fix_files(sequence_fullpath, key, expected_sequence.files[key], "json", subject, timepoint)
-        fix_files(sequence_fullpath, key, expected_sequence.files[key], "nii.gz", subject, timepoint)
+        fix_files(sequence_fullpath, key, expected_sequence.files[key], extension_json, subject, timepoint)
+        fix_files(sequence_fullpath, key, expected_sequence.files[key], extension_nifti, subject, timepoint)
 
+# Validate sequence files
+def validate_sequencefilecount(expected_sequence: object, sequence_fullpath: str, extension: str, timepoint: str, subject: str):
+    sequence_files = os.listdir(sequence_fullpath)
+    found_allfiles = [file for file in sequence_files if file.endswith(extension)]
+    if len(found_allfiles) > expected_sequence.get_filecount():
+        write_to_errorlog("WARNING! Too many %s files in %s %s %s" % (extension, subject, timepoint, os.path.basename(sequence_fullpath)))
+        
 
 # Fix files
 def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, extension: str, subject: str, timepoint: str):
@@ -242,7 +257,7 @@ def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, e
     If more than the expected number of runs of a file exist, move the appropriate \
     number of files with the lowest run numbers to the tmp__dcm2bids folder. \
     Then, change the run numbers for the remaining files.
-    
+
     @type sequence_fillpath:                string
     @param sequence_fullpath:               The full path to to the sequence folder
     @type filegroup:                        string
@@ -252,7 +267,7 @@ def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, e
     @type: extension:                       string
     @param extension:                       File extension
     @type subject:                          string
-    @param subject:                         Subject folder name   
+    @param subject:                         Subject folder name
     @type timepoint:                        string
     @param timepoint:                       Name of timepoint
     """
@@ -278,23 +293,25 @@ def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, e
                 if not os.path.isdir(tempdir_fullpath):
                     os.mkdir(tempdir_fullpath)
                 shutil.move(target_file, tempdir_fullpath)
-                (filepath, target_filename) = os.path.split(target_file)
+                target_filename = os.path.basename(target_file)
                 write_to_outputlog("MOVED: %s to %s" % (target_filename, tempdir_fullpath))
             elif run_int > difference:
                 if expected_numfiles == 1:
-                    new_filename = found_file.replace("_run-" + run_number, '')
-                    new_filename_path = os.path.join(sequence_fullpath, new_filename)
-                    os.rename(target_file, new_filename_path)
-                    (filepath, target_filename) = os.path.split(target_file)
-                    write_to_outputlog("RENAMED: %s to %s" % (target_filename, new_filename))
+                    new_runnum = ''
+                    rename_file(found_file, run_number, new_runnum, sequence_fullpath, target_file)
                 elif expected_numfiles > 1:
                     new_int = run_int - difference
                     int_str = str(new_int)
-                    new_filename = found_file.replace("_run-" + run_number, "_run-" + int_str.zfill(2))
-                    new_filename_path = os.path.join(sequence_fullpath, new_filename)
-                    os.rename(target_file, new_filename_path)
-                    (filepath, target_filename) = os.path.split(target_file)
-                    write_to_outputlog("RENAMED: %s to %s" % (target_filename, new_filename))
+                    new_runnum = "_run-" + int_str.zfill(2)
+                    rename_file(found_file, run_number, new_runnum, sequence_fullpath, target_file)
+
+# Rename run number segment of sequence file
+def rename_file(found_file, run_number, run_replacement, sequence_fullpath, target_file):
+    new_filename = found_file.replace("_run-" + run_number, run_replacement)
+    new_filename_path = os.path.join(sequence_fullpath, new_filename)
+    os.rename(target_file, new_filename_path)
+    target_filename = os.path.basename(target_file)
+    write_to_outputlog("RENAMED: %s to %s" % (target_filename, new_filename))
 
 
 
@@ -302,10 +319,8 @@ def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, e
 main()
 
 ## TO DO:
-# Do the file rename for niftis by indexing from end of string to deal with gzipped or not)
-# List unexpected files that exist in a directory
-# List missing files in a directory
-# Finish log messages
-
+# Make a config file
+### In config file
+### - config option: zipped nifti files or not zipped (.nii or .nii.gz)
 
 
