@@ -1,118 +1,30 @@
-##################################
-#  Setup
-##################################
-
 # Import libraries
 import fnmatch
 import os
 import os.path
 import shutil
 from datetime import datetime
-
-# Set study info (change these for your study)
-group = "sanlab"
-study = "REV"
-
-# Set directories (Check these for your study)
-
-# logdir = os.getcwd() + "/logs_bidsQC"
-# bidsdir = "/projects/" + group + "/shared/" + study + "/bids_data_copy"
-# tempdir = bidsdir + "/tmp_dcm2bids"
-# outputlog = logdir + "/outputlog_bidsQC" + datetime.now().strftime("%Y%m%d-%H%M%S") + ".txt"
-# errorlog = logdir + "/errorlog_bidsQC" + datetime.now().strftime("%Y%m%d-%H%M%S") + ".txt"
-# derivatives = bidsdir + "/derivatives"
-
-# Set directories for local testing
-bidsdir = "/Users/kristadestasio/Desktop/bids_data"
-logdir = bidsdir + "/logs_bidsQC"
-tempdir = bidsdir + "/tmp_dcm2bids"
-outputlog = logdir + "/outputlog_bidsQC_" + datetime.now().strftime("%Y%m%d-%H%M%S") + ".txt"
-errorlog = logdir + "/errorlog_bidsQC_" + datetime.now().strftime("%Y%m%d-%H%M%S") + ".txt"
-derivatives = bidsdir + "/derivatives"
-
-
-############### In progress chunk / configurable part ###############
-
-class TimePoint:
-    def __init__(self, name: str, sequences: list):
-        self.name = name
-        self.sequences = sequences
-
-
-class Sequence:
-    def __init__(self, name: str, files: dict):
-        self.name = name
-        self.files = files
-
-    def get_filecount(self):
-        filecount = 0
-        for key in self.files.keys():
-            filecount = filecount + self.files[key]
-        return filecount
-
-
-# Create a dictionary (the thing below) for each timepoint in your study where the pairs are "sequence_directory_name" : "expected_number_runs"
-sequence1 = Sequence("func", {"bart": 1, "gng1":1, "gng2":1, "react1":1, "react2":1, "sst1":1, "sst2":1})
-sequence2 = Sequence("func", {"bart": 1, "gng3":1, "gng4":1, "react3":1, "react4":1, "sst3":1, "sst4":1})
-sequence3 = Sequence("anat", {"T1w":1})
-sequence4 = Sequence("fmap", {"magnitude1":2, "magnitude2":2, "phasediff":2 })
-timepoint1 = TimePoint("ses-wave1", [sequence1, sequence3, sequence4])
-timepoint2 = TimePoint("ses-wave2", [sequence2, sequence3, sequence4])
-expected_timepoints = [timepoint1, timepoint2]
-
-
-# Define a function to create files
-def touch(path):
-    """Create a new file"""
-    with open(path, 'a'):
-        os.utime(path, None)
-
-
-# Check and create directories
-if not os.path.isdir(bidsdir):
-    os.mkdir(bidsdir)
-if not os.path.isdir(derivatives):
-    os.mkdir(derivatives)
-if not os.path.isdir(logdir):
-    os.mkdir(logdir)
-if not os.path.isdir(tempdir):
-    os.mkdir(tempdir)
-
-# Check/create log files
-if not os.path.isfile(outputlog):
-    touch(outputlog)
-if not os.path.isfile(errorlog):
-    touch(errorlog)
-
-
-# Functions to write to log files
-def write_to_outputlog(message):
-    with open(outputlog, 'a') as logfile:
-        logfile.write(message + os.linesep)
-    print(message)
-
-
-def write_to_errorlog(message):
-    with open(errorlog, 'a') as logfile:
-        logfile.write(message + os.linesep)
-    print(message)
-
+import config_bidsQC as cfg
 
 # Main function
 def main():
     """
     Run the things.
     """
+    folders_tocheck = cfg.bidsdir, cfg.derivatives, cfg.logdir, cfg.tempdir
+    check_dirs(folders_tocheck)
+    logfile_fullpaths = cfg.errorlog, cfg.outputlog
+    create_logfiles(logfile_fullpaths)
     subjectdirs = get_subjectdirs()
     write_to_outputlog("\nScript ran on %i subject directories\n" % (len(subjectdirs)))
     for subject in subjectdirs:
         write_to_errorlog("\n" + "-"*20 + "\n" + subject + "\n" + "-"*20)
         write_to_outputlog("\n" + "-"*20 + "\n" + subject + "\n" + "-"*20)
         timepoints = get_timepoints(subject)
-        check_timepoint_count(timepoints, expected_timepoints, subject)
+        check_timepoint_count(timepoints, cfg.expected_timepoints, subject)
         for timepoint in timepoints:
             sequence_folder_names = get_sequences(subject, timepoint)
-            expected_timepoint = [etp for etp in expected_timepoints if etp.name == timepoint]
+            expected_timepoint = [etp for etp in cfg.expected_timepoints if etp.name == timepoint]
             if len(expected_timepoint) == 1:
                 check_sequence_folder_count(sequence_folder_names, expected_timepoint[0].sequences, subject, timepoint)
             else:
@@ -124,6 +36,63 @@ def main():
                 else:
                     write_to_errorlog("SEQUENCE DIRECTORY ERROR! %s missing or user entered duplicate or non-existant sequence folder name." % (sequence_folder_name))
 
+# Define a function to create files
+def touch(path:str):
+    """
+    Create a new file
+    
+    @type path:     string
+    @param path:    path to - including name of - file to be created
+    """
+    with open(path, 'a'):
+        os.utime(path, None)
+
+# Check and create directories
+def check_dirs(dir_fullpaths:list):
+    """
+    Check if a directory exists. If not, create it.
+
+    @type dir_fullpaths:        list
+    @param dir_fullpaths:       Paths to directorys to check
+    """
+    for dir_fullpath in dir_fullpaths:
+        if not os.path.isdir(dir_fullpath):
+            os.mkdir(dir_fullpath)
+
+# Create logs
+def create_logfiles(logfile_fullpaths:list):
+    """
+    Check if a logfile exists. If not, make one.
+
+    @type logfile_fullpaths:         list
+    @param logfile_fullpaths:        Paths to logfiles to check
+    """
+    for logfile_fullpath in logfile_fullpaths:
+        if not os.path.isfile(logfile_fullpath):
+            touch(logfile_fullpath)
+
+# Functions to write to log files
+def write_to_outputlog(message):
+    """
+    Write a log message to the output log. Also print it to the terminal.
+
+    @type message:          string
+    @param message:         Message to be printed to the log
+    """
+    with open(cfg.outputlog, 'a') as logfile:
+        logfile.write(message + os.linesep)
+    print(message)
+
+def write_to_errorlog(message):
+    """
+    Write a log message to the error log. Also print it to the terminal.
+
+    @type message:          string
+    @param message:         Message to be printed to the log
+    """
+    with open(cfg.errorlog, 'a') as logfile:
+        logfile.write(message + os.linesep)
+    print(message)
 
 # Check for subject directories
 def get_subjectdirs() -> list:
@@ -133,9 +102,9 @@ def get_subjectdirs() -> list:
     @rtype:  list
     @return: list of bidsdir directories that start with the prefix sub
     """
-    bidsdir_contents = os.listdir(bidsdir)
+    bidsdir_contents = os.listdir(cfg.bidsdir)
     has_sub_prefix = [subdir for subdir in bidsdir_contents if subdir.startswith('sub-')]
-    subjectdirs = [subdir for subdir in has_sub_prefix if os.path.isdir(os.path.join(bidsdir, subdir))] # get subject directories
+    subjectdirs = [subdir for subdir in has_sub_prefix if os.path.isdir(os.path.join(cfg.bidsdir, subdir))] # get subject directories
     subjectdirs.sort()
     return subjectdirs
 
@@ -150,10 +119,9 @@ def get_timepoints(subject: str) -> list:
     @rtype:  list
     @return: list of ses-wave folders in the subject directory
     """
-    subject_fullpath = os.path.join(bidsdir, subject)
+    subject_fullpath = os.path.join(cfg.bidsdir, subject)
     subjectdir_contents = os.listdir(subject_fullpath)
     return [f for f in subjectdir_contents if not f.startswith('.')]
-
 
 # Check subjects' sessions
 def check_timepoint_count(timepoints: list, expected_timepoints: list, subject: str):
@@ -174,7 +142,6 @@ def check_timepoint_count(timepoints: list, expected_timepoints: list, subject: 
     else:
         write_to_outputlog("\n EXISTS: %s \n" % (log_message))
 
-
 # Get sequences
 def get_sequences(subject: str, timepoint: str) -> list:
     """
@@ -188,10 +155,9 @@ def get_sequences(subject: str, timepoint: str) -> list:
     @rtype:                     list
     @return:                    list of sequence folders that exist in the subject directory
     """
-    timepoint_fullpath = os.path.join(bidsdir, subject, timepoint)
+    timepoint_fullpath = os.path.join(cfg.bidsdir, subject, timepoint)
     timepoint_contents = os.listdir(timepoint_fullpath)
     return [f for f in timepoint_contents if not f.startswith('.')]
-
 
 # Check subjects' sessions
 def check_sequence_folder_count(sequence_folder_names: list, expected_sequences: list, subject: str, timepoint: str):
@@ -214,7 +180,6 @@ def check_sequence_folder_count(sequence_folder_names: list, expected_sequences:
     else:
         write_to_outputlog("\n EXIST: %s. \n" % (log_message))
 
-
 # Check files
 def check_sequence_files(subject: str, timepoint: str, sequence: str, expected_sequence: object):
     """
@@ -230,8 +195,8 @@ def check_sequence_files(subject: str, timepoint: str, sequence: str, expected_s
     @param expected_sequence:               The expected sequence
     """
     extension_json = "json"
-    extension_nifti = "nii.gz"
-    sequence_fullpath = os.path.join(bidsdir, subject, timepoint, sequence)
+    extension_nifti = "nii.gz" if cfg.gzipped else ".nii"
+    sequence_fullpath = os.path.join(cfg.bidsdir, subject, timepoint, sequence)
     if not os.path.isdir(sequence_fullpath):
         write_to_errorlog("\n FOLDER ERROR! %s folder missing for %s \n" % (sequence, subject))
     else:
@@ -249,7 +214,6 @@ def validate_sequencefilecount(expected_sequence: object, sequence_fullpath: str
     if len(found_allfiles) > expected_sequence.get_filecount():
         write_to_errorlog("WARNING! Too many %s files in %s %s %s" % (extension, subject, timepoint, os.path.basename(sequence_fullpath)))
         
-
 # Fix files
 def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, extension: str, subject: str, timepoint: str):
     """
@@ -285,11 +249,11 @@ def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, e
         write_to_outputlog("\n FIXING FILES: %s \n" % (extension))
         for found_file in found_files:
             run_index = found_file.index("_run-")
-            run_number = found_file[run_index+ 5:run_index + 7]
+            run_number = found_file[run_index + 5:run_index + 7]
             run_int = int(run_number)
             target_file = os.path.join(sequence_fullpath, found_file)
             if run_int <= difference:
-                tempdir_fullpath = os.path.join(tempdir, subject + "_" + timepoint)
+                tempdir_fullpath = os.path.join(cfg.tempdir, subject + "_" + timepoint)
                 if not os.path.isdir(tempdir_fullpath):
                     os.mkdir(tempdir_fullpath)
                 shutil.move(target_file, tempdir_fullpath)
@@ -306,21 +270,28 @@ def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, e
                     rename_file(found_file, run_number, new_runnum, sequence_fullpath, target_file)
 
 # Rename run number segment of sequence file
-def rename_file(found_file, run_number, run_replacement, sequence_fullpath, target_file):
+def rename_file(found_file:str, run_number:int, run_replacement:str, sequence_fullpath:str, target_file:str):
+    """
+    Rename a file with the appropriate run number.
+    
+    @type found_file:           string
+    @param found_file:          Sequence file to be renamed
+    @type run_number:           integer             
+    @param run_number:          File run number before renaming
+    @type run_replacement:      string
+    @param run_replacement:     Correct run number to be used for renaming
+    @type sequence_fullpath:    string
+    @param sequence_fullpath:   Path to the file that will be renamed
+    @type target_file:          string
+    @param target file:         The file to be renamed
+    """
     new_filename = found_file.replace("_run-" + run_number, run_replacement)
     new_filename_path = os.path.join(sequence_fullpath, new_filename)
     os.rename(target_file, new_filename_path)
     target_filename = os.path.basename(target_file)
     write_to_outputlog("RENAMED: %s to %s" % (target_filename, new_filename))
 
-
-
 # Call main
 main()
-
-## TO DO:
-# Make a config file
-### In config file
-### - config option: zipped nifti files or not zipped (.nii or .nii.gz)
 
 

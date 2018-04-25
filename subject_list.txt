@@ -1,4 +1,9 @@
-sub001_suffix,wave1
-sub001_suffix,wave2
-sub002_suffix,wave1
-sub002_suffix,wave2
+sub001_20150406,sub001,wave1
+sub001_20150428,sub001,wave2
+sub002_20150306,sub002,wave1
+sub003_20150309,sub003,wave1
+sub003_20150409,sub003,wave2
+sub004_20150311,sub004,wave1
+sub005_20150422,sub005,wave1
+sub006_20150313,sub006,wave1
+

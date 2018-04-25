@@ -1,81 +1,98 @@
-# This script will use the dcm2bids_helper to create json files
-# for use in creating the study specific configuration file
-#
-# See the dcm2Bids repo for instructions to create the config file:
-# https://github.com/cbedetti/Dcm2Bids
-#
-# More detailed instructions on san wiki:
-# https://uosanlab.atlassian.net/wiki/spaces/SW/pages/44269646/Convert+DICOM+to+BIDS
-
-##################################
-# Setup
-##################################
-
 # Import libraries
 import os
 import subprocess
+import config_dcm2bids_helper as cfg
 
-# Set study info (may need to change for your study)
-group = "sanlab"
-study = "REV"
-gitrepo = "REV_scripts"
-test_subject = "REV001_20150406" # Name of a directory that contains DICOMS for one participant
-
-dicomdir = "/projects/lcni/dcm/" + group + "/Archive/" + study
-image = "/projects/" + group + "/shared/containers/Dcm2Bids-master.simg"
-
-# Set directories
-archivedir = "/projects/" + group + "/shared/" + study + "/archive"
-niidir = archivedir + "/clean_nii"
-codedir = "/projects/" + group + "/shared/" + study + "/" + gitrepo + "/org/dcm2bids/"
-logdir = codedir + "/logs_helper"
-
-outputlog = logdir + "/outputlog_helper.txt"
-errorlog = logdir + "/errorlog_helper.txt"
-
-
-##################################
-# Directory Check & Log Creation
-##################################
+def main():
+    """
+    Run the things.
+    """
+    dir_fullpaths = cfg.logdir, cfg.archivedir, cfg.niidir
+    check_dirs_make(dir_fullpaths)
+    logfile_fullpaths = cfg.outputlog, cfg.errorlog
+    create_logfiles(logfile_fullpaths)
+    dirs_and_messages = {cfg.dicomdir:"Incorrect dicom directory specified", os.path.join(cfg.dicomdir, cfg.test_subject):"Test participant's folder does not exist - %s " % (cfg.test_subject)}
+    check_dirs(dirs_and_messages)
+    if os.path.isdir(cfg.dicomdir):
+        write_to_outputlog(cfg.test_subject + os.linesep)
+        # Create a job to submit to the HPC with sbatch
+        cmd = 'module load singularity; sbatch --job-name helper_{test_subject} --partition=short --time 00:60:00 --mem-per-cpu=2G --cpus-per-task=1 -o {logdir}/{test_subject}_helper_output.txt -e {logdir}/{test_subject}_helper_error.txt --wrap="singularity exec -B {dicomdir} -B /projects/{group}/shared/{study} {image} dcm2bids_helper -d {dicomdir}/{test_subject} -o /projects/{group}/shared/{study}"'.format(dicomdir=cfg.dicomdir, test_subject=cfg.test_subject, niidir=cfg.niidir, group=cfg.group, image=cfg.singularity_image, study=cfg.study, logdir=cfg.logdir)
+        # Submit the job
+        subprocess.call([cmd], shell=True)
+    else:
+        write_to_errorlog(cfg.test_subject+os.linesep)
 
 # Define a function to create files
-def touch(path):
+def touch(path:str):
+    """
+    Create a new file.
+    
+    @type path:     string
+    @param path:    path to - including name of - file to be created
+    """
     with open(path, 'a'):
         os.utime(path, None)
 
+# Check and create directories
+def check_dirs_make(dir_fullpaths:list):
+    """
+    Check if a directory exists. If not, create it.
 
-# Check/create log files
-if not os.path.isdir(logdir):
-    os.mkdir(logdir)
-if not os.path.isfile(outputlog):
-    touch(outputlog)
-if not os.path.isfile(errorlog):
-    touch(errorlog)
+    @type dir_fullpaths:        list
+    @param dir_fullpaths:       Paths to directorys to check
+    """
+    for dir_fullpath in dir_fullpaths:
+        if not os.path.isdir(dir_fullpath):
+            os.mkdir(dir_fullpath)
+
+# Create logs
+def create_logfiles(logfile_fullpaths:list):
+    """
+    Check if a logfile exists. If not, make one.
+
+    @type logfile_fullpaths:         list
+    @param logfile_fullpaths:        Paths to logfiles to check
+    """
+    for logfile_fullpath in logfile_fullpaths:
+        if not os.path.isfile(logfile_fullpath):
+            touch(logfile_fullpath)
+
+# Functions to write to log files
+def write_to_outputlog(message):
+    """
+    Write a log message to the output log. Also print it to the terminal.
+
+    @type message:          string
+    @param message:         Message to be printed to the log
+    """
+    with open(cfg.outputlog, 'a') as logfile:
+        logfile.write(message + os.linesep)
+    print(message)
+
+def write_to_errorlog(message):
+    """
+    Write a log message to the error log. Also print it to the terminal.
+
+    @type message:          string
+    @param message:         Message to be printed to the log
+    """
+    with open(cfg.errorlog, 'a') as logfile:
+        logfile.write(message + os.linesep)
+    print(message)
 
 # Check directory dependencies
-if not os.path.isdir(dicomdir):
-    with open(errorlog, 'a') as logfile:
-        logfile.write("Incorrect dicom directory specified")
-if not os.path.isdir(dicomdir + "/" + test_subject):
-    with open(errorlog, 'a') as logfile:
-        logfile.write("Test participant's folder does not exist - " + test_subject)
-if not os.path.isdir(archivedir):
-    os.mkdir(archivedir)
-if not os.path.isdir(niidir):
-    os.mkdir(niidir)
+def check_dirs(dirs_and_messages: dict):
+    """
+    Check if a directory exists. If not, print an error message to the errorlog.
+    
+    type dir_fullpaths:         list
+    param dir_fullpaths:        Paths to the directories to check
+    type error_messages:        list
+    param error_messages:       Messages to be printed to the error log 
+    """
+    for k, v in dirs_and_messages.items():
+        if not os.path.isdir(k):
+            write_to_errorlog(v)
 
-
-##################################
-# Run dcm2bids Helper
-##################################
-
-if os.path.isdir(dicomdir):
-    with open(outputlog, 'a') as logfile:
-        logfile.write(test_subject+os.linesep)
-    # Create a job to submit to the HPC with sbatch
-    cmd = 'module load singularity; sbatch --job-name helper_{test_subject} --partition=short --time 00:60:00 --mem-per-cpu=2G --cpus-per-task=1 -o {logdir}/{test_subject}_helper_output.txt -e {logdir}/{test_subject}_helper_error.txt --wrap="singularity exec -B {dicomdir} -B /projects/{group}/shared/{study} {image} dcm2bids_helper -d {dicomdir}/{test_subject} -o /projects/{group}/shared/{study}"'.format(dicomdir=dicomdir, test_subject=test_subject, niidir=niidir, group=group, image=image, study=study, logdir=logdir)
-    # Submit the job
-    subprocess.call([cmd], shell=True)
-else:
-    with open(errorlog, 'a') as logfile:
-        logfile.write(test_subject+os.linesep)
+# Call main
+main()
