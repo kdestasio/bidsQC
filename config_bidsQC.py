@@ -18,12 +18,12 @@ errorlog = os.path.join(logdir, "errorlog_bidsQC" + datetime.now().strftime("%Y%
 derivatives = os.path.join(bidsdir, "derivatives")
 
 # Create a dictionary (the thing below) for each timepoint in your study where the pairs are "sequence_directory_name" : "expected_number_runs"
-sequence1 = Sequence("func", {"taskname": 1, "othertaskname":1, "anothertask":2})
-sequence2 = Sequence("func", {"taskname": 1, "othertaskname":1, "anothertask":2})
-sequence3 = Sequence("anat", {"T1w":1})
-sequence4 = Sequence("fmap", {"magnitude1":2, "magnitude2":2, "phasediff":2 })
-timepoint1 = TimePoint("ses-wave1", [sequence1, sequence3, sequence4])
-timepoint2 = TimePoint("ses-wave2", [sequence2, sequence3, sequence4])
+files1 = Sequence("func", {"taskname": 1, "othertaskname":1, "anothertask":2})
+files2 = Sequence("func", {"taskname": 1, "othertaskname":1, "anothertask":2})
+files3 = Sequence("anat", {"T1w":1})
+files4 = Sequence("fmap", {"magnitude1":2, "magnitude2":2, "phasediff":2 })
+timepoint1 = TimePoint("ses-wave1", [files1, files3, files4])
+timepoint2 = TimePoint("ses-wave2", [files2, files3, files4])
 expected_timepoints = [timepoint1, timepoint2]
 
 # Files g-zipped or not? NOTE: All files must be either zipped or unzipped. A mixture won't work properly.
