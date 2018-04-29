@@ -37,11 +37,8 @@ In this example:
 * Both time points also have fieldmap images with the same name, so we can also create one "func" sequence to use at both time points
 * Once we've constructed our "timepoints" with the correct contents, we put them into the "expected\_timepoints" object, and we're done!
 
-**![](quiver-image-url/9388A49AC359657315B195D9FC20A2F3.png "SANlab Wiki > BIDS Quality Check > Screen Shot 2018-04-29 at 1.11.13 PM.png")**
+![](./images/example_config.png)
 
-**![](quiver-image-url/9AB00411A66666BA25B8807ACAEF44B5.png "SANlab Wiki > BIDS Quality Check > Screen Shot 2018-04-29 at 1.09.06 PM.png")**
-
-**![](quiver-image-url/356947A6BB622524EFD099CC7FCBB95F.png "SANlab Wiki > BIDS Quality Check > Screen Shot 2018-04-29 at 1.04.55 PM.png")**
 
 # Run the script
 
