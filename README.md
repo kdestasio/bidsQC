@@ -1,7 +1,11 @@
+**_Instructions for the dcm2Bids scripts are to run jobs in parallel on a high performance cluster running SLURM and using a Singularity container of the dcm2Bids package. If you want to run the dcm2bids_helper or the dcm2bids conversion on a local machine, see [cbedetti's](https://github.com/cbedetti) original[ dcm2Bids](https://github.com/cbedetti/Dcm2Bids) package as the scripts described below will not work for you._**  
+
+**_The bidsQC script can work in any environment and can be used either with the dcm2bids scripts in this repository, or with [cbedetti's](https://github.com/cbedetti) original[ dcm2Bids](https://github.com/cbedetti/Dcm2Bids) scripts_**  
+
+
 # Overview
 DICOMS are converted into Niftis, which are renamed and put into BIDS structure using [cbedetti's](https://github.com/cbedetti) [dcm2Bids package](https://github.com/cbedetti/Dcm2Bids). The dcm2Bids package converts DICOM files to Nifti files using the [rordenlab's](https://github.com/rordenlab) [dcm2niix package](https://github.com/rordenlab/dcm2niix), then renames and relocates them as per BIDS specifications.  
 
-**_Instructions on this page are to jobs in parallel on a high performance cluster running SLURM and using a Singularity container of the dcm2Bids package. If you want to run the dcm2bids_helper or the dcm2bids conversion on a local machine, see [cbedetti's](https://github.com/cbedetti) original[ dcm2Bids](https://github.com/cbedetti/Dcm2Bids) package as the scripts described below will not work for you._**  
 
 # What You Need
 - Dcm2Bids singularity container (exists at /projects/sanlab/shared/containers/Dcm2Bids-master.simg)  
