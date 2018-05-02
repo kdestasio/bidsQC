@@ -21,8 +21,7 @@ dicomdir = os.path.join(os.sep, "projects", "lcni", "dcm", group, "Archive", stu
 singularity_image =  os.path.join(os.sep, "projects", group, "shared", "containers", "Dcm2Bids-master.simg")
 
 # Set directories
-archivedir =  os.path.join(os.sep, "projects", group, "shared", study, "archive")
-niidir = os.path.join(archivedir, "clean_nii")
+niidir = os.path.join(os.sep, "projects", group, "shared", study, "archive", "clean_nii")
 codedir =  os.path.join(os.sep, "projects", group, "shared", study, "REV_scripts", "org", gitrepo)
 logdir = os.path.join(codedir, "logs_helper")
 
