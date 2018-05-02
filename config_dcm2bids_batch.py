@@ -26,12 +26,18 @@ parent_dir = "dcm2bids" # Where the scripts live
 
 
 # Set directories
-dicomdir = os.path.join(os.sep, "projects", "lcni", "dcm", group, "Archive", study)
-niidir = os.path.join(os.sep, "projects", group, "shared", study, "bids_data") # Where the niftis will be put
-codedir = os.path.join(os.sep, "projects", group, "shared", study, "REV_scripts", "org", parent_dir)  # Contains subject_list.txt, config file, and dcm2bids_batch.py
+# dicomdir = os.path.join(os.sep, "projects", "lcni", "dcm", group, "Archive", study)
+# niidir = os.path.join(os.sep, "projects", group, "shared", study, "bids_data") # Where the niftis will be put
+# codedir = os.path.join(os.sep, "projects", group, "shared", study, "REV_scripts", "org", parent_dir)  # Contains subject_list.txt, config file, and dcm2bids_batch.py
+# configfile = os.path.join(codedir, "study_config.json")  # path to and name of config file
+# image = os.path.join(os.sep, "projects", group, "shared", "containers", "Dcm2Bids-master.simg")
+# logdir = os.path.join(codedir, "logs_dcm2bids")
+dicomdir = os.path.join(os.sep, "Users/kristadestasio/Desktop/data")
+niidir = os.path.join(dicomdir, "niftis") # Where the niftis will be put
+codedir = os.path.join( "/Users/kristadestasio/Desktop/dcm2bids")  # Contains subject_list.txt, config file, and dcm2bids_batch.py
 configfile = os.path.join(codedir, "study_config.json")  # path to and name of config file
-image = os.path.join(os.sep, "projects", group, "shared", "containers", "Dcm2Bids-master.simg")
-logdir = os.path.join(codedir, "logs_dcm2bids")
+image = dicomdir
+logdir = os.path.join(dicomdir, "logs_dcm2bids")
 
 outputlog = os.path.join(logdir, "outputlog_dcmn2bids" + datetime.now().strftime("%Y%m%d-%H%M") + ".txt")
 errorlog = os.path.join(logdir, "errorlog_dcm2bids" + datetime.now().strftime("%Y%m%d-%H%M") + ".txt")
