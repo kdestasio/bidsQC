@@ -28,13 +28,13 @@ def main():
             if len(expected_timepoint) == 1:
                 check_sequence_folder_count(sequence_folder_names, expected_timepoint[0].sequences, subject, timepoint)
             else:
-                write_to_errorlog("TIMEPOINT ERROR! %s missing or user entered duplicate or non-existant timepoint." % (timepoint))
+                write_to_errorlog("TIMEPOINT WARNING! %s missing or user entered duplicate or non-existant timepoint." % (timepoint))
             for sequence_folder_name in sequence_folder_names:
                 expected_sequence = [es for es in expected_timepoint[0].sequences if es.name == sequence_folder_name]
                 if len(expected_sequence) == 1:
                     check_sequence_files(subject, timepoint, sequence_folder_name, expected_sequence[0])
                 else:
-                    write_to_errorlog("SEQUENCE DIRECTORY ERROR! %s missing or user entered duplicate or non-existant sequence folder name." % (sequence_folder_name))
+                    write_to_errorlog("SEQUENCE DIRECTORY WARNING! %s missing or user entered duplicate or non-existant sequence folder name." % (sequence_folder_name))
 
 # Define a function to create files
 def touch(path:str):
@@ -138,7 +138,7 @@ def check_timepoint_count(timepoints: list, expected_timepoints: list, subject: 
     number_timepoints_exist = len(timepoints)
     log_message =  "%s has %s ses-wave directories." % (subject, str(number_timepoints_exist))
     if len(expected_timepoints) != number_timepoints_exist:
-        write_to_errorlog("\n TIMEPOINT ERROR! %s Expected %s \n" % (log_message, str(len(expected_timepoints))))
+        write_to_errorlog("\n TIMEPOINT WARNING! %s Expected %s \n" % (log_message, str(len(expected_timepoints))))
     else:
         write_to_outputlog("\n EXISTS: %s \n" % (log_message))
 
@@ -176,7 +176,7 @@ def check_sequence_folder_count(sequence_folder_names: list, expected_sequences:
     number_sequences_exist = len(sequence_folder_names)
     log_message =  "%s %s has %s total sequence directories" % (subject, timepoint, str(number_sequences_exist))
     if len(expected_sequences) != number_sequences_exist:
-        write_to_errorlog("\n SEQUENCE DIRECTORY ERROR! %s Expected %s.\n" % (log_message, str(len(expected_sequences))))
+        write_to_errorlog("\n SEQUENCE DIRECTORY WARNING! %s Expected %s.\n" % (log_message, str(len(expected_sequences))))
     else:
         write_to_outputlog("\n EXIST: %s. \n" % (log_message))
 
@@ -198,7 +198,7 @@ def check_sequence_files(subject: str, timepoint: str, sequence: str, expected_s
     extension_nifti = "nii.gz" if cfg.gzipped else ".nii"
     sequence_fullpath = os.path.join(cfg.bidsdir, subject, timepoint, sequence)
     if not os.path.isdir(sequence_fullpath):
-        write_to_errorlog("\n FOLDER ERROR! %s folder missing for %s \n" % (sequence, subject))
+        write_to_errorlog("\n FOLDER WARNING! %s folder missing for %s \n" % (sequence, subject))
     else:
         write_to_outputlog("\n EXISTS: %s folder for subject %s \n" % (sequence, subject))
     validate_sequencefilecount(expected_sequence, sequence_fullpath, extension_json, timepoint, subject)
@@ -241,7 +241,7 @@ def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, e
         write_to_outputlog("OK: %s has correct number of %s %s files in %s." % (subject, file_group, extension, timepoint))
         return
     if len(found_files) < expected_numfiles:
-        write_to_errorlog("FILE ERROR! %s MISSING %s %s files in %s." % (subject, file_group, extension, timepoint))
+        write_to_errorlog("FILE WARNING! %s MISSING %s %s files in %s." % (subject, file_group, extension, timepoint))
         return
     if len(found_files) > expected_numfiles:
         difference = len(found_files) - expected_numfiles
@@ -253,43 +253,27 @@ def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, e
             run_int = int(run_number)
             target_file = os.path.join(sequence_fullpath, found_file)
             if run_int <= difference:
-                tempdir_fullpath = os.path.join(cfg.tempdir, subject + "_" + timepoint)
-                if not os.path.isdir(tempdir_fullpath):
-                    os.mkdir(tempdir_fullpath)
-                shutil.move(target_file, tempdir_fullpath)
-                target_filename = os.path.basename(target_file)
-                write_to_outputlog("MOVED: %s to %s" % (target_filename, tempdir_fullpath))
+                move_files_tmp(target_file, subject, timepoint)
             elif run_int > difference:
                 if expected_numfiles == 1:
-                    new_runnum = ''
-                    rename_file(found_file, run_number, new_runnum, sequence_fullpath, target_file)
+                    os.rename(os.path.join(sequence_fullpath, found_file), found_file.replace(found_file[run_index:run_index + 8], ''))
+                    write_to_outputlog("RENAMED: %s" % (found_file))
                 elif expected_numfiles > 1:
                     new_int = run_int - difference
                     int_str = str(new_int)
-                    new_runnum = "_run-" + int_str.zfill(2)
-                    rename_file(found_file, run_number, new_runnum, sequence_fullpath, target_file)
+                    new_runnum = int_str.zfill(2)
+                    os.rename(os.path.join(sequence_fullpath, found_file), found_file.replace(found_file[run_index + 5:run_index + 7], new_runnum))
+                    write_to_outputlog("RENAMED: %s" % (found_file))
 
-# Rename run number segment of sequence file
-def rename_file(found_file:str, run_number:int, run_replacement:str, sequence_fullpath:str, target_file:str):
-    """
-    Rename a file with the appropriate run number.
-    
-    @type found_file:           string
-    @param found_file:          Sequence file to be renamed
-    @type run_number:           integer             
-    @param run_number:          File run number before renaming
-    @type run_replacement:      string
-    @param run_replacement:     Correct run number to be used for renaming
-    @type sequence_fullpath:    string
-    @param sequence_fullpath:   Path to the file that will be renamed
-    @type target_file:          string
-    @param target file:         The file to be renamed
-    """
-    new_filename = found_file.replace("_run-" + run_number, run_replacement)
-    new_filename_path = os.path.join(sequence_fullpath, new_filename)
-    os.rename(target_file, new_filename_path)
-    target_filename = os.path.basename(target_file)
-    write_to_outputlog("RENAMED: %s to %s" % (target_filename, new_filename))
+
+def move_files_tmp(target_file:str, subject:str, timepoint:str):
+    tempdir_fullpath = os.path.join(cfg.tempdir, subject + "_" + timepoint)
+    if not os.path.isdir(tempdir_fullpath):
+        os.mkdir(tempdir_fullpath)
+        shutil.move(target_file, tempdir_fullpath)
+        target_filename = os.path.basename(target_file)
+        write_to_outputlog("MOVED: %s to %s" % (target_filename, tempdir_fullpath))
+
 
 # Call main
 main()
