@@ -245,34 +245,40 @@ def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, e
         return
     if len(found_files) > expected_numfiles:
         difference = len(found_files) - expected_numfiles
+        # gng_acq-1 want 2 files, have 3
+        # expect 2
+        # difference = 1
+        # IF too many files exist, diff is positive
+        # IF too few files exist (won't happen)
+        # IF correct number, (won't happen)
         found_files.sort()
         write_to_outputlog("\n FIXING FILES: %s \n" % (extension))
         for found_file in found_files:
             run_index = found_file.index("_run-")
-            run_number = found_file[run_index + 5:run_index + 7]
-            run_int = int(run_number)
+            run_number = found_file[run_index + 5:run_index + 7] #03
+            run_int = int(run_number) #3
             target_file = os.path.join(sequence_fullpath, found_file)
-            if run_int <= difference:
+            if run_int <= difference: # if = 1
                 move_files_tmp(target_file, subject, timepoint)
-            elif run_int > difference:
-                if expected_numfiles == 1:
-                    os.rename(os.path.join(sequence_fullpath, found_file), found_file.replace(found_file[run_index:run_index + 8], ''))
-                    write_to_outputlog("RENAMED: %s" % (found_file))
-                elif expected_numfiles > 1:
-                    new_int = run_int - difference
+            elif run_int > difference: # If there are more files than expected
+                if expected_numfiles == 1: # If there should only be one file
+                    os.rename(target_file, target_file.replace(found_file[run_index:run_index + 7], ''))
+                    write_to_outputlog("RENAMED: %s, dropped run from filename" % (target_file))
+                elif expected_numfiles > 1: # If we expect more than 1 file, rename the run-## part of the filename
+                    new_int = run_int - difference # 3-1 = 2
                     int_str = str(new_int)
-                    new_runnum = int_str.zfill(2)
-                    os.rename(os.path.join(sequence_fullpath, found_file), found_file.replace(found_file[run_index + 5:run_index + 7], new_runnum))
-                    write_to_outputlog("RENAMED: %s" % (found_file))
+                    new_runnum = int_str.zfill(2) #02
+                    os.rename(target_file, target_file.replace(found_file[run_index + 5:run_index + 7], new_runnum))
+                    write_to_outputlog("RENAMED: %s with run-%s" % (target_file, new_runnum))
 
 
 def move_files_tmp(target_file:str, subject:str, timepoint:str):
     tempdir_fullpath = os.path.join(cfg.tempdir, subject + "_" + timepoint)
     if not os.path.isdir(tempdir_fullpath):
         os.mkdir(tempdir_fullpath)
-        shutil.move(target_file, tempdir_fullpath)
-        target_filename = os.path.basename(target_file)
-        write_to_outputlog("MOVED: %s to %s" % (target_filename, tempdir_fullpath))
+    shutil.move(target_file, tempdir_fullpath)
+    target_filename = os.path.basename(target_file)
+    write_to_outputlog("MOVED: %s to %s" % (target_filename, tempdir_fullpath))
 
 
 # Call main
