@@ -7,6 +7,8 @@ from datetime import datetime
 import config_bidsQC as cfg
 import json
 import sys
+import re
+
 
 # Main function
 def main():
@@ -38,29 +40,38 @@ def main():
                 else:
                     write_to_errorlog("SEQUENCE DIRECTORY WARNING! %s missing or user entered duplicate or non-existant sequence folder name." % (sequence_folder_name))
             if cfg.order_sequences:
-                task_files = append_series_number(sequence_fullpath, cfg.bidsdir, cfg.tasks_to_order)
-                task_files_ordered = order_sequence_files(task_files)
-                rename_tasks_ordered(sequence_fullpath, task_files_ordered)
+                files_all_target_tasks = append_series_number(sequence_fullpath, cfg.bidsdir, cfg.tasks_to_order)
+                rename_tasks_ordered(files_all_target_tasks, sequence_fullpath, cfg.tasks_to_order)
 
 
-def order_sequence_files(task_files:list):
-    sorted(task_files, key = lambda x: int(x.split("_")[0]))
-    return task_files
+def atoi(text):
+    return int(text) if text.isdigit() else text
+
+def natural_keys(text):
+    '''
+    alist.sort(key=natural_keys) sorts in human order
+    http://nedbatchelder.com/blog/200712/human_sorting.html
+    (See Toothy's implementation in the comments)
+    '''
+    return [ atoi(c) for c in re.split('(\d+)', text) ]
 
 
-def rename_tasks_ordered(sequence_fullpath, task_files_ordered):
-    extensions = '.nii.gz', '.json'
-    for extension in extensions:
-        target_files = [f for f in task_files_ordered if f.endswith(extension)]
-        i = 1
-        for target_file in target_files:
-            bold_index = target_file.index('_bold')
-            start_str = target_file[0:bold_index]
-            end_str = target_file[bold_index:]
-            runnum = str(i).zfill(2)
-            new_file_name = start_str + '_run-' + runnum + end_str + extension
-            os.rename(os.path.join(sequence_fullpath, target_file), os.path.join(sequence_fullpath, new_file_name.split('_', 1)[-1]))
-            i = i + 1
+def rename_tasks_ordered(files_all_target_tasks, sequence_fullpath, tasks_to_order):    
+    for task in tasks_to_order:
+        files_one_task = [f for f in files_all_target_tasks if str(task) in f]
+        extensions = '.nii.gz', '.json'
+        for extension in extensions:
+            task_files_oftype = [f for f in files_one_task if f.endswith(extension)]
+            task_files_oftype.sort(key=natural_keys)
+            i = 1
+            for target_file in task_files_oftype:
+                bold_index = target_file.index('_bold')
+                start_str = target_file[0:bold_index]
+                end_str = target_file[bold_index:]
+                runnum = str(i).zfill(2)
+                new_file_name = start_str + '_run-' + runnum + end_str
+                os.rename(os.path.join(sequence_fullpath, target_file), os.path.join(sequence_fullpath, new_file_name.split('_', 1)[-1]))
+                i = i + 1
 
 
 def append_series_number(sequence_fullpath:str, bidsdir:str, tasks_to_order):
@@ -68,9 +79,9 @@ def append_series_number(sequence_fullpath:str, bidsdir:str, tasks_to_order):
     Pull SeriesNumber from the JSON file and append it as a prefix to the appropriate json and nifti files.
     """
     sequence_files = os.listdir(sequence_fullpath)
-    task_files = [sequence_file for sequence_file in sequence_files for task in tasks_to_order if str(task) in sequence_file]
+    files_all_target_tasks = [sequence_file for sequence_file in sequence_files for task in tasks_to_order if str(task) in sequence_file]
     extensions = '.nii.gz', '.json'
-    json_files = [f for f in task_files if f.endswith('.json')]
+    json_files = [f for f in files_all_target_tasks if f.endswith('.json')]
     for json_file in json_files:
         file_basename = get_file_basename(json_file)
         json_fullpath = os.path.join(sequence_fullpath, json_file)
@@ -82,8 +93,8 @@ def append_series_number(sequence_fullpath:str, bidsdir:str, tasks_to_order):
             new_file_name = str(series_number) + '_' + file_basename + extension
             os.rename(os.path.join(sequence_fullpath, file_basename + extension), os.path.join(sequence_fullpath, new_file_name))
     sequence_files = os.listdir(sequence_fullpath)
-    task_files = [sequence_file for sequence_file in sequence_files for task in tasks_to_order if str(task) in sequence_file]
-    return task_files
+    files_all_target_tasks = [sequence_file for sequence_file in sequence_files for task in tasks_to_order if str(task) in sequence_file]
+    return files_all_target_tasks
 
 
 def get_file_basename(json_file:str):
