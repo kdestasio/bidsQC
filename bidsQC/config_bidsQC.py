@@ -44,5 +44,7 @@ gzipped = True
 
 
 # Do we want runs based on sequence order? Yes = True
+# This is for tasks that use counterbalancing (of e.g. stimulus blocks) anf for which we want to identify the content
+# with the 'acq-' label and order administered with the 'task-' label
 order_sequences = True
 tasks_to_order = 'words', 'picture'
