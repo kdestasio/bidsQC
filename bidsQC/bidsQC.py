@@ -5,6 +5,8 @@ import os.path
 import shutil
 from datetime import datetime
 import config_bidsQC as cfg
+import json
+import sys
 
 # Main function
 def main():
@@ -32,9 +34,62 @@ def main():
             for sequence_folder_name in sequence_folder_names:
                 expected_sequence = [es for es in expected_timepoint[0].sequences if es.name == sequence_folder_name]
                 if len(expected_sequence) == 1:
-                    check_sequence_files(subject, timepoint, sequence_folder_name, expected_sequence[0])
+                    sequence_fullpath = check_sequence_files(subject, timepoint, sequence_folder_name, expected_sequence[0])
                 else:
                     write_to_errorlog("SEQUENCE DIRECTORY WARNING! %s missing or user entered duplicate or non-existant sequence folder name." % (sequence_folder_name))
+            if cfg.order_sequences:
+                task_files = append_series_number(sequence_fullpath, cfg.bidsdir, cfg.tasks_to_order)
+                task_files_ordered = order_sequence_files(task_files)
+                rename_tasks_ordered(sequence_fullpath, task_files_ordered)
+
+
+def order_sequence_files(task_files:list):
+    sorted(task_files, key = lambda x: int(x.split("_")[0]))
+    return task_files
+
+
+def rename_tasks_ordered(sequence_fullpath, task_files_ordered):
+    extensions = '.nii.gz', '.json'
+    for extension in extensions:
+        target_files = [f for f in task_files_ordered if f.endswith(extension)]
+        i = 1
+        for target_file in target_files:
+            bold_index = target_file.index('_bold')
+            start_str = target_file[0:bold_index]
+            end_str = target_file[bold_index:]
+            runnum = str(i).zfill(2)
+            new_file_name = start_str + '_run-' + runnum + end_str + extension
+            os.rename(os.path.join(sequence_fullpath, target_file), os.path.join(sequence_fullpath, new_file_name.split('_', 1)[-1]))
+            i = i + 1
+
+
+def append_series_number(sequence_fullpath:str, bidsdir:str, tasks_to_order):
+    """
+    Pull SeriesNumber from the JSON file and append it as a prefix to the appropriate json and nifti files.
+    """
+    sequence_files = os.listdir(sequence_fullpath)
+    task_files = [sequence_file for sequence_file in sequence_files for task in tasks_to_order if str(task) in sequence_file]
+    extensions = '.nii.gz', '.json'
+    json_files = [f for f in task_files if f.endswith('.json')]
+    for json_file in json_files:
+        file_basename = get_file_basename(json_file)
+        json_fullpath = os.path.join(sequence_fullpath, json_file)
+        with open(json_fullpath) as f:
+            data = json.load(f)
+            series_number = data["SeriesNumber"]
+        extensions = '.nii.gz', '.json'
+        for extension in extensions:
+            new_file_name = str(series_number) + '_' + file_basename + extension
+            os.rename(os.path.join(sequence_fullpath, file_basename + extension), os.path.join(sequence_fullpath, new_file_name))
+    sequence_files = os.listdir(sequence_fullpath)
+    task_files = [sequence_file for sequence_file in sequence_files for task in tasks_to_order if str(task) in sequence_file]
+    return task_files
+
+
+def get_file_basename(json_file:str):
+    file_base_name = json_file.split('.')[0:-1]
+    return str(file_base_name[0])
+
 
 # Define a function to create files
 def touch(path:str):
@@ -104,7 +159,7 @@ def get_subjectdirs() -> list:
     """
     bidsdir_contents = os.listdir(cfg.bidsdir)
     has_sub_prefix = [subdir for subdir in bidsdir_contents if subdir.startswith('sub-')]
-    subjectdirs = [subdir for subdir in has_sub_prefix if os.path.isdir(os.path.join(cfg.bidsdir, subdir))] # get subject directories
+    subjectdirs = [subdir for subdir in has_sub_prefix if os.path.isdir(os.path.join(cfg.bidsdir, subdir))]
     subjectdirs.sort()
     return subjectdirs
 
@@ -206,6 +261,7 @@ def check_sequence_files(subject: str, timepoint: str, sequence: str, expected_s
     for key in expected_sequence.files.keys():
         fix_files(sequence_fullpath, key, expected_sequence.files[key], extension_json, subject, timepoint)
         fix_files(sequence_fullpath, key, expected_sequence.files[key], extension_nifti, subject, timepoint)
+    return sequence_fullpath
 
 # Validate sequence files
 def validate_sequencefilecount(expected_sequence: object, sequence_fullpath: str, extension: str, timepoint: str, subject: str):
@@ -245,29 +301,23 @@ def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, e
         return
     if len(found_files) > expected_numfiles:
         difference = len(found_files) - expected_numfiles
-        # gng_acq-1 want 2 files, have 3
-        # expect 2
-        # difference = 1
-        # IF too many files exist, diff is positive
-        # IF too few files exist (won't happen)
-        # IF correct number, (won't happen)
         found_files.sort()
         write_to_outputlog("\n FIXING FILES: %s \n" % (extension))
         for found_file in found_files:
             run_index = found_file.index("_run-")
-            run_number = found_file[run_index + 5:run_index + 7] #03
-            run_int = int(run_number) #3
+            run_number = found_file[run_index + 5:run_index + 7]
+            run_int = int(run_number) 
             target_file = os.path.join(sequence_fullpath, found_file)
-            if run_int <= difference: # if = 1
+            if run_int <= difference: 
                 move_files_tmp(target_file, subject, timepoint)
-            elif run_int > difference: # If there are more files than expected
-                if expected_numfiles == 1: # If there should only be one file
+            elif run_int > difference:
+                if expected_numfiles == 1:
                     os.rename(target_file, target_file.replace(found_file[run_index:run_index + 7], ''))
                     write_to_outputlog("RENAMED: %s, dropped run from filename" % (target_file))
-                elif expected_numfiles > 1: # If we expect more than 1 file, rename the run-## part of the filename
-                    new_int = run_int - difference # 3-1 = 2
+                elif expected_numfiles > 1:
+                    new_int = run_int - difference
                     int_str = str(new_int)
-                    new_runnum = int_str.zfill(2) #02
+                    new_runnum = int_str.zfill(2)
                     os.rename(target_file, target_file.replace(found_file[run_index + 5:run_index + 7], new_runnum))
                     write_to_outputlog("RENAMED: %s with run-%s" % (target_file, new_runnum))
 
@@ -283,5 +333,3 @@ def move_files_tmp(target_file:str, subject:str, timepoint:str):
 
 # Call main
 main()
-
-
