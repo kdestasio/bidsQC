@@ -36,16 +36,19 @@ def main():
             for sequence_folder_name in sequence_folder_names:
                 expected_sequence = [es for es in expected_timepoint[0].sequences if es.name == sequence_folder_name]
                 if len(expected_sequence) == 1:
-                    sequence_fullpath = check_sequence_files(subject, timepoint, sequence_folder_name, expected_sequence[0])
+                    check_sequence_files(subject, timepoint, sequence_folder_name, expected_sequence[0])
                 else:
                     write_to_errorlog("SEQUENCE DIRECTORY WARNING! %s missing or user entered duplicate or non-existant sequence folder name." % (sequence_folder_name))
             if cfg.order_sequences:
-                files_all_target_tasks = append_series_number(sequence_fullpath, cfg.bidsdir, cfg.tasks_to_order)
-                rename_tasks_ordered(files_all_target_tasks, sequence_fullpath, cfg.tasks_to_order)
+                func_fullpath = os.path.join(cfg.bidsdir, subject, timepoint, 'func')
+                if os.path.isdir(func_fullpath):
+                    files_all_target_tasks = append_series_number(func_fullpath, cfg.bidsdir, cfg.tasks_to_order)
+                    rename_tasks_ordered(files_all_target_tasks, func_fullpath, cfg.tasks_to_order)
 
 
 def atoi(text):
     return int(text) if text.isdigit() else text
+
 
 def natural_keys(text):
     '''
@@ -56,7 +59,7 @@ def natural_keys(text):
     return [ atoi(c) for c in re.split('(\d+)', text) ]
 
 
-def rename_tasks_ordered(files_all_target_tasks, sequence_fullpath, tasks_to_order):    
+def rename_tasks_ordered(files_all_target_tasks, func_dir_path, tasks_to_order):    
     for task in tasks_to_order:
         files_one_task = [f for f in files_all_target_tasks if str(task) in f]
         extensions = '.nii.gz', '.json'
@@ -70,30 +73,30 @@ def rename_tasks_ordered(files_all_target_tasks, sequence_fullpath, tasks_to_ord
                 end_str = target_file[bold_index:]
                 runnum = str(i).zfill(2)
                 new_file_name = start_str + '_run-' + runnum + end_str
-                os.rename(os.path.join(sequence_fullpath, target_file), os.path.join(sequence_fullpath, new_file_name.split('_', 1)[-1]))
+                os.rename(os.path.join(func_dir_path, target_file), os.path.join(func_dir_path, new_file_name.split('_', 1)[-1]))
                 i = i + 1
 
 
-def append_series_number(sequence_fullpath:str, bidsdir:str, tasks_to_order):
+def append_series_number(func_fullpath:str, bidsdir:str, tasks_to_order):
     """
     Pull SeriesNumber from the JSON file and append it as a prefix to the appropriate json and nifti files.
     """
-    sequence_files = os.listdir(sequence_fullpath)
-    files_all_target_tasks = [sequence_file for sequence_file in sequence_files for task in tasks_to_order if str(task) in sequence_file]
-    extensions = '.nii.gz', '.json'
+    functional_files = os.listdir(func_fullpath)
+    files_all_target_tasks = [func_file for func_file in functional_files for task in tasks_to_order if str(task) in func_file]
     json_files = [f for f in files_all_target_tasks if f.endswith('.json')]
     for json_file in json_files:
         file_basename = get_file_basename(json_file)
-        json_fullpath = os.path.join(sequence_fullpath, json_file)
+        json_fullpath = os.path.join(func_fullpath, json_file)
         with open(json_fullpath) as f:
             data = json.load(f)
             series_number = data["SeriesNumber"]
-        extensions = '.nii.gz', '.json'
+        extension_nifti = "nii.gz" if cfg.gzipped else ".nii"
+        extensions = extension_nifti, '.json'
         for extension in extensions:
             new_file_name = str(series_number) + '_' + file_basename + extension
-            os.rename(os.path.join(sequence_fullpath, file_basename + extension), os.path.join(sequence_fullpath, new_file_name))
-    sequence_files = os.listdir(sequence_fullpath)
-    files_all_target_tasks = [sequence_file for sequence_file in sequence_files for task in tasks_to_order if str(task) in sequence_file]
+            os.rename(os.path.join(func_fullpath, file_basename + extension), os.path.join(func_fullpath, new_file_name))
+    func_files = os.listdir(func_fullpath)
+    files_all_target_tasks = [func_file for func_file in func_files for task in tasks_to_order if str(task) in func_file]
     return files_all_target_tasks
 
 
