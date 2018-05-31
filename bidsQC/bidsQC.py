@@ -8,6 +8,7 @@ import config_bidsQC as cfg
 import json
 import sys
 import re
+import multiprocessing as mp
 
 
 # Main function
@@ -337,7 +338,7 @@ def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, e
                         os.rename(target_file, target_file.replace(found_file[run_index + 5:run_index + 7], new_runnum))
                         write_to_outputlog("RENAMED: %s with run-%s" % (target_file, new_runnum))
             except ValueError:
-                write_to_errorlog('ERROR in fix_files:\n    Subject: %s\n     File: %s' %(subject, found_file))
+                write_to_errorlog('VALUE ERROR in fix_files:\n    Subject: %s\n     File: %s' %(subject, found_file))
 
 
 def move_files_tmp(target_file:str, subject:str, timepoint:str):
