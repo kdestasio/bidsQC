@@ -209,7 +209,7 @@ def check_timepoint_count(timepoints: list, expected_timepoints: list, subject: 
     if len(expected_timepoints) != number_timepoints_exist:
         write_to_errorlog("\nTIMEPOINT WARNING! %s Expected %s \n" % (log_message, str(len(expected_timepoints))))
     else:
-        write_to_outputlog("\n EXISTS: %s \n" % (log_message))
+        write_to_outputlog("\nEXISTS: %s \n" % (log_message))
 
 # Get sequences
 def get_sequences(subject: str, timepoint: str) -> list:
@@ -242,6 +242,7 @@ def check_sequence_folder_count(sequence_folder_names: list, expected_sequences:
     @type timepoint:                        string
     @param timepoint:                       Timepoint folder name
     """
+    write_to_outputlog('\n' + '-'*40)
     number_sequences_exist = len(sequence_folder_names)
     log_message =  "%s %s has %s total sequence directories" % (subject, timepoint, str(number_sequences_exist))
     if len(expected_sequences) != number_sequences_exist:
