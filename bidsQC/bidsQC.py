@@ -307,6 +307,7 @@ def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, e
     """
     sequence_files = os.listdir(sequence_fullpath)
     found_files = [file for file in sequence_files if file_group in file and file.endswith(extension)]
+    write_to_outputlog('-'*20 + ' checking number of files ' + '-'*20)
     if len(found_files) == expected_numfiles:
         write_to_outputlog("OK: %s has correct number of %s %s files in %s." % (subject, file_group, extension, timepoint))
         return
