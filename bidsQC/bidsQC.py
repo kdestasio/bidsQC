@@ -57,7 +57,7 @@ def natural_keys(text):
 
 
 def rename_tasks_ordered(files_all_target_tasks:list, sequence_fullpath:str, tasks_to_order:list, subject:str):    
-    write_to_outputlog('-'*20 + ' assign ordered run numbers ' + '-'*20)
+    write_to_outputlog('\n' + '-'*20 + ' assign ordered run numbers ' + '-'*20)
     for task in tasks_to_order:
         files_one_task = [f for f in files_all_target_tasks if str(task) in f]
         extensions = '.nii.gz', '.json'
@@ -207,7 +207,7 @@ def check_timepoint_count(timepoints: list, expected_timepoints: list, subject: 
     number_timepoints_exist = len(timepoints)
     log_message =  "%s has %s ses-wave directories." % (subject, str(number_timepoints_exist))
     if len(expected_timepoints) != number_timepoints_exist:
-        write_to_errorlog("\n TIMEPOINT WARNING! %s Expected %s \n" % (log_message, str(len(expected_timepoints))))
+        write_to_errorlog("\nTIMEPOINT WARNING! %s Expected %s \n" % (log_message, str(len(expected_timepoints))))
     else:
         write_to_outputlog("\n EXISTS: %s \n" % (log_message))
 
@@ -272,6 +272,7 @@ def check_sequence_files(subject: str, timepoint: str, sequence: str, expected_s
         write_to_outputlog("\n EXISTS: %s folder for subject %s \n" % (sequence, subject))
     validate_sequencefilecount(expected_sequence, sequence_fullpath, extension_json, timepoint, subject)
     validate_sequencefilecount(expected_sequence, sequence_fullpath, extension_nifti, timepoint, subject)
+    write_to_outputlog('-'*20 + ' checking number of files ' + '-'*20)
     for key in expected_sequence.files.keys():
         fix_files(sequence_fullpath, key, expected_sequence.files[key], extension_json, subject, timepoint)
         fix_files(sequence_fullpath, key, expected_sequence.files[key], extension_nifti, subject, timepoint)
@@ -307,7 +308,6 @@ def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, e
     """
     sequence_files = os.listdir(sequence_fullpath)
     found_files = [file for file in sequence_files if file_group in file and file.endswith(extension)]
-    write_to_outputlog('-'*20 + ' checking number of files ' + '-'*20)
     if len(found_files) == expected_numfiles:
         write_to_outputlog("OK: %s has correct number of %s %s files in %s." % (subject, file_group, extension, timepoint))
         return
@@ -319,22 +319,25 @@ def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, e
         found_files.sort()
         write_to_outputlog("\n FIXING FILES: %s \n" % (extension))
         for found_file in found_files:
-            run_index = found_file.index("_run-")
-            run_number = found_file[run_index + 5:run_index + 7]
-            run_int = int(run_number) 
-            target_file = os.path.join(sequence_fullpath, found_file)
-            if run_int <= difference: 
-                move_files_tmp(target_file, subject, timepoint)
-            elif run_int > difference:
-                if expected_numfiles == 1:
-                    os.rename(target_file, target_file.replace(found_file[run_index:run_index + 7], ''))
-                    write_to_outputlog("RENAMED: %s, dropped run from filename" % (target_file))
-                elif expected_numfiles > 1:
-                    new_int = run_int - difference
-                    int_str = str(new_int)
-                    new_runnum = int_str.zfill(2)
-                    os.rename(target_file, target_file.replace(found_file[run_index + 5:run_index + 7], new_runnum))
-                    write_to_outputlog("RENAMED: %s with run-%s" % (target_file, new_runnum))
+            try:
+                run_index = found_file.index("_run-")
+                run_number = found_file[run_index + 5:run_index + 7]
+                run_int = int(run_number) 
+                target_file = os.path.join(sequence_fullpath, found_file)
+                if run_int <= difference: 
+                    move_files_tmp(target_file, subject, timepoint)
+                elif run_int > difference:
+                    if expected_numfiles == 1:
+                        os.rename(target_file, target_file.replace(found_file[run_index:run_index + 7], ''))
+                        write_to_outputlog("RENAMED: %s, dropped run from filename" % (target_file))
+                    elif expected_numfiles > 1:
+                        new_int = run_int - difference
+                        int_str = str(new_int)
+                        new_runnum = int_str.zfill(2)
+                        os.rename(target_file, target_file.replace(found_file[run_index + 5:run_index + 7], new_runnum))
+                        write_to_outputlog("RENAMED: %s with run-%s" % (target_file, new_runnum))
+            except ValueError:
+                write_to_errorlog('ERROR in fix_files:\n    Subject: %s\n     File: %s' %(subject, found_file))
 
 
 def move_files_tmp(target_file:str, subject:str, timepoint:str):
