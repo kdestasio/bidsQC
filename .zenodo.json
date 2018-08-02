@@ -1,0 +1,29 @@
+{
+  "creators": [
+    {
+      "name": "DeStasio, Krista L.",
+      "affiliation": "Department of Psychology, University of Oregon",
+      "orcid": "0000-0002-3959-9060"
+    },
+    {
+      "name": "May, Erik",
+      "affiliation": "",
+      "orcid": ""
+    },
+    {
+      "name": "Cosme, Danielle",
+      "affiliation": "Department of Psychology, University of Oregon",
+      "orcid": "0000-0001-8956-4053"
+    }
+  ],
+  "keywords": [
+    "neuroimaging",
+    "workflow",
+    "pipeline",
+    "preprocessing",
+    "fMRI",
+    "BIDS"
+  ],
+  "license": "BSD-3-Clause",
+  "upload_type": "software"
+}
