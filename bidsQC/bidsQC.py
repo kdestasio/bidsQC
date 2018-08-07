@@ -297,6 +297,10 @@ def check_sequence_files(subject: str, timepoint: str, sequence: str, expected_s
 
 # Validate sequence files
 def validate_sequencefilecount(expected_sequence: object, sequence_fullpath: str, extension: str, timepoint: str, subject: str):
+    """
+    Compare the number of files of a given sequence type to the number of expected files \
+    for that sequence, specified in the configuration file.    
+    """
     sequence_files = os.listdir(sequence_fullpath)
     found_allfiles = [file for file in sequence_files if file.endswith(extension)]
     if len(found_allfiles) > expected_sequence.get_filecount():
@@ -358,6 +362,16 @@ def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, e
 
 
 def move_files_tmp(target_file:str, subject:str, timepoint:str):
+    """
+    Move files to a holding directory.
+
+    @type target_file:      string
+    @param target_file:     The full path to the file to be moved.
+    @type subject:          string
+    @param subject:         Subject folder name.
+    @type timepoint:        string
+    @param timepoint:       Name of timepoint.            
+    """
     tempdir_fullpath = os.path.join(cfg.tempdir, subject + "_" + timepoint)
     if not os.path.isdir(tempdir_fullpath):
         os.mkdir(tempdir_fullpath)
