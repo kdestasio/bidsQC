@@ -11,7 +11,7 @@ The scripts in this repo are a combination of wrappers and quality checking scri
 # Table of Contents
 
 - [Dependencies](#dependencies)
-- [Repo Contents](#repo-contents)
+- [Conversion Folder Contents](#repo-contents)
 - [Creating the dcm2bids Configuration File](helper_readme.md)
 - [Running dcm2bids]
   - [On a Linux Cluster](/running_dcm2bids_cluster.md)
@@ -30,7 +30,7 @@ The scripts in this repo are a combination of wrappers and quality checking scri
 
 
 # Repo Contents<a name="repo-contents"/>
-## dcm2bids Scripts
+## Conversion Scripts
 Wrapper around the rordenlab's  `dcm2niix` and cbedetti's `dcm2Bids`. These scripts convert the DICOM files in subjects' directories, convert them to Niftis, and put them in BIDS.  
 
   - `config_dcm2bids_batch.py`  
