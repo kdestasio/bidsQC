@@ -13,12 +13,11 @@ The scripts in this repo are a combination of wrappers and quality checking scri
 - [Dependencies](#dependencies)
 - [Conversion Folder Contents](#repo-contents)
 - [Creating the dcm2bids Configuration File](helper_readme.md)
-- [Running dcm2bids]
+- Running dcm2bids
   - [On a Linux Cluster](/running_dcm2bids_cluster.md)
   - [Locally](runnung_dcm2bids_local.md)
 - [Running bidsQC](/bidsQC/README.md)
 - [Final BIDS Steps](#final-steps)
-- [Links]
 
 
 # Dependencies<a name="dependencies"/>
