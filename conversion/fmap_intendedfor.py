@@ -58,7 +58,7 @@ def get_funcdir_niftis(func_dir_path:str, timepoint:str) -> list:
     """
     Returns a list of json files in the func directory.
     """
-    func_niftis_partialpath = [os.path.join('func/', f) for f in os.listdir(func_dir_path) if f.endswith('.nii.gz')]
+    func_niftis_partialpath = [os.path.join(timepoint, 'func/', f) for f in os.listdir(func_dir_path) if f.endswith('.nii.gz')]
     return func_niftis_partialpath
 
 
