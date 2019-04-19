@@ -1,7 +1,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1326895.svg)](https://doi.org/10.5281/zenodo.1326895)
 
 # Note:  
-the bidsQC quality checking functionality has been integrated into [pybids](https://github.com/INCF/pybids) as the `validate_sequences` function. Questions? – send a message to kdestasio@gmail.com
+The bidsQC quality checking functionality has been integrated into [pybids](https://github.com/INCF/pybids) as the `validate_sequences` function. Questions? – send a message to kdestasio@gmail.com
 
 # Overview
 
