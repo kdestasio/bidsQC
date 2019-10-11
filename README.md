@@ -22,9 +22,9 @@ The scripts in this repo are a combination of wrappers and quality checking scri
   - [Conversion Folder](#conversion_folder)
   - [Bids Quality Check Folder](#qc_folder)
 - [Creating the dcm2bids Configuration File](helper_readme.md)
-- Running dcm2bids
+- [Running dcm2bids](/conversion/README.md)
   - [On a Linux Cluster](/running_dcm2bids_cluster.md)
-  - [Locally](runnung_dcm2bids_local.md)
+  - [Locally](/conversion/README.md)
 - [Running bidsQC](/bidsQC/README.md)
 - [Final BIDS Steps](#final-steps)
 
@@ -50,9 +50,8 @@ Once Niftis are in BIDS, these scripts can be used to check whether each sequenc
 
 For step-by-step instructions and a description of the naming rules, see the [bidsQC README.](/bidsQC/README.md)
 
-
-# Final BIDS Steps<a name="final-steps"/>
-## Manually Create Metadata Files
+## Final BIDS Steps<a name="final-steps"/>
+### Manually Create Metadata Files
 
 As per: [http://bids.neuroimaging.io/bids\_spec1.0.0-rc2.pdf](http://bids.neuroimaging.io/bids_spec1.0.0-rc2.pdf)
 
