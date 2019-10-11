@@ -15,8 +15,8 @@ group = "sanlab"
 study = "REV"
 
 
-# The following variables are used in the main script and need to be defined here. 
-# They need to exist prior to running the script
+# The following variables are used in the main script and need to be defined here. Change them for your data. 
+# They need to exist prior to running the script.
 
 # Directories
 parentdir = os.path.join(os.sep, "projects", group, "shared", study) # folder that contains bidsdir and codedir
