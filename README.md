@@ -1,7 +1,13 @@
+# BidsQC
+
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1326895.svg)](https://doi.org/10.5281/zenodo.1326895)
 
-# Note:  
-The bidsQC quality checking functionality has been integrated into [pybids](https://github.com/INCF/pybids) as the `validate_sequences` function. Questions? – send a message to kdestasio@gmail.com
+## Using BidsQC 
+
+1. Using either [git clone](https://help.github.com/en/articles/cloning-a-repository) or the downlod button, copy this repo to the machine you will use for dicom conversion.
+2. Follow the instructions on [cbedetti's tutorial](https://github.com/cbedetti/Dcm2Bids) to convert the DICOM files to Nifti files. The tutorial is comprehensive and should have all of the information you need. Look at it now.
+   1. If you want to **(a)** convert only a subset of the participant data, or **(b)** run the conversion on Talapas (the University of Oregon high performance cluster), there are scripts available in the [conversion](/conversion) folder of this repo to help you do so. But first, go look at that tutorial.
+3. Check that the results of the conversion and renaming are as expected by using the files in the [bidsQC](/bidsQC) folder of this repo to help you do so.
 
 # Overview
 
