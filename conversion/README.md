@@ -1,10 +1,17 @@
+
 # Convert Dicoms to Niftis
 
+## Table of Contents
+
+- [Scripts](#scripts)
+- [Running on a cluster](#cluster)
+- [Running locally](#local)
+  
 The scripts in this directory build off of [cbedetti's Dcm2Bids package](https://github.com/cbedetti/Dcm2Bids), which on its own will allow you to convert all of the DICOM files in a given directory to Nifti files on a local machine. See [cbedetti's tutorial](https://cbedetti.github.io/Dcm2Bids/tutorial/) to learn how to do the basic conversion and for detailed instructions on how to create the configuration file specific to _your_ study's dicoms.
 
 The scripts in this folder allow the user to **convert dicoms for all or only a subset of participants in the dicom directory and to run the conversion on Talapas**, the University of Oregon's high performance cluster. And here is some additional information on [running the helper script on Talapas](helper_readme.md).
 
-## Scripts
+## Scripts<a name="scripts"/>
 
 ### `config_dcm2bids_helper.py`
   
@@ -57,7 +64,7 @@ Here is an example of what the output would look like:
     "EchoTime2": "0.00683"
 ```
 
-## Running dcm2bids on a Linux Cluster
+## Running dcm2bids on a Linux Cluster<a name="cluster"/>
 
 ### Dependencies
 
@@ -99,7 +106,7 @@ Here is an example of what the output would look like:
 
 8. Check the niftis, output logs, and error logs.
 
-## Running dcm2bids Locally
+## Running dcm2bids Locally<a name="local"/>
 
 ### Steps to convert DICOMS to BIDS
 
