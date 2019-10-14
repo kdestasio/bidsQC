@@ -1,14 +1,10 @@
 # Import libraries
-import fnmatch
 import os
 import os.path
 import shutil
-from datetime import datetime
 import config_bidsQC as cfg
 import json
-import sys
 import re
-import multiprocessing as mp
 
 
 # Main function
