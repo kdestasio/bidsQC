@@ -42,9 +42,9 @@ def main():
                     write_to_errorlog("SEQUENCE DIRECTORY WARNING! %s missing or user entered duplicate or non-existant sequence folder name." % (sequence_folder_name))
             if cfg.order_sequences:
                 write_to_outputlog('\n' + '-'*20 + ' assign ordered run numbers ' + '-'*20)
-                files_all_target_tasks = append_series_number(sequence_fullpath, cfg.bidsdir, cfg.tasks_to_order)
+                files_all_target_tasks = append_series_number(sequence_fullpath, cfg.tasks_to_order)
                 files_torename = drop_runnum(files_all_target_tasks, cfg.tasks_to_order, sequence_fullpath)
-                rename_tasks_ordered(files_torename, sequence_fullpath, cfg.tasks_to_order, subject)
+                rename_tasks_ordered(files_torename, sequence_fullpath, cfg.tasks_to_order)
 
 
 def drop_runnum(files_all_target_tasks, tasks_to_order, sequence_fullpath):
@@ -72,7 +72,7 @@ def natural_keys(text):
     return [ atoi(c) for c in re.split('(\d+)', text) ]
 
 
-def rename_tasks_ordered(files_torename:list, sequence_fullpath:str, tasks_to_order:list, subject:str):    
+def rename_tasks_ordered(files_torename: list, sequence_fullpath: str, tasks_to_order: list):
     write_to_outputlog('Appending run number based on sequence acquisition order.')
     for task in tasks_to_order:
         files_one_task = [f for f in files_torename if str(task) in f]
@@ -93,7 +93,7 @@ def rename_tasks_ordered(files_torename:list, sequence_fullpath:str, tasks_to_or
                 i = i + 1
 
 
-def append_series_number(sequence_fullpath:str, bidsdir:str, tasks_to_order: list):
+def append_series_number(sequence_fullpath: str, tasks_to_order: list):
     """
     Pull SeriesNumber from the JSON file and append it as a prefix to the appropriate json and nifti files.
     """
