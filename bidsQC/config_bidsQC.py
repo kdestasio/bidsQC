@@ -3,7 +3,7 @@ from datetime import datetime
 from bidsQC_classes import Sequence
 from bidsQC_classes import TimePoint
 
-######################## CONFIGURAGBLE PART BELOW ########################
+######################## CONFIGURABLE PART BELOW ########################
 
 # Set study info (change these for your study)
 # These variables are used only in this file for path names.
