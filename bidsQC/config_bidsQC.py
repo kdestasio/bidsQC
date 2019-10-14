@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
-from bidsQC_classes import Sequence
-from bidsQC_classes import TimePoint
+from sequence import Sequence
+from timepoint import TimePoint
 
 ######################## CONFIGURAGBLE PART BELOW ########################
 
