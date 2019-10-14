@@ -108,7 +108,7 @@ def append_series_number(sequence_fullpath: str, tasks_to_order: list):
         with open(json_fullpath) as f:
             data = json.load(f)
             series_number = data["SeriesNumber"]
-        extensions = '.nii.gz', '.json'
+
         for extension in extensions:
             new_file_name = str(series_number) + '_' + file_basename + extension
             os.rename(os.path.join(sequence_fullpath, file_basename + extension), os.path.join(sequence_fullpath, new_file_name))
