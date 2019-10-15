@@ -1,6 +1,5 @@
 import os
 import json
-from pprint import pprint
 
 # Change these to your own paths/times/etc.
 bidsdir = os.path.join(os.sep, 'projects', 'sanlab', 'shared', 'REV', 'bids_data')
