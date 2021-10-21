@@ -2,18 +2,21 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1326895.svg)](https://doi.org/10.5281/zenodo.1326895)
 
+The scripts in this repo are a combination of wrappers and quality checking scripts that take neuroimaging files from DICOMS to Niftis named and structured as per [BIDS](http://bids.neuroimaging.io/). They add functionality to the Dcm2Bids scripts that allow the user to:
+
+1. Convert dicoms for all or only a subset of participants in the dicom directory (`/conversion`)
+2. Run the conversion on Talapas, the University of Oregon's high performance cluster (`/conversion`)
+3. Check that the expected files exist for each participant and notify the user if there is a discrepency (`/bidsQC`)
+4. Rename task runs, retaining those that occured latest in time (`/bidsQC`)
+
+**Instructions on this page are to run batches of subjects on a high performance cluster running SLURM using a Singularity container of the dcm2Bids package -- or -- to run the subjects serially on a local machine.**
+
 ## Using BidsQC
 
 1. Using either [git clone](https://help.github.com/en/articles/cloning-a-repository) or the download button, copy this repo to the machine you will use for dicom conversion.
 2. Follow the instructions on the [Dcm2Bids tutorial](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/) to convert the DICOM files to Nifti files. The tutorial is comprehensive and should have all of the information you need. Look at it now.
    1. If you want to **(a)** convert only a subset of the participant data, or **(b)** run the conversion on Talapas (the University of Oregon high performance cluster), there are scripts available in the [conversion](/conversion) folder of this repo to help you do so. But first, go look at that tutorial.
 3. Check that the results of the conversion and renaming are as expected by using the files in the [bidsQC](/bidsQC) folder of this repo to help you do so.
-
-## Overview
-
-The scripts in this repo are a combination of wrappers and quality checking scripts that take neuroimaging files from DICOMS to Niftis named and structured as per [BIDS](http://bids.neuroimaging.io/).
-
-**_Instructions on this page are to run batches of subjects on a high performance cluster running SLURM using a Singularity container of the dcm2Bids package - or - to run the subjects serially on a local machine._**
 
 ## Table of Contents
 
