@@ -34,13 +34,13 @@ The scripts in this repo are a combination of wrappers and quality checking scri
 - `dcm2niix` conversion tool. **You need to install it.**
   - Get via the [rordenlab github](https://github.com/rordenlab/dcm2niix)
 - `dcm2Bids`. **You need to install it.**
-  - Get via [cbedetti's github](https://github.com/cbedetti/Dcm2Bids)
+  - Available from [UNFmontreal](https://github.com/UNFmontreal/Dcm2Bids)
 
 ## Repo Contents<a name="repo-contents"/>
 
 ### Conversion Scripts<a name="conversion_folder"/>
 
-These scripts are located in the [conversion folder](/conversion). They allow the user to convert dicoms for only a subset of participants in the dicom directory and to run the conversion on Talapas, the University of Oregon's high performance cluster. The scripts in this repo build off of [cbedetti's Dcm2Bids package](https://github.com/cbedetti/Dcm2Bids), which on its own will allow you to convert the DICOM files to Nifti files. See [cbedetti's tutorial](https://cbedetti.github.io/Dcm2Bids/tutorial/) to learn how to do the basic conversion and for detailed instructions on how to create the configuration file specific to _your_ study's dicoms.
+These scripts are located in the [conversion folder](/conversion). They allow the user to convert dicoms for only a subset of participants in the dicom directory and to run the conversion on Talapas, the University of Oregon's high performance cluster. The scripts in this repo build off of [Dcm2Bids](https://github.com/UNFmontreal/Dcm2Bids), which on its own will allow you to convert the DICOM files to Nifti files. See the [Dcm2Bids tutorial](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/) to learn how to do the basic conversion and for detailed instructions on how to create the configuration file specific to _your_ study's dicoms.
 
 For instructions on how to use the conversion scripts, see the conversion folder [README](/conversion/README.md).
 
