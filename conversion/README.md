@@ -1,15 +1,20 @@
 
 # Convert Dicoms to Niftis
 
+The scripts in this folder allow the user to:  
+
+1. Convert dicoms for all or only a subset of participants in the dicom directory.  
+2. Run the conversion on Talapas, the University of Oregon's high performance cluster.  
+
 ## Table of Contents
 
 - [Scripts](#scripts)
 - [Running on a cluster](#cluster)
 - [Running locally](#local)
   
-The scripts in this directory build off of [cbedetti's Dcm2Bids package](https://github.com/cbedetti/Dcm2Bids), which on its own will allow you to convert all of the DICOM files in a given directory to Nifti files on a local machine. See [cbedetti's tutorial](https://cbedetti.github.io/Dcm2Bids/tutorial/) to learn how to do the basic conversion and for detailed instructions on how to create the configuration file specific to _your_ study's dicoms.
+The scripts in this directory build off of the [Dcm2Bids package](https://github.com/UNFmontreal/Dcm2Bids), which on its own will allow you to convert all of the DICOM files in a given directory to Nifti files on a local machine. See the [Dcm2Bids tutorial](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/) to learn how to do the basic conversion and for detailed instructions on how to create the [configuration file](https://unfmontreal.github.io/Dcm2Bids/docs/3-configuration/) specific to _your_ study's dicoms.
 
-The scripts in this folder allow the user to **convert dicoms for all or only a subset of participants in the dicom directory and to run the conversion on Talapas**, the University of Oregon's high performance cluster. And here is some additional information on [running the helper script on Talapas](helper_readme.md).
+Here is some additional information on [running the helper script on Talapas](#usingHelper) to get the information you need for your configuration file.
 
 ## Scripts<a name="scripts"/>
 
@@ -23,7 +28,7 @@ You should not need to edit this script. After updating `config_dcm2bids_helper.
 
 ### `study_config.json`<a name="study_config"/>
 
-This file is an example of what a study configuration file should look like. You will need to create a custom `study_config.json` for your data. Make sure it is named `study_config.json` and is located in the `conversion` folder. It is used in the Dcm2Bids conversion and is required by the `dcm2bids_batch.py` script. For detailed instructions on how to create this file for your own study, see [cbedetti's tutorial](https://cbedetti.github.io/Dcm2Bids/tutorial/).
+This file is an example of what a study configuration file should look like. You will need to create a custom `study_config.json` for your data. Make sure it is named `study_config.json` and is located in the `conversion` folder. It is used in the Dcm2Bids conversion and is required by the `dcm2bids_batch.py` script. For detailed instructions on how to create this file for your own study, see the [Dcm2Bids tutorial](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/#building-the-configuration-file).
 
 ### `subject_list.txt`
 
@@ -47,7 +52,9 @@ You should not need to edit this script. After updating `config_dcm2bids_batch.p
 
 ### `fmap_intendedfor.py`
 
-Requires you to edit it. In order to meet the BIDS specifications, this script will insert the following fields into the `.json` file for each fieldmap:
+If the `bidsQC` script is to be used to alter run numbers, that must be done BEFORE running `fmap_intededfor.py`. 
+
+This script requires you to edit it. In order to meet the BIDS specifications, the following fields are inserted into the `.json` file for each fieldmap:
 
 - `"IntendedFor"`
   - Followed by a list of all the functional runs in the `func` folder associated with the matching subject and session.
@@ -83,7 +90,7 @@ Here is an example of what the output would look like:
   - The container is available on [Singularity Hub](https://singularity-hub.org/collections/544)
   - Note that when you copy the container, you either need to name it `Dcm2Bids-master.simg` or change the image name in the `config_dcm2bids_batch.py` script.
 
-### Using the Dcm2Bids helper
+### Using the Dcm2Bids helper <a name="usingHelper"/>
 
 If you need the metadata to populate the config file, use the dcm2bids helper.
 
@@ -131,7 +138,7 @@ ls
 
 ### Using the Dcm2Bids helper
 
-[Use cbdetti's built in command line tool.](https://cbedetti.github.io/Dcm2Bids/tutorial/)
+[Use the Dcm2Bids built in command line interface.](https://unfmontreal.github.io/Dcm2Bids/docs/1-usage/#command-line-interface-cli)
 
 ### Steps to convert DICOMS to BIDS
 

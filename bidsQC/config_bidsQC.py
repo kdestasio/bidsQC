@@ -3,7 +3,7 @@ from datetime import datetime
 from sequence import Sequence
 from timepoint import TimePoint
 
-######################## CONFIGURAGBLE PART BELOW ########################
+######################## CONFIGURABLE PART BELOW ########################
 
 # Set study info (change these for your study)
 # These variables are used only in this file for path names.
