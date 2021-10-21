@@ -26,10 +26,13 @@ def main():
         for timepoint in timepoints:
             sequence_folder_names = get_sequences(subject, timepoint)
             expected_timepoint = [etp for etp in cfg.expected_timepoints if etp.name == timepoint]
-            if len(expected_timepoint) == 1:
-                check_sequence_folder_count(sequence_folder_names, expected_timepoint[0].sequences, subject, timepoint)
-            else:
-                write_to_errorlog("TIMEPOINT WARNING! %s missing or user entered duplicate or non-existant timepoint." % (timepoint))
+
+            if len(expected_timepoint) != 1:
+                write_to_errorlog(f'TIMEPOINT WARNING! {timepoint}: '
+                                  f'Expected 1 timepoint. Found {len(expected_timepoint)}')
+                continue
+
+            check_sequence_folder_count(sequence_folder_names, expected_timepoint[0].sequences, subject, timepoint)
             for sequence_folder_name in sequence_folder_names:
                 expected_sequence = [es for es in expected_timepoint[0].sequences if es.name == sequence_folder_name]
                 if len(expected_sequence) == 1:
