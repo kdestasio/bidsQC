@@ -47,19 +47,19 @@ In this example:
 ```
     module load python3
 ```
-- Run the `bidsQC.py` script
+- Run the `qualityCheck.py` script
 
 ```
-    python3 bidsQC.py
+    python3 qualityCheck.py
 ```
 - Check your output and error logs
 
 ## Locally
 
 - `cd` to the directory that has your code in it
-- Run the `bidsQC.py` sciript
+- Run the `qualityCheck.py` sciript
 ```
-python3 bidsQC.py
+python3 qualityCheck.py
 ```
 - Check your output and error logs
 

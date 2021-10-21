@@ -14,7 +14,7 @@ study = 'REV'
 # Set directories (Check these for your study)
 # These variables are used in the main script and need to be defined here. 
 # They need to exist prior to running the script.
-logdir = os.path.join(os.getcwd(), 'logs_bidsQC')  # Where log files will go
+logdir = os.path.join(os.getcwd(), 'logs_qualityCheck')  # Where log files will go
 bidsdir = os.path.join(os.sep, 'projects', group, 'shared', study, 'bids_data')  # Where your subjects' nifti directories are
 
 
@@ -42,6 +42,6 @@ tasks_to_order = 'task1', 'task2'
 
 # Paths that are required and that should not be changed
 tempdir = os.path.join(bidsdir, 'tmp_dcm2bids')  # holding folder for undesired files
-outputlog = os.path.join(logdir, 'outputlog_bidsQC' + datetime.now().strftime('%Y%m%d-%H%M%S') + '.txt')
-errorlog = os.path.join(logdir, 'errorlog_bidsQC' + datetime.now().strftime('%Y%m%d-%H%M%S') + '.txt')
+outputlog = os.path.join(logdir, 'outputlog_qualityCheck' + datetime.now().strftime('%Y%m%d-%H%M%S') + '.txt')
+errorlog = os.path.join(logdir, 'errorlog_qualityCheck' + datetime.now().strftime('%Y%m%d-%H%M%S') + '.txt')
 derivatives = os.path.join(bidsdir, 'derivatives')  # Where processed data will go

@@ -2,7 +2,7 @@
 import os
 import os.path
 import shutil
-import config_bidsQC as cfg
+import config_qualityCheck as cfg
 import json
 import re
 

@@ -52,7 +52,7 @@ You should not need to edit this script. After updating `config_dcm2bids_batch.p
 
 ### `fmap_intendedfor.py`
 
-If the `bidsQC` script is to be used to alter run numbers, that must be done BEFORE running `fmap_intededfor.py`. 
+If the `qualityCheck.py` script is to be used to alter run numbers, that must be done BEFORE running `fmap_intededfor.py`. 
 
 This script requires you to edit it. In order to meet the BIDS specifications, the following fields are inserted into the `.json` file for each fieldmap:
 
