@@ -29,18 +29,18 @@ def main():
             if len(expected_timepoint) == 1:
                 check_sequence_folder_count(sequence_folder_names, expected_timepoint[0].sequences, subject, timepoint)
             else:
-                write_to_errorlog("TIMEPOINT WARNING! %s missing or user entered duplicate or non-existant timepoint." % (timepoint))
+                write_to_errorlog("TIMEPOINT WARNING! %s missing or user entered duplicate or non-existent timepoint." % (timepoint))
             for sequence_folder_name in sequence_folder_names:
                 expected_sequence = [es for es in expected_timepoint[0].sequences if es.name == sequence_folder_name]
                 if len(expected_sequence) == 1:
                     sequence_fullpath = check_sequence_files(subject, timepoint, sequence_folder_name, expected_sequence[0])
                 else:
-                    write_to_errorlog("SEQUENCE DIRECTORY WARNING! %s missing or user entered duplicate or non-existant sequence folder name." % (sequence_folder_name))
+                    write_to_errorlog("SEQUENCE DIRECTORY WARNING! %s missing or user entered duplicate or non-existent sequence folder name." % (sequence_folder_name))
             if cfg.order_sequences:
                 write_to_outputlog('\n' + '-'*20 + ' assign ordered run numbers ' + '-'*20)
-                files_all_target_tasks = append_series_number(sequence_fullpath, cfg.bidsdir, cfg.tasks_to_order)
+                files_all_target_tasks = append_series_number(sequence_fullpath, cfg.tasks_to_order)
                 files_torename = drop_runnum(files_all_target_tasks, cfg.tasks_to_order, sequence_fullpath)
-                rename_tasks_ordered(files_torename, sequence_fullpath, cfg.tasks_to_order, subject)
+                rename_tasks_ordered(files_torename, sequence_fullpath, cfg.tasks_to_order)
 
 
 def drop_runnum(files_all_target_tasks, tasks_to_order, sequence_fullpath):
@@ -68,7 +68,7 @@ def natural_keys(text):
     return [ atoi(c) for c in re.split('(\d+)', text) ]
 
 
-def rename_tasks_ordered(files_torename:list, sequence_fullpath:str, tasks_to_order:list, subject:str):    
+def rename_tasks_ordered(files_torename: list, sequence_fullpath: str, tasks_to_order: list):
     write_to_outputlog('Appending run number based on sequence acquisition order.')
     for task in tasks_to_order:
         files_one_task = [f for f in files_torename if str(task) in f]
@@ -89,7 +89,7 @@ def rename_tasks_ordered(files_torename:list, sequence_fullpath:str, tasks_to_or
                 i = i + 1
 
 
-def append_series_number(sequence_fullpath:str, bidsdir:str, tasks_to_order: list):
+def append_series_number(sequence_fullpath: str, tasks_to_order: list):
     """
     Pull SeriesNumber from the JSON file and append it as a prefix to the appropriate json and nifti files.
     """
@@ -104,7 +104,7 @@ def append_series_number(sequence_fullpath:str, bidsdir:str, tasks_to_order: lis
         with open(json_fullpath) as f:
             data = json.load(f)
             series_number = data["SeriesNumber"]
-        extensions = '.nii.gz', '.json'
+
         for extension in extensions:
             new_file_name = str(series_number) + '_' + file_basename + extension
             os.rename(os.path.join(sequence_fullpath, file_basename + extension), os.path.join(sequence_fullpath, new_file_name))
@@ -135,7 +135,7 @@ def check_dirs(dir_fullpaths:list):
     Check if a directory exists. If not, create it.
 
     @type dir_fullpaths:        list
-    @param dir_fullpaths:       Paths to directorys to check
+    @param dir_fullpaths:       Paths to check
     """
     for dir_fullpath in dir_fullpaths:
         if not os.path.isdir(dir_fullpath):
@@ -310,10 +310,10 @@ def fix_files(sequence_fullpath: str, file_group: str, expected_numfiles: int, e
     number of files with the lowest run numbers to the tmp__dcm2bids folder. \
     Then, change the run numbers for the remaining files.
 
-    @type sequence_fillpath:                string
+    @type sequence_fullpath:                string
     @param sequence_fullpath:               The full path to to the sequence folder
-    @type filegroup:                        string
-    @param filegroup:                       Name of files (e.g. T1w, taskname) to check
+    @type file_group:                       string
+    @param file_group:                      Name of files (e.g. T1w, taskname) to check
     @type expected_numfiles:                integer
     @param expected_numfiles:               The expected number of runs for the filegroup
     @type: extension:                       string
