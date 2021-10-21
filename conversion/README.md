@@ -9,7 +9,7 @@
   
 The scripts in this directory build off of [cbedetti's Dcm2Bids package](https://github.com/cbedetti/Dcm2Bids), which on its own will allow you to convert all of the DICOM files in a given directory to Nifti files on a local machine. See [cbedetti's tutorial](https://cbedetti.github.io/Dcm2Bids/tutorial/) to learn how to do the basic conversion and for detailed instructions on how to create the configuration file specific to _your_ study's dicoms.
 
-The scripts in this folder allow the user to **convert dicoms for all or only a subset of participants in the dicom directory and to run the conversion on Talapas**, the University of Oregon's high performance cluster. And here is some additional information on [running the helper script on Talapas](helper_readme.md).
+The scripts in this folder allow the user to **convert dicoms for all or only a subset of participants in the dicom directory and to run the conversion on Talapas**, the University of Oregon's high performance cluster. And here is some additional information on [running the helper script on Talapas](#usingHelper).
 
 ## Scripts<a name="scripts"/>
 
@@ -85,7 +85,7 @@ Here is an example of what the output would look like:
   - The container is available on [Singularity Hub](https://singularity-hub.org/collections/544)
   - Note that when you copy the container, you either need to name it `Dcm2Bids-master.simg` or change the image name in the `config_dcm2bids_batch.py` script.
 
-### Using the Dcm2Bids helper
+### Using the Dcm2Bids helper <a name="usingHelper"/>
 
 If you need the metadata to populate the config file, use the dcm2bids helper.
 
