@@ -1,7 +1,10 @@
 
 # Convert Dicoms to Niftis
 
-The scripts in this folder allow the user to **convert dicoms for all or only a subset of participants in the dicom directory and to run the conversion on Talapas**, the University of Oregon's high performance cluster. 
+The scripts in this folder allow the user to:  
+
+1. Convert dicoms for all or only a subset of participants in the dicom directory.  
+2. Run the conversion on Talapas, the University of Oregon's high performance cluster.  
 
 ## Table of Contents
 
