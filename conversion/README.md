@@ -47,7 +47,9 @@ You should not need to edit this script. After updating `config_dcm2bids_batch.p
 
 ### `fmap_intendedfor.py`
 
-Requires you to edit it. In order to meet the BIDS specifications, this script will insert the following fields into the `.json` file for each fieldmap:
+If the `bidsQC` script is to be used to alter run numbers, that must be done BEFORE running `fmap_intededfor.py`. 
+
+This script requires you to edit it. In order to meet the BIDS specifications, the following fields are inserted into the `.json` file for each fieldmap:
 
 - `"IntendedFor"`
   - Followed by a list of all the functional runs in the `func` folder associated with the matching subject and session.
