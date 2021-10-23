@@ -11,11 +11,12 @@ The scripts in this repo are a combination of wrappers and quality checking scri
 
 **Instructions on this page are to run batches of subjects on a high performance cluster running SLURM using a Singularity container of the dcm2Bids package -- or -- to run the subjects serially on a local machine.**
 
-## Using BidsQC
+## Using BidsQC: First steps
 
 1. Using either [git clone](https://help.github.com/en/articles/cloning-a-repository) or the download button, copy this repo to the machine you will use for dicom conversion. This can be your local machine or a high performance cluster such as the UO's Talapas.
-2. Follow the instructions on the [Dcm2Bids tutorial](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/) to convert the DICOM files to Nifti files. The tutorial is comprehensive and should have all of the information you need. Look at it now.
-   1. If you want to (a) **convert only a subset of the participant data,** or (b) **run the conversion in a cluster environment** such as Talapas, there are instructions and scripts available in the [conversion](/conversion) folder of this repo to help you do so.
+2. Convert your DICOMS to Nifti files that adhere to BIDS. To do so, you can:
+   1. Convert all DICOMS in a specified directory. Simply follow the instructions on the [Dcm2Bids tutorial](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/). The tutorial is comprehensive and should have all of the information you need.
+   2. Or you can **convert only a subset of the participant data,** or **run the conversion in a cluster environment** such as Talapas. To do so, see the instructions and scripts in the [conversion](/conversion) folder of this repo.
 3. Check that the results of the conversion and renaming are as expected. You can use the files in the [qualityCheck](/qualityCheck) folder of this repo to help you do so.
 
 ## Table of Contents
@@ -34,10 +35,13 @@ The scripts in this repo are a combination of wrappers and quality checking scri
 ## Dependencies<a name="dependencies"/>
 
 - Python 3 with the `future` module (pip install of cbedetti's `dcm2bids` will install the future module)
-- `dcm2niix` conversion tool. **You need to install it.**
+- `dcm2niix` conversion tool. **If it is not already available on your machine or cluster, install it.**
   - Get via the [rordenlab github](https://github.com/rordenlab/dcm2niix)
-- `dcm2Bids`. **You need to install it.**
-  - Available from [UNFmontreal](https://github.com/UNFmontreal/Dcm2Bids)
+- `dcm2Bids` **If it is not already available on your machine or cluster, install it.**
+  - Available from [UNFmontreal](https://github.com/UNFmontreal/Dcm2Bids) for your local machine.
+  - [Here are instructions](/conversion/README.md#dependencies) for getting a singularity image for use on a cluster. 
+
+* Note: to check if Python 3, dcm2niix, or other packages are available on a Linux cluster, type `module avail [packageName]` at the command line, e.g. `module avail Python3`
 
 ## Repo Contents<a name="repo-contents"/>
 
