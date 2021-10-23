@@ -86,7 +86,7 @@ Here is an example of what the output would look like:
 - SLURM
 - Python3
 - Dcm2Bids singularity container **You need to download it.**
-  - For instructions on copying singularity containers, see [Containers: Docker & Singularity](https://uosanlab.atlassian.net/wiki/spaces/SW/pages/45285423) (and, as always, read the [documentation](http://singularity.lbl.gov/docs-build-container))
+  - For instructions on copying singularity containers, see [Containers: Docker & Singularity](https://uoregonctn.atlassian.net/wiki/spaces/FSS/pages/138248203/Containers+Docker+Singularity) (and, as always, read the [documentation](http://singularity.lbl.gov/docs-build-container))
   - The container is available on [Singularity Hub](https://singularity-hub.org/collections/544)
   - Note that when you copy the container, you either need to name it `Dcm2Bids-master.simg` or change the image name in the `config_dcm2bids_batch.py` script.
 
