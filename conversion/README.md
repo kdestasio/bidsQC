@@ -90,14 +90,19 @@ Here is an example of what the output would look like:
   - Follow the [instructions](https://uoregonctn.atlassian.net/wiki/spaces/FSS/pages/138248203/Containers+Docker+Singularity#Containers:Docker&Singularity-trueFromgithub) to build the singularity container on Talapas 
   - **Important:** when you copy the container, you either need to name it `Dcm2Bids-master.simg` or change the image name in the `config_dcm2bids_batch.py` script.
 
-### Using the Dcm2Bids helper <a name="usingHelper"/>
+### Using the Dcm2Bids helper <a name="usingHelper">
 
 If you need the metadata to populate the config file, use the dcm2bids helper.
 
-1. `cd` into the `conversion` directory.
-2. Load python3 by typing `module load python3` into the terminal.
-3. Use the [helper script](helper).
-4. cd to the folder created by the helper (should be in the top level of your study directory), e.g. 
+1. Log into the HPC   
+`ssh -X username@Talapas-ln1.uoregon.edu`
+2. `cd` into the `conversion` directory.
+3. Change the variables and/or paths in the `config_dcm2bids_helper.py` script for your study.
+4. Load python3 by typing in the terminal:  
+`module load python3`
+5. Run the [helper script](helper) by typing:   
+`python3 dcm2bids_helper.py`
+4. `cd` to the folder created by the helper (should be in the top level of your study directory), e.g. 
 
 ```{bash}
 cd /projects/sanlab/shared/REV/tmp_dcm2bids/helper
@@ -112,7 +117,8 @@ ls
     017_REV001_20150406_React2_mb3_g2_2mm_te27_20150406145550.nii.gz
 ```
 
-5. View the `.json` files and use that info to [edit the config file](#study_config) so it works for your study.
+5. View the `.json` files and use that info to [edit the config file](#study_config) `study_config.json` so it works for your study.
+
 
 ### Steps to convert DICOMS to BIDS
 
