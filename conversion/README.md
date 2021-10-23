@@ -83,12 +83,12 @@ Here is an example of what the output would look like:
 
 ### Dependencies
 
-- SLURM
-- Python3
-- Dcm2Bids singularity container **You need to download it.**
-  - For instructions on copying singularity containers, see [Containers: Docker & Singularity](https://uoregonctn.atlassian.net/wiki/spaces/FSS/pages/138248203/Containers+Docker+Singularity) (and, as always, read the [documentation](http://singularity.lbl.gov/docs-build-container))
-  - The container is available on [Singularity Hub](https://singularity-hub.org/collections/544)
-  - Note that when you copy the container, you either need to name it `Dcm2Bids-master.simg` or change the image name in the `config_dcm2bids_batch.py` script.
+- SLURM (already available on Talapas)
+- Python3 (type `module load python3` on Talapas to make it available)
+- Dcm2Bids singularity container **You need to download it if you don't have access to a copy on Talapas.**
+  - For instructions on copying singularity containers, see [Containers: Docker & Singularity](https://uoregonctn.atlassian.net/wiki/spaces/FSS/pages/138248203/Containers+Docker+Singularity)
+  - Follow the [instructions](https://uoregonctn.atlassian.net/wiki/spaces/FSS/pages/138248203/Containers+Docker+Singularity#Containers:Docker&Singularity-trueFromgithub) to build the singularity container on Talapas 
+  - **Important:** when you copy the container, you either need to name it `Dcm2Bids-master.simg` or change the image name in the `config_dcm2bids_batch.py` script.
 
 ### Using the Dcm2Bids helper <a name="usingHelper"/>
 
