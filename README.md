@@ -14,11 +14,10 @@ The scripts in this repo are a combination of wrappers and quality checking scri
 ## bidsQC Table of Contents
 
 - [Using bidsQC: Overview](#overview)
-- [Dependencies](#dependencies)
+  - [Dependencies](#dependencies)
 - [Repository Contents](#repo-contents)
   - [Conversion Folder](#conversion_folder)
   - [Bids Quality Check Folder](#qc_folder)
-- [Creating the dcm2bids Configuration File](helper_readme.md)
 - [Running dcm2bids](/conversion/README.md)
   - [On a Linux Cluster](/conversion/README.md#running-the-scripts-on-a-linux-cluster)
   - [Locally](/conversion/README.md#running-dcm2bids-locally)
