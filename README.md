@@ -11,16 +11,9 @@ The scripts in this repo are a combination of wrappers and quality checking scri
 
 **Instructions on this page are to run batches of subjects on a high performance cluster running SLURM using a Singularity container of the dcm2Bids package -- or -- to run the subjects serially on a local machine.**
 
-## Using BidsQC: First steps
+## bidsQC Table of Contents
 
-1. Using either [git clone](https://help.github.com/en/articles/cloning-a-repository) or the download button, copy this repo to the machine you will use for dicom conversion. This can be your local machine or a high performance cluster such as the UO's Talapas.
-2. Convert your DICOMS to Nifti files that adhere to BIDS. To do so, you can:
-   1. Convert all DICOMS in a specified directory. Simply follow the instructions on the [Dcm2Bids tutorial](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/). The tutorial is comprehensive and should have all of the information you need.
-   2. Or you can **convert only a subset of the participant data,** or **run the conversion in a cluster environment** such as Talapas. To do so, see the instructions and scripts in the [conversion](/conversion) folder of this repo.
-3. Check that the results of the conversion and renaming are as expected. You can use the files in the [qualityCheck](/qualityCheck) folder of this repo to help you do so.
-
-## Table of Contents
-
+- [Using bidsQC: Overview](#overview)
 - [Dependencies](#dependencies)
 - [Repository Contents](#repo-contents)
   - [Conversion Folder](#conversion_folder)
@@ -32,7 +25,16 @@ The scripts in this repo are a combination of wrappers and quality checking scri
 - [Running qualityCheck](/qualityCheck/README.md)
 - [Final BIDS Steps](#final-steps)
 
-## Dependencies<a name="dependencies"/>
+## Using BidsQC: Overview <a name="overview">
+
+1. Using either [git clone](https://help.github.com/en/articles/cloning-a-repository) or the download button, copy this repo to the machine you will use for dicom conversion. This can be your local machine or a high performance cluster such as the UO's Talapas.
+2. Convert your DICOMS to Nifti files that adhere to BIDS. To do so, you can:
+   1. Convert all DICOMS in a specified directory. Simply follow the instructions on the [Dcm2Bids tutorial](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/). The tutorial is comprehensive and should have all of the information you need.
+   2. Or you can **convert only a subset of the participant data,** or **run the conversion in a cluster environment** such as Talapas. To do so, see the instructions and scripts in the [conversion](/conversion) folder of this repo.
+3. Check that the results of the conversion and renaming are as expected. You can use the files in the [qualityCheck](/qualityCheck) folder of this repo to help you do so.
+4. Verify your data are in BIDS using the [BIDS Validator](http://incf.github.io/bids-validator/)
+
+## Dependencies<a name="dependencies">
 
 - Python 3 with the `future` module (pip install of cbedetti's `dcm2bids` will install the future module)
 - `dcm2niix` conversion tool. **If it is not already available on your machine or cluster, install it.**
@@ -43,21 +45,21 @@ The scripts in this repo are a combination of wrappers and quality checking scri
 
 * Note: to check if Python 3, dcm2niix, or other packages are available on a Linux cluster, type `module avail [packageName]` at the command line, e.g. `module avail Python3`
 
-## Repo Contents<a name="repo-contents"/>
+## Repo Contents<a name="repo-contents">
 
-### Conversion Scripts<a name="conversion_folder"/>
+### Conversion Scripts<a name="conversion_folder">
 
 These scripts are located in the [conversion folder](/conversion). They allow the user to convert dicoms for only a subset of participants in the dicom directory and to run the conversion on Talapas, the University of Oregon's high performance cluster. The scripts in this repo build off of [Dcm2Bids](https://github.com/UNFmontreal/Dcm2Bids), which on its own will allow you to convert the DICOM files to Nifti files. See the [Dcm2Bids tutorial](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/) to learn how to do the basic conversion and for detailed instructions on how to create the configuration file specific to _your_ study's dicoms.
 
 For instructions on how to use the conversion scripts, see the conversion folder [README](/conversion/README.md).
 
-### qualityCheck Scripts<a name="qc_folder"/>
+### qualityCheck Scripts<a name="qc_folder">
 
 Once Niftis are in BIDS, these scripts can be used to check whether each sequence has the correct number of runs. Files in the target directories are checked against values in the configuration file where the user specifies how many runs of each sequence are expected at each time point. Optional: append the `run-##` key-value string to file names based on sequence order (option specifed in config file).  
 
 For step-by-step instructions and a description of the naming rules, see the [qualityCheck README.](/qualityCheck/README.md)
 
-## Final BIDS Steps<a name="final-steps"/>
+## Final BIDS Steps<a name="final-steps">
 ### Manually Create Metadata Files
 
 As per: [http://bids.neuroimaging.io/bids\_spec1.0.0-rc2.pdf](http://bids.neuroimaging.io/bids_spec1.0.0-rc2.pdf)
@@ -70,6 +72,6 @@ Place these files in the top level bids directory.
 - README (optional, but strongly recommended)
 - CHANGES (optional, but strongly recommended)
 
-## Check the BIDS Conversion
+## Check the BIDS Conversion <a name="bidsValidator">
 
 BIDS validator: [http://incf.github.io/bids-validator](http://incf.github.io/bids-validator/)
