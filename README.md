@@ -13,10 +13,10 @@ The scripts in this repo are a combination of wrappers and quality checking scri
 
 ## Using BidsQC
 
-1. Using either [git clone](https://help.github.com/en/articles/cloning-a-repository) or the download button, copy this repo to the machine you will use for dicom conversion.
+1. Using either [git clone](https://help.github.com/en/articles/cloning-a-repository) or the download button, copy this repo to the machine you will use for dicom conversion. This can be your local machine or a high performance cluster such as the UO's Talapas.
 2. Follow the instructions on the [Dcm2Bids tutorial](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/) to convert the DICOM files to Nifti files. The tutorial is comprehensive and should have all of the information you need. Look at it now.
-   1. If you want to **(a)** convert only a subset of the participant data, or **(b)** run the conversion on Talapas (the University of Oregon high performance cluster), there are scripts available in the [conversion](/conversion) folder of this repo to help you do so. But first, go look at that tutorial.
-3. Check that the results of the conversion and renaming are as expected by using the files in the [qualityCheck](/qualityCheck) folder of this repo to help you do so.
+   1. If you want to (a) **convert only a subset of the participant data,** or (b) **run the conversion in a cluster environment** such as Talapas, there are instructions and scripts available in the [conversion](/conversion) folder of this repo to help you do so.
+3. Check that the results of the conversion and renaming are as expected. You can use the files in the [qualityCheck](/qualityCheck) folder of this repo to help you do so.
 
 ## Table of Contents
 
@@ -26,8 +26,8 @@ The scripts in this repo are a combination of wrappers and quality checking scri
   - [Bids Quality Check Folder](#qc_folder)
 - [Creating the dcm2bids Configuration File](helper_readme.md)
 - [Running dcm2bids](/conversion/README.md)
-  - [On a Linux Cluster](/running_dcm2bids_cluster.md)
-  - [Locally](/conversion/README.md)
+  - [On a Linux Cluster](/conversion/README.md#running-the-scripts-on-a-linux-cluster)
+  - [Locally](/conversion/README.md#running-dcm2bids-locally)
 - [Running qualityCheck](/qualityCheck/README.md)
 - [Final BIDS Steps](#final-steps)
 
