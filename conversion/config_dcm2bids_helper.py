@@ -8,11 +8,11 @@ import os
 # They need to exist prior to running the script.
 
 # Directories
-pathToStudyFolder = os.path.join(os.sep, "projects", "sanlab", "shared", "studyName") # folder that contains bidsdir and codedir
+pathToStudyFolder = os.path.join(os.sep, "projects", "sanlab", "shared", "studyName") # folder that contains bidsdir and pathToConversionFolder
 pathToDicomFolder = os.path.join(os.sep, "projects", "shared", "DICOMS")
 bidsdir = os.path.join(pathToStudyFolder, "bids_data") # where the niftis will be put
-codedir = os.path.join(pathToStudyFolder, "REV_study", "org", "dcm2bids") # Contains subject_list.txt, config file, and dcm2bids_batch.py
-logdir = os.path.join(codedir, "logs_helper")
+pathToConversionFolder = os.path.join(pathToStudyFolder, "REV_study", "org", "dcm2bids") # Contains subject_list.txt, config file, and dcm2bids_batch.py
+logdir = os.path.join(pathToConversionFolder, "logs_helper")
 
 # Log files
 outputlog = os.path.join(logdir, "outputlog_helper.txt")
