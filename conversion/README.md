@@ -15,6 +15,9 @@ The scripts in this folder allow the user to:
   4. [Run dcm2bids_batch.py](#clust4)
 - [How to run locally](#local)
   1. [Use the Dcm2Bids helper](#local1)
+  2. [Edit the `study_config.json` ](#local2)
+  3. [Create `subject_list.txt`](#local3)
+  4. [run `dcm2bids_batch.py`](local4)
 - [More detail on the scripts in this folder](#scripts)
   - [Scripts you need to edit](#edit)
   - [Scripts you don't need to edit](#noEdit)
@@ -140,7 +143,7 @@ sub01_20150909,REV001,wave2
 sub02_20150909,REV001,wave1
 ```
 
-#### 4. run `dcm2bids_batch.py`
+#### 4. run `dcm2bids_batch.py` <a name="local4">
 
 - Navigate into the `bidsQC/conversion` directory.  
   `cd path/to/bidsQC/conversion`
