@@ -6,6 +6,8 @@ The scripts in this folder allow the user to:
 1. Convert dicoms for all or only a subset of participants in the dicom directory.  
 2. Run the conversion on Talapas, the University of Oregon's high performance cluster.  
 
+The instructions below presuppose you have the bidsQC repository on your machine (local or cluster) with access to your dicoms. For instructions on getting the repo onto your machine, see the [step-by-step guide.](../uoTutorial.md)
+
 ## Table of Contents
 
 - [How to run on a cluster](#cluster)
@@ -17,7 +19,7 @@ The scripts in this folder allow the user to:
   1. [Use the Dcm2Bids helper](#local1)
   2. [Edit the `study_config.json` ](#local2)
   3. [Create `subject_list.txt`](#local3)
-  4. [run `dcm2bids_batch.py`](local4)
+  4. [Run `dcm2bids_batch.py`](local4)
 - [More detail on the scripts in this folder](#scripts)
   - [Scripts you need to edit](#edit)
   - [Scripts you don't need to edit](#noEdit)
@@ -40,7 +42,7 @@ Here is some additional information on [running the helper script on Talapas](#c
     - instructions on copying singularity containers, see [Containers: Docker & Singularity](https://uoregonctn.atlassian.net/wiki/spaces/FSS/pages/138248203/Containers+Docker+Singularity)
     - Follow the [instructions](https://uoregonctn.atlassian.net/wiki/spaces/FSS/pages/138248203/Containers+Docker+Singularity#Containers:Docker&Singularity-trueFromgithub) to build the singularity container on Talapas 
 
-  **Note:** to check if Python 3, dcm2niix, or other packages are available on a Linux cluster, type module avail [packageName] at the command line, e.g. module avail Python3
+To check if Python 3, dcm2niix, or other packages are available on a Linux cluster, type module avail [packageName] at the command line, e.g. module avail Python3
 
 ***Important:** when you copy the container, you either need to name it `Dcm2Bids-master.simg` or change the image name in the `config_dcm2bids_batch.py` script.
 
