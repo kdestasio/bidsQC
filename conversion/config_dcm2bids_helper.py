@@ -6,23 +6,24 @@ import os
 
 # The following variables are used in the main script and need to be defined here. Change them for your data. 
 # They need to exist prior to running the script.
+# You don't need to use slashes in the path names, just put the parts of the path in quotes as shown below.
 
 # Directories
 pathToStudyFolder = os.path.join(os.sep, "projects", "sanlab", "shared", "studyName") # folder that contains bidsdir and pathToConversionFolder
-pathToDicomFolder = os.path.join(os.sep, "projects", "shared", "DICOMS")
-bidsdir = os.path.join(pathToStudyFolder, "bids_data") # where the niftis will be put
-pathToConversionFolder = os.path.join(pathToStudyFolder, "REV_study", "org", "dcm2bids") # Contains subject_list.txt, config file, and dcm2bids_batch.py
-logdir = os.path.join(pathToConversionFolder, "logs_helper")
+pathToDicomFolder = os.path.join(os.sep, "projects", "lcni", "dcm", "sanlab", "Berkman", "REV")
+bidsdir = os.path.join(pathToStudyFolder, "bids_data") # path to the folder where the niftis will be put
+pathToConversionFolder = os.path.join(pathToStudyFolder, "bidsQC", "conversion") # Contains subject_list.txt, config file, and dcm2bids_batch.py
+logdir = os.path.join(pathToConversionFolder, "logs_helper") # Path to the folder where logs will be created
 
 # Log files
 outputlog = os.path.join(logdir, "outputlog_helper.txt")
 errorlog = os.path.join(logdir, "errorlog_helper.txt")
 
 # Test subject
-test_subject = "S001" # Name of a directory that contains DICOMS for one participant
+test_subject = "REV027_20150518_102229" # Name of a directory that contains DICOMS for one participant. Must be subfolder of pathToDicomsFolder. E.g. pathToDicomsFolder/S001
 
 # Run on local machine (run_local = True) or high performance cluster with slurm (run_local = False)
-run_local = True
+run_local = False
 
-# If false, set the singularity image. Else, set to "NA"
+# If run_local is set to false, enter the path for the singularity image. Else, set to "NA"
 singularity_image =  os.path.join(os.sep, "projects", "sanlab", "shared", "containers", "Dcm2Bids-master.simg")
