@@ -2,6 +2,8 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1326895.svg)](https://doi.org/10.5281/zenodo.1326895)
 
+## Overview
+
 The scripts in this repo are a combination of wrappers and quality checking scripts that take neuroimaging files from DICOMS to Niftis named and structured as per [BIDS](http://bids.neuroimaging.io/). They add functionality to the Dcm2Bids scripts that allow the user to:
 
 1. Convert dicoms for all or only a subset of participants in the dicom directory (`/conversion`)
@@ -9,22 +11,22 @@ The scripts in this repo are a combination of wrappers and quality checking scri
 3. Check that the expected files exist for each participant and notify the user if there is a discrepency (`/qualityCheck`)
 4. Rename task runs, retaining those that occured latest in time (`/qualityCheck`)
 
-**Instructions on this page are to run batches of subjects on a high performance cluster running SLURM using a Singularity container of the dcm2Bids package -- or -- to run the subjects serially on a local machine.**
+**The purpose of these scripts is to allow the user to run batches of specific subjects on a high performance cluster -- or -- to run the subjects serially on a local machine. They also provide some functionality to check that the resultant data contains the expected runs.**
 
 ## bidsQC Table of Contents
 
-- [Using bidsQC: Overview](#overview)
+- [Using bidsQC: Overview](#usage)
   - [Dependencies](#dependencies)
 - [Repository Contents](#repo-contents)
   - [Conversion Folder](#conversion_folder)
+    - [Running dcm2bids](/conversion/README.md)
+    - [On a Linux Cluster](/conversion/README.md#running-the-scripts-on-a-linux-cluster)
+    - [Locally](/conversion/README.md#running-dcm2bids-locally)
   - [Bids Quality Check Folder](#qc_folder)
-- [Running dcm2bids](/conversion/README.md)
-  - [On a Linux Cluster](/conversion/README.md#running-the-scripts-on-a-linux-cluster)
-  - [Locally](/conversion/README.md#running-dcm2bids-locally)
-- [Running qualityCheck](/qualityCheck/README.md)
+    - [Running qualityCheck](/qualityCheck/README.md)
 - [Final BIDS Steps](#final-steps)
 
-## Using BidsQC: Overview <a name="overview">
+## Using BidsQC <a name="usage">
 
 1. Using either [git clone](https://help.github.com/en/articles/cloning-a-repository) or the download button, copy this repo to the machine you will use for dicom conversion. This can be your local machine or a high performance cluster such as the UO's Talapas.
 2. Convert your DICOMS to Nifti files that adhere to BIDS. To do so, you can:
@@ -46,9 +48,9 @@ The scripts in this repo are a combination of wrappers and quality checking scri
 
 ## Repo Contents<a name="repo-contents">
 
-### Conversion Scripts<a name="conversion_folder">
+### Conversion Folder<a name="conversion_folder">
 
-These scripts are located in the [conversion folder](/conversion). They allow the user to convert dicoms for only a subset of participants in the dicom directory and to run the conversion on Talapas, the University of Oregon's high performance cluster. The scripts in this repo build off of [Dcm2Bids](https://github.com/UNFmontreal/Dcm2Bids), which on its own will allow you to convert the DICOM files to Nifti files. See the [Dcm2Bids tutorial](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/) to learn how to do the basic conversion and for detailed instructions on how to create the configuration file specific to _your_ study's dicoms.
+The scripts located in the [conversion folder](/conversion) allow the user to convert dicoms for only a subset of participants in the dicom directory and to run the conversion on Talapas, the University of Oregon's high performance cluster. They build off of [Dcm2Bids](https://github.com/UNFmontreal/Dcm2Bids), which on its own will allow you to convert the DICOM files to Nifti files en masse. See the [Dcm2Bids tutorial](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/) to learn how to do the basic conversion and for detailed instructions on how to create the configuration file specific to _your_ study's dicoms.
 
 For instructions on how to use the conversion scripts, see the conversion folder [README](/conversion/README.md).
 
