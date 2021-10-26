@@ -12,11 +12,11 @@ def main():
     check_dirs(folders_tocheck)
     logfile_fullpaths = cfg.errorlog, cfg.outputlog
     create_logfiles(logfile_fullpaths)
-    check_dicomdir(cfg.dicomdir)
-    batch_jobs(cfg.subjectlist, cfg.dicomdir, cfg.configfile, cfg.niidir)
+    check_dicomdir(cfg.pathToDicomFolder)
+    batch_jobs(cfg.subjectlist, cfg.pathToDicomFolder, cfg.configfile, cfg.niidir)
 
 
-def batch_jobs(subject_list, dicomdir, configfile, niidir):
+def batch_jobs(subject_list, pathToDicomFolder, configfile, niidir):
     with open(subject_list) as file:
         lines = file.readlines()  
     for line in lines:
@@ -24,20 +24,20 @@ def batch_jobs(subject_list, dicomdir, configfile, niidir):
         subjectdir = entry.split(",")[0]
         subject = entry.split(",")[1]
         wave = entry.split(",")[2]
-        subjectpath = os.path.join(dicomdir, subjectdir)
+        subjectpath = os.path.join(pathToDicomFolder, subjectdir)
         if os.path.isdir(subjectpath):
             write_to_outputlog(subjectdir + os.linesep)
             if cfg.run_local:
                 batch_cmd = 'dcm2bids -d {subjectpath} -s {wave} -p {subject} -c {configfile} -o {niidir}  --forceDcm2niix --clobber'.format(subjectpath=subjectpath,  wave=wave, subject=subject, configfile=configfile,  niidir=niidir)
             else:
-                batch_cmd = 'module load singularity; sbatch --job-name dcm2bids_{subjectdir} --partition=short --time 00:60:00 --mem-per-cpu=2G --cpus-per-task=1 -o {logdir}/{subjectdir}_dcm2bids_output.txt -e {logdir}/{subjectdir}_dcm2bids_error.txt --wrap="singularity run -B {dicomdir} -B {niidir} -B {codedir} {image} -d {subjectpath} -s {wave} -p {subject} -c {configfile} -o {niidir}  --forceDcm2niix --clobber"'.format(logdir=cfg.logdir, subjectdir=subjectdir, dicomdir=cfg.dicomdir, wave=wave, codedir=cfg.codedir, configfile=cfg.configfile, subject=subject, niidir=cfg.niidir, subjectpath=subjectpath, image=cfg.image)
+                batch_cmd = 'module load singularity; sbatch --job-name dcm2bids_{subjectdir} --partition=short --time 00:60:00 --mem-per-cpu=2G --cpus-per-task=1 -o {logdir}/{subjectdir}_dcm2bids_output.txt -e {logdir}/{subjectdir}_dcm2bids_error.txt --wrap="singularity run -B {pathToDicomFolder} -B {niidir} -B {pathToConversionFolder} {image} -d {subjectpath} -s {wave} -p {subject} -c {configfile} -o {niidir}  --forceDcm2niix --clobber"'.format(logdir=cfg.logdir, subjectdir=subjectdir, pathToDicomFolder=cfg.pathToDicomFolder, wave=wave, pathToConversionFolder=cfg.pathToConversionFolder, configfile=cfg.configfile, subject=subject, niidir=cfg.niidir, subjectpath=subjectpath, image=cfg.image)
             subprocess.call([batch_cmd], shell=True)
         else:
             write_to_errorlog(subjectdir + os.linesep)
 
 
-def check_dicomdir(dicomdir):
-    if not os.path.isdir(dicomdir):
+def check_dicomdir(pathToDicomFolder):
+    if not os.path.isdir(pathToDicomFolder):
         write_to_errorlog("Incorrect dicom directory specified")
 
 

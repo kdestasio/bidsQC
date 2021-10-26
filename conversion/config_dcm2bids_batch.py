@@ -31,15 +31,15 @@ parent_dir = "dcm2bids"
 # These variables are used in the main script and need to be defined here.
 # They need to exist prior to running the script (with the exception of `image` 
 # which can be set equal to "NA" if you are running the script locally)
-dicomdir = os.path.join(os.sep, "projects", "lcni", "dcm", group, "Archive", study)
-codedir = os.path.join(os.sep, "projects", group, "shared", study, "REV_scripts", "org", parent_dir)  # Contains subject_list.txt, config file, and dcm2bids_batch.py
-configfile = os.path.join(codedir, "study_config.json")  # path to and name of config file
+pathToDicomFolder = os.path.join(os.sep, "projects", "lcni", "dcm", group, "Archive", study)
+pathToConversionFolder = os.path.join(os.sep, "projects", group, "shared", study, "REV_scripts", "org", parent_dir)  # Contains subject_list.txt, config file, and dcm2bids_batch.py
+configfile = os.path.join(pathToConversionFolder, "study_config.json")  # path to and name of config file
 image = os.path.join(os.sep, "projects", group, "shared", "containers", "Dcm2Bids-master.simg")
 
 # These variables are also used in the main script and need to be defined here.
 # If they don't exist, they will be created by the script
 niidir = os.path.join(os.sep, "projects", group, "shared", study, "bids_data") # Where the niftis will be put
-logdir = os.path.join(codedir, "logs_dcm2bids")
+logdir = os.path.join(pathToConversionFolder, "logs_dcm2bids")
 outputlog = os.path.join(logdir, "outputlog_dcmn2bids" + datetime.now().strftime("%Y%m%d-%H%M") + ".txt")
 errorlog = os.path.join(logdir, "errorlog_dcm2bids" + datetime.now().strftime("%Y%m%d-%H%M") + ".txt")
 
