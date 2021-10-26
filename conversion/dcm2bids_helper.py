@@ -19,7 +19,7 @@ def main():
         if cfg.run_local:
             cmd = 'dcm2bids_helper -d {pathToDicomFolder}/{test_subject} -b {bidsdir}'.format(pathToDicomFolder=cfg.pathToDicomFolder, test_subject=cfg.test_subject, niidir=cfg.bidsdir)
         else:
-            cmd = 'module load singularity; sbatch --job-name helper_{test_subject} --partition=short --time 00:60:00 --mem-per-cpu=2G --cpus-per-task=1 -o {logdir}/{test_subject}_helper_output.txt -e {logdir}/{test_subject}_helper_error.txt --wrap="singularity exec -B {pathToDicomFolder} -B {pathToStudyFolder} {image} dcm2bids_helper -d {pathToDicomFolder}/{test_subject} -o {bidsdir}"'.format(pathToDicomFolder=cfg.pathToDicomFolder, test_subject=cfg.test_subject, bidsdir=cfg.bidsdir, group=cfg.group, image=cfg.singularity_image, study=cfg.study, logdir=cfg.logdir, pathToStudyFolder=cfg.pathToStudyFolder)
+            cmd = 'module load singularity; sbatch --job-name helper_{test_subject} --partition=short --time 00:60:00 --mem-per-cpu=2G --cpus-per-task=1 -o {logdir}/{test_subject}_helper_output.txt -e {logdir}/{test_subject}_helper_error.txt --wrap="singularity exec -B {pathToDicomFolder} -B {pathToStudyFolder} {image} dcm2bids_helper -d {pathToDicomFolder}/{test_subject} -o {bidsdir}"'.format(pathToDicomFolder=cfg.pathToDicomFolder, test_subject=cfg.test_subject, bidsdir=cfg.bidsdir, image=cfg.singularity_image, logdir=cfg.logdir, pathToStudyFolder=cfg.pathToStudyFolder)
         subprocess.call([cmd], shell=True)
     else:
         write_to_errorlog(cfg.test_subject+os.linesep)
