@@ -129,7 +129,7 @@ The following steps are to convert specific participants and/or sessions. If you
 
 #### 1. Use the Dcm2Bids helper <a name="local1">
 
-Get your disom metadate using the [dcm2bids_helper](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/#dicom-to-nifti-conversion)
+Get your dicom metadate using the [dcm2bids_helper](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/#dicom-to-nifti-conversion)
 
 #### 2. Edit the `study_config.json` <a name="local2">
 
