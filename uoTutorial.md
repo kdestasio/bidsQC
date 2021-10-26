@@ -36,14 +36,6 @@ e.g. `cd /projects/sanlab/shared/studyDir`
 
 ## DICOM to Nifti conversion
 
-### Convert an entire directory's contents
-
-Follow the steps in the unfmontreal tutorial.
-
-### Convert a subset of participants
-
-1. Collect the metadate from your DICOMs by using the Dcn2Bids helper.
-2. Create a file called `subject_list.txt`.
-
+Follow the instructions in the [`bidsQC/conversion/README.md`](/conversion/README.md#running-the-scripts-on-a-linux-cluster).  
 
 
