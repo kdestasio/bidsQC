@@ -25,6 +25,7 @@ The scripts in this repo are a combination of wrappers and quality checking scri
   - [Bids Quality Check Folder](#qc_folder)
     - [Running qualityCheck](/qualityCheck/README.md)
 - [Final BIDS Steps](#final-steps)
+- [Detailed tutorial: University of Oregon specific](uoTutorial.md)
 
 ## Using BidsQC <a name="usage">
 
@@ -44,7 +45,7 @@ The scripts in this repo are a combination of wrappers and quality checking scri
   - Available from [UNFmontreal](https://github.com/UNFmontreal/Dcm2Bids) for your local machine.
   - [Here are instructions](/conversion/README.md#dependencies) for getting a singularity image for use on a cluster. 
 
-* Note: to check if Python 3, dcm2niix, or other packages are available on a Linux cluster, type `module avail [packageName]` at the command line, e.g. `module avail Python3`
+**Note:** to check if Python 3, dcm2niix, or other packages are available on a Linux cluster, type `module avail [packageName]` at the command line, e.g. `module avail Python3`
 
 ## Repo Contents<a name="repo-contents">
 
