@@ -31,7 +31,7 @@ parent_dir = "dcm2bids"
 # These variables are used in the main script and need to be defined here.
 # They need to exist prior to running the script (with the exception of `image` 
 # which can be set equal to "NA" if you are running the script locally)
-dicomdir = os.path.join(os.sep, "projects", "lcni", "dcm", group, "Archive", study)
+pathToDicomFolder = os.path.join(os.sep, "projects", "lcni", "dcm", group, "Archive", study)
 codedir = os.path.join(os.sep, "projects", group, "shared", study, "REV_scripts", "org", parent_dir)  # Contains subject_list.txt, config file, and dcm2bids_batch.py
 configfile = os.path.join(codedir, "study_config.json")  # path to and name of config file
 image = os.path.join(os.sep, "projects", group, "shared", "containers", "Dcm2Bids-master.simg")
