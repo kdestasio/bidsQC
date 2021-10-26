@@ -9,14 +9,19 @@ The scripts in this folder allow the user to:
 ## Table of Contents
 
 - [How to run on a cluster](#cluster)
+  1. [Get dicom metadata](#clust1)
+  2. [Edit the study_config.json](#clust2)
+  3. [Create subject_list.txt](#clust3)
+  4. [Run dcm2bids_batch.py](#clust4)
 - [How to run locally](#local)
+  1. [Use the Dcm2Bids helper](#local1)
 - [More detail on the scripts in this folder](#scripts)
   - [Scripts you need to edit](#edit)
   - [Scripts you don't need to edit](#noEdit)
   
 The scripts in this directory build off of the [Dcm2Bids package](https://github.com/UNFmontreal/Dcm2Bids), which on its own will allow you to convert all of the DICOM files in a given directory to Nifti files on a local machine. See the [Dcm2Bids tutorial](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/) to learn how to do the basic conversion and for detailed instructions on how to create the [configuration file](https://unfmontreal.github.io/Dcm2Bids/docs/3-configuration/) specific to _your_ study's dicoms.
 
-Here is some additional information on [running the helper script on Talapas](#usingHelper) to get the information you need for your configuration file.
+Here is some additional information on [running the helper script on Talapas](#clust1) to get the information you need for your configuration file.
 
 <hr>
 
@@ -32,12 +37,13 @@ Here is some additional information on [running the helper script on Talapas](#u
     - instructions on copying singularity containers, see [Containers: Docker & Singularity](https://uoregonctn.atlassian.net/wiki/spaces/FSS/pages/138248203/Containers+Docker+Singularity)
     - Follow the [instructions](https://uoregonctn.atlassian.net/wiki/spaces/FSS/pages/138248203/Containers+Docker+Singularity#Containers:Docker&Singularity-trueFromgithub) to build the singularity container on Talapas 
 
-***Important:** when you copy the container, you either need to name it `Dcm2Bids-master.simg` or change the image name in the `config_dcm2bids_batch.py` script.
+  **Note:** to check if Python 3, dcm2niix, or other packages are available on a Linux cluster, type module avail [packageName] at the command line, e.g. module avail Python3
 
+***Important:** when you copy the container, you either need to name it `Dcm2Bids-master.simg` or change the image name in the `config_dcm2bids_batch.py` script.
 
 ### Steps to convert DICOMS to BIDS
 
-#### 1. Get dicom metadata <a name="usingHelper">
+#### 1. Get dicom metadata <a name="clust1">
 
 If you need the metadata to populate the `study_config.json` file, use the dcm2bids helper.
 
@@ -67,11 +73,11 @@ ls
 
 7. View the `.json` files and use that info to edit the `study_config.json` file. 
 
-#### 2. Edit the `study_config.json`
+#### 2. Edit the `study_config.json` <a name="clust2">
 
 3. Change the variables and/or paths in `config_dcm2bids_batch.py` script for your study and set `run_local = False`
 
-#### 3. Create `subject_list.txt` 
+#### 3. Create `subject_list.txt` <a name="clust3">
 
 Each row has the input: `dicomFolderName,subjectID,sessionLabel`.
 
@@ -85,7 +91,7 @@ sub01_20150909,REV001,wave2
 sub02_20150909,REV001,wave1
 ```
 
-#### 4. Run `dcm2bids_batch.py`
+#### 4. Run `dcm2bids_batch.py` <a name="clust4">
 
 - Log into the HPC  
   `ssh -X username@Talapas-ln1.uoregon.edu`
@@ -112,15 +118,15 @@ sub02_20150909,REV001,wave1
 
 The following steps are to convert specific participants and/or sessions. If you want to convert everything, follow the [unfmontreal tutorial](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/).
 
-#### 1. Use the Dcm2Bids helper
+#### 1. Use the Dcm2Bids helper <a name="local1">
 
 Get your disom metadate using the [dcm2bids_helper](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/#dicom-to-nifti-conversion)
 
-#### 2. Edit the `study_config.json`
+#### 2. Edit the `study_config.json` <a name="local2">
 
-3. Change the variables and/or paths in `config_dcm2bids_batch.py` script for your study and set `run_local = False`
+Change the variables and/or paths in `config_dcm2bids_batch.py` script for your study and set `run_local = True`
 
-#### 3. Create `subject_list.txt` 
+#### 3. Create `subject_list.txt` <a name="local3">
 
 Each row has the input: `dicomFolderName,subjectID,sessionLabel`.
 
@@ -134,9 +140,7 @@ sub01_20150909,REV001,wave2
 sub02_20150909,REV001,wave1
 ```
 
-#### 4. Change the variables and/or paths in `config_dcm2bids_batch.py` script for your study and set `run_local = True`
-
-#### 5. run `dcm2bids_batch.py`
+#### 4. run `dcm2bids_batch.py`
 
 - Navigate into the `bidsQC/conversion` directory.  
   `cd path/to/bidsQC/conversion`
