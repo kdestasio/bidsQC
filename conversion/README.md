@@ -8,49 +8,165 @@ The scripts in this folder allow the user to:
 
 ## Table of Contents
 
-- [Scripts](#scripts)
-- [Running on a cluster](#cluster)
-- [Running locally](#local)
+- [How to run on a cluster](#cluster)
+- [How to run locally](#local)
+- [More detail on the scripts in this folder](#scripts)
+  - [Scripts you need to edit](#edit)
+  - [Scripts you don't need to edit](#noEdit)
   
 The scripts in this directory build off of the [Dcm2Bids package](https://github.com/UNFmontreal/Dcm2Bids), which on its own will allow you to convert all of the DICOM files in a given directory to Nifti files on a local machine. See the [Dcm2Bids tutorial](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/) to learn how to do the basic conversion and for detailed instructions on how to create the [configuration file](https://unfmontreal.github.io/Dcm2Bids/docs/3-configuration/) specific to _your_ study's dicoms.
 
 Here is some additional information on [running the helper script on Talapas](#usingHelper) to get the information you need for your configuration file.
 
-## Scripts<a name="scripts"/>
+<hr>
 
-### `config_dcm2bids_helper.py`
-  
-Requires you to edit it. This script is where you enter the information used by the `dcm2bids_helper`, which will convert one participant's dicoms to niftis and also generate `.json` files for each sequence that contain metadata you will use to uniquely identify each type of scan. This script can be used locally or on Talapas.
+## Running the scripts on a Linux Cluster <a name="cluster">
 
-## `dcm2bids_helper.py`<a name="helper"/>
+### Dependencies
 
-You should not need to edit this script. After updating `config_dcm2bids_helper.py`, run this script by typing `python3 dcm2bids_helper.py` in the terminal of the machine on which you want to run the conversion. This will run the Dcm2Bids conversion on your test subject, creating the nifti and `.json` files needed to specify the `study_config.json` file.
+- SLURM (already available on the UO cluster)
+- Python3
+- Dcm2Bids singularity container*. You need to download it if you don't have access to a copy on Talapas.
+  - Instructions for getting the singularity container are available here: https://unfmontreal.github.io/Dcm2Bids/docs/1-usage/#containers
+  - If the above link doesn't get you what you need, try:
+    - instructions on copying singularity containers, see [Containers: Docker & Singularity](https://uoregonctn.atlassian.net/wiki/spaces/FSS/pages/138248203/Containers+Docker+Singularity)
+    - Follow the [instructions](https://uoregonctn.atlassian.net/wiki/spaces/FSS/pages/138248203/Containers+Docker+Singularity#Containers:Docker&Singularity-trueFromgithub) to build the singularity container on Talapas 
 
-### `study_config.json`<a name="study_config"/>
+***Important:** when you copy the container, you either need to name it `Dcm2Bids-master.simg` or change the image name in the `config_dcm2bids_batch.py` script.
 
-This file is an example of what a study configuration file should look like. You will need to create a custom `study_config.json` for your data. Make sure it is named `study_config.json` and is located in the `conversion` folder. It is used in the Dcm2Bids conversion and is required by the `dcm2bids_batch.py` script. For detailed instructions on how to create this file for your own study, see the [Dcm2Bids tutorial](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/#building-the-configuration-file).
 
-### `subject_list.txt`
+### Steps to convert DICOMS to BIDS
 
-This file is an example of what a subject list should look like. Each entry in the file takes the format `dicomFolderName,subjectID,sessionLabel`.
+#### 1. Get dicom metadata <a name="usingHelper">
+
+If you need the metadata to populate the `study_config.json` file, use the dcm2bids helper.
+
+1. Log into the HPC   
+`ssh -X username@Talapas-ln1.uoregon.edu`
+2. `cd` into the `bidsQC/conversion` directory.
+3. Change the variables and/or paths in the `config_dcm2bids_helper.py` script for your study. 
+4. Load python3 by typing in the terminal:  
+`module load python3`
+5. Run the helper script by typing:   
+`python3 dcm2bids_helper.py`  
+This will run Dcm2Bids on your test subject, creating the nifti and `.json` files needed to construct the `study_config.json` file.
+6. `cd` to the folder created by the helper (should be in the top level of your study directory), e.g. 
+
+```{bash}
+cd /projects/sanlab/shared/REV/tmp_dcm2bids/helper
+ls 
+
+    001_REV001_20150406_AAHScout_20150406145550.nii.gz
+    002_REV001_20150406_AAHScout_20150406145550a.json
+    .
+    .
+    .
+    017_REV001_20150406_React2_mb3_g2_2mm_te27_20150406145550.json
+    017_REV001_20150406_React2_mb3_g2_2mm_te27_20150406145550.nii.gz
+```
+
+7. View the `.json` files and use that info to edit the `study_config.json` file. 
+
+#### 2. Edit the `study_config.json`
+
+3. Change the variables and/or paths in `config_dcm2bids_batch.py` script for your study and set `run_local = False`
+
+#### 3. Create `subject_list.txt` 
+
+Each row has the input: `dicomFolderName,subjectID,sessionLabel`.
 
 An easy way to do this is to `cd` into your DICOM directory and use the command `ls >> subject_list.txt` , which will create a text file of that name and populate it with all the directories/files in your working directory. You can then move that `subject_list.txt` file to the directory from which you will be running your code and add the subject ID and time-point columns.
 
 The subject_list should be formatted such that each row consists of: the subject directory names (that contains the dicoms), desired subject ID, and data collection wave number. Each field is comma separated without spaces, e.g.:
 
-`sub01_20150909,REV001,wave1`
-`sub01_20150909,REV001,wave2`
-`sub02_20150909,REV001,wave1`
+```
+sub01_20150909,REV001,wave1  
+sub01_20150909,REV001,wave2
+sub02_20150909,REV001,wave1
+```
 
-### `config_dcm2bids_batch.py`
+#### 4. Run `dcm2bids_batch.py`
+
+- Log into the HPC  
+  `ssh -X username@Talapas-ln1.uoregon.edu`
+- Navigate into the `bidsQC/conversion` directory.  
+  `cd path/to/bidsQC/conversion`
+- Load python3  
+  `module load python3`
+- Run the batch script  
+  `python3 dcm2bids_batch.py`
+- Check the niftis, output logs, and error logs.
+
+<hr>
+
+## Running dcm2bids Locally<a name="local">
+
+### Dependencies
+
+- Python3
+- dcm2niix
+- dcm2bids
+- pip
+
+### Steps to convert DICOMS to BIDS
+
+The following steps are to convert specific participants and/or sessions. If you want to convert everything, follow the [unfmontreal tutorial](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/).
+
+#### 1. Use the Dcm2Bids helper
+
+Get your disom metadate using the [dcm2bids_helper](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/#dicom-to-nifti-conversion)
+
+#### 2. Edit the `study_config.json`
+
+3. Change the variables and/or paths in `config_dcm2bids_batch.py` script for your study and set `run_local = False`
+
+#### 3. Create `subject_list.txt` 
+
+Each row has the input: `dicomFolderName,subjectID,sessionLabel`.
+
+An easy way to do this is to `cd` into your DICOM directory and use the command `ls >> subject_list.txt` , which will create a text file of that name and populate it with all the directories/files in your working directory. You can then move that `subject_list.txt` file to the directory from which you will be running your code and add the subject ID and time-point columns.
+
+The subject_list should be formatted such that each row consists of: the subject directory names (that contains the dicoms), desired subject ID, and data collection wave number. Each field is comma separated without spaces, e.g.:
+
+```
+sub01_20150909,REV001,wave1  
+sub01_20150909,REV001,wave2
+sub02_20150909,REV001,wave1
+```
+
+#### 4. Change the variables and/or paths in `config_dcm2bids_batch.py` script for your study and set `run_local = True`
+
+#### 5. run `dcm2bids_batch.py`
+
+- Navigate into the `bidsQC/conversion` directory.  
+  `cd path/to/bidsQC/conversion`
+- Run the batch script  
+  `python3 dcm2bids_batch.py`
+- Check the niftis, output logs, and error logs.  
+
+<hr>
+
+## Descriptions of the Scripts<a name="scripts">
+
+### Scripts you need to edit <a name="edit">
+
+#### `config_dcm2bids_helper.py`
+  
+This script is where you enter the information used by the `dcm2bids_helper`, which will convert one participant's dicoms to niftis and also generate `.json` files for each sequence that contain metadata you will use to uniquely identify each type of scan. This script can be used locally or on Talapas.
+
+#### `study_config.json`<a name="study_config">
+
+This is an example of what a study configuration file should look like. You will need to create a custom `study_config.json` for your data. Make sure it is named `study_config.json` and is located in the `conversion` folder. It is used in the Dcm2Bids conversion and is required by the `dcm2bids_batch.py` script. For detailed instructions on how to create this file for your own study, see the [Dcm2Bids tutorial](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/#building-the-configuration-file).
+
+#### `subject_list.txt`
+
+This file is an example of what a subject list should look like. Each entry in the file takes the format `dicomFolderName,subjectID,sessionLabel`.
+
+#### `config_dcm2bids_batch.py`
   
 Requires you to edit it. This script will convert all of the dicoms in the source directory that you define for any participant directories that are listed in the `subject_list.txt file`. Niftis will be renamed and put into BIDS structure using the dcm2Bids package. This script can be used locally or on Talapas.
 
-### `dcm2bids_batch.py`
-  
-You should not need to edit this script. After updating `config_dcm2bids_batch.py`, `study_config.json`, and `subject_list.txt` files, run this script by typing `python3 dcm2bids_batch.py` in the terminal of the machine on which you want to run the conversion. This will run the Dcm2Bids conversion.
-
-### `fmap_intendedfor.py`
+#### `fmap_intendedfor.py`
 
 If the `qualityCheck.py` script is to be used to alter run numbers, that must be done BEFORE running `fmap_intededfor.py`. 
 
@@ -79,85 +195,12 @@ Here is an example of what the output would look like:
     "EchoTime2": "0.00683"
 ```
 
-## Running the scripts on a Linux Cluster<a name="cluster"/>
+### Scripts you don't edit <a name="noEdit">
 
-### Dependencies
+#### `dcm2bids_helper.py`
 
-- SLURM (already available on the UO cluster)
-- Python3
-- Dcm2Bids singularity container **You need to download it if you don't have access to a copy on Talapas.**
-  - For instructions on copying singularity containers, see [Containers: Docker & Singularity](https://uoregonctn.atlassian.net/wiki/spaces/FSS/pages/138248203/Containers+Docker+Singularity)
-  - Follow the [instructions](https://uoregonctn.atlassian.net/wiki/spaces/FSS/pages/138248203/Containers+Docker+Singularity#Containers:Docker&Singularity-trueFromgithub) to build the singularity container on Talapas 
-  - **Important:** when you copy the container, you either need to name it `Dcm2Bids-master.simg` or change the image name in the `config_dcm2bids_batch.py` script.
+After updating `config_dcm2bids_helper.py`, run this script by typing `python3 dcm2bids_helper.py` in the terminal of the machine on which you want to run the conversion. This will run the Dcm2Bids conversion on your test subject, creating the nifti and `.json` files needed to specify the `study_config.json` file.
 
-### Using the Dcm2Bids helper <a name="usingHelper">
-
-If you need the metadata to populate the config file, use the dcm2bids helper.
-
-1. Log into the HPC   
-`ssh -X username@Talapas-ln1.uoregon.edu`
-2. `cd` into the `conversion` directory.
-3. Change the variables and/or paths in the `config_dcm2bids_helper.py` script for your study.
-4. Load python3 by typing in the terminal:  
-`module load python3`
-5. Run the [helper script](helper) by typing:   
-`python3 dcm2bids_helper.py`
-4. `cd` to the folder created by the helper (should be in the top level of your study directory), e.g. 
-
-```{bash}
-cd /projects/sanlab/shared/REV/tmp_dcm2bids/helper
-ls 
-
-    001_REV001_20150406_AAHScout_20150406145550.nii.gz
-    002_REV001_20150406_AAHScout_20150406145550a.json
-    .
-    .
-    .
-    017_REV001_20150406_React2_mb3_g2_2mm_te27_20150406145550.json
-    017_REV001_20150406_React2_mb3_g2_2mm_te27_20150406145550.nii.gz
-```
-
-5. View the `.json` files and use that info to [edit the config file](#study_config) `study_config.json` so it works for your study.
-
-
-### Steps to convert DICOMS to BIDS
-
-1. [Create the `subject_list.txt` where each row has the input: `dicomFolderName,subjectID,sessionLabel`](#subject_list).
-2. [Edit the `study_config.json` file such that it works for your study.](#config)
-3. Change the variables and/or paths in `config_dcm2bids_batch.py` script for your study and set `run_local = False`
-4. Log into the HPC.  
-
-  `ssh -X username@Talapas-ln1.uoregon.edu`
-
-5. `cd` into the `conversion` directory.
-6. Load the python3 module.  
-
-  `module load python3`
-
-7. Run the batch script.  
-
-  `python3 dcm2bids_batch.py`
-
-8. Check the niftis, output logs, and error logs.
-
-## Running dcm2bids Locally<a name="local"/>
-
-### Using the Dcm2Bids helper
-
-[Use the Dcm2Bids built in command line interface.](https://unfmontreal.github.io/Dcm2Bids/docs/1-usage/#command-line-interface-cli)
-
-### Steps to convert DICOMS to BIDS
-
-1. [Create the `subject_list.txt` where each row has the input: `dicomFolderName,subjectID,sessionLabel`](#subject_list).
-2. [Edit the `study_config.json` file such that it works for your study.](#config)
-3. Change the variables and/or paths in `config_dcm2bids_batch.py` script for your study and set `run_local = True`
-4. `cd` into the `conversion` directory.
-5. Load the python3 module.  
-
-  `module load python3`
-
-7. Run the batch script.  
-
-  `python3 dcm2bids_batch.py`
-
-8. Check the niftis, output logs, and error logs.
+#### `dcm2bids_batch.py`
+  
+After updating `config_dcm2bids_batch.py`, `study_config.json`, and `subject_list.txt` files, run this script by typing `python3 dcm2bids_batch.py` in the terminal of the machine on which you want to run the conversion. This will run the Dcm2Bids conversion.
