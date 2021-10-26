@@ -32,6 +32,10 @@ Here is some additional information on [running the helper script on Talapas](#c
 
 ## Running the scripts on a Linux Cluster <a name="cluster">
 
+**A note on editing scripts.**
+
+I find it easiest to edit scripts using a code editor with syntax highlighting (e.g. VS code, Sublime, pycharm) on my local machine. You can use the editor on your local machine, save the script, use git to push your changes to your repository, and then pull those changes into your repository on Talapas.
+
 ### Dependencies
 
 - SLURM (already available on the UO cluster)
@@ -55,7 +59,7 @@ If you need the metadata to populate the `study_config.json` file, use the dcm2b
 1. Log into the HPC   
 `ssh -X username@Talapas-ln1.uoregon.edu`
 2. `cd` into the `bidsQC/conversion` directory.
-3. Change the variables and/or paths in the `config_dcm2bids_helper.py` script for your study. 
+3. Change the variables and/or paths in the `config_dcm2bids_helper.py` script for your study.  
 4. Load python3 by typing in the terminal:  
 `module load python3`
 5. Run the helper script by typing:   
