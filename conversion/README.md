@@ -14,12 +14,14 @@ The instructions below presuppose you have the bidsQC repository on your machine
   1. [Get dicom metadata](#clust1)
   2. [Edit the study_config.json](#clust2)
   3. [Create subject_list.txt](#clust3)
-  4. [Run dcm2bids_batch.py](#clust4)
+  4. [Edit `config_dcm2bids_batch.py`](#clust4)
+  5. [Run dcm2bids_batch.py](#clust5)
 - [How to run locally](#local)
   1. [Use the Dcm2Bids helper](#local1)
   2. [Edit the `study_config.json` ](#local2)
   3. [Create `subject_list.txt`](#local3)
-  4. [Run `dcm2bids_batch.py`](local4)
+  4. [Edit `config_dcm2bids_batch.py`](#local4)
+  5. [Run `dcm2bids_batch.py`](#local5)
 - [More detail on the scripts in this folder](#scripts)
   - [Scripts you need to edit](#edit)
   - [Scripts you don't need to edit](#noEdit)
@@ -81,11 +83,11 @@ If you need the metadata to populate the `study_config.json` file, use the dcm2b
       - `outputlog_helper.txt`: lists the subjects for which the job was successfully run.
       -`subjectID_helper_output.txt`: gives you the path to where the Nifti and .json files were put.
       - `subjectID_helper_error.txt`: gives you the errors for that subject.
-7. Navigate to the folder indicated in the View the file `subjectID_helper_output.txt`. View the`.json` files and use that info to edit the fields of the `study_config.json` file. 
+7. Navigate to the folder indicated in the file `subjectID_helper_output.txt`. View the`.json` files and use that info to edit the fields of the `study_config.json` file. 
 
 #### 2. Edit the `study_config.json` <a name="clust2">
 
-3. Change the variables and/or paths in `config_dcm2bids_batch.py` script for your study and set `run_local = False`
+Instructions and two examples are available on the unfMontreal Dcm2Bids tutorial page, [here](https://unfmontreal.github.io/Dcm2Bids/docs/3-configuration/) and [here](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/#building-the-configuration-file).
 
 #### 3. Create `subject_list.txt` <a name="clust3">
 
@@ -101,7 +103,11 @@ sub01_20150909,REV001,wave2
 sub02_20150909,REV001,wave1
 ```
 
-#### 4. Run `dcm2bids_batch.py` <a name="clust4">
+#### 4. Edit `config_dcm2bids_batch.py` <a name="clust4">
+
+Change the variables and/or paths in `config_dcm2bids_batch.py` script for your study and set `run_local = False`
+
+#### 5. Run `dcm2bids_batch.py` <a name="clust5">
 
 - Log into the HPC  
   `ssh -X username@Talapas-ln1.uoregon.edu`
@@ -134,7 +140,7 @@ Get your dicom metadate using the [dcm2bids_helper](https://unfmontreal.github.i
 
 #### 2. Edit the `study_config.json` <a name="local2">
 
-Change the variables and/or paths in `config_dcm2bids_batch.py` script for your study and set `run_local = True`
+Instructions and two examples are available on the unfMontreal Dcm2Bids tutorial page, [here](https://unfmontreal.github.io/Dcm2Bids/docs/3-configuration/) and [here](https://unfmontreal.github.io/Dcm2Bids/docs/2-tutorial/#building-the-configuration-file).
 
 #### 3. Create `subject_list.txt` <a name="local3">
 
@@ -150,7 +156,11 @@ sub01_20150909,REV001,wave2
 sub02_20150909,REV001,wave1
 ```
 
-#### 4. run `dcm2bids_batch.py` <a name="local4">
+#### 4. Edit `config_dcm2bids_batch.py` <a name="local4">
+
+Change the variables and/or paths in `config_dcm2bids_batch.py` script for your study and set `run_local = True`
+
+#### 5. Run `dcm2bids_batch.py` <a name="local4">
 
 - Navigate into the `bidsQC/conversion` directory.  
   `cd path/to/bidsQC/conversion`
