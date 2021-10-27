@@ -64,23 +64,24 @@ If you need the metadata to populate the `study_config.json` file, use the dcm2b
 `module load python3`
 5. Run the helper script by typing:   
 `python3 dcm2bids_helper.py`  
-This will run Dcm2Bids on your test subject, creating the nifti and `.json` files needed to construct the `study_config.json` file.
-6. `cd` to the folder created by the helper (should be in the top level of your study directory), e.g. 
+    - This will run Dcm2Bids on your test subject, creating the nifti and `.json` files needed to construct the `study_config.json` file.
+    - It may take some time for the job to complete. You can check the status using `squeue` with either the `-j` flag to specify the jobn number or the `-u` flag to specufy your username.  
+    e.g. `squeue -j 16534789`
+6. `cd` to the `conversion` folder where there should now be a new folder called `logs_helper`.
 
-```{bash}
-cd /projects/sanlab/shared/REV/tmp_dcm2bids/helper
-ls 
+    ```{bash}
+    $ cd /path/to/studyName/bidsQC/conversion/logs_helper
+    $ ls 
 
-    001_REV001_20150406_AAHScout_20150406145550.nii.gz
-    002_REV001_20150406_AAHScout_20150406145550a.json
-    .
-    .
-    .
-    017_REV001_20150406_React2_mb3_g2_2mm_te27_20150406145550.json
-    017_REV001_20150406_React2_mb3_g2_2mm_te27_20150406145550.nii.gz
-```
+    errorlog_helper.txt  outputlog_helper.txt  REV027_20150518_102229_helper_error.txt  REV027_20150518_102229_helper_output.txt
+    ```
 
-7. View the `.json` files and use that info to edit the `study_config.json` file. 
+    - In the `logs_helper` folder, you will find:
+      - `errorlog_helper.txt`: lists any subjects for which there was an error during the job.
+      - `outputlog_helper.txt`: lists the subjects for which the job was successfully run.
+      -`subjectID_helper_output.txt`: gives you the path to where the Nifti and .json files were put.
+      - `subjectID_helper_error.txt`: gives you the errors for that subject.
+7. Navigate to the folder indicated in the View the file `subjectID_helper_output.txt`. View the`.json` files and use that info to edit the fields of the `study_config.json` file. 
 
 #### 2. Edit the `study_config.json` <a name="clust2">
 
