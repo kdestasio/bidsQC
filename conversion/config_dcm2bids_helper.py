@@ -6,9 +6,11 @@ import os
 
 # The following variables are used in the main script and need to be defined here. Change them for your data. 
 # They need to exist prior to running the script.
-# You don't need to use slashes in the path names, just put the parts of the path in quotes as shown below.
+group = "sanlab" # This is the name of the group on Talapas to which your account belongs
+
 
 # Directories
+# You don't need to use slashes in the path names, just put the parts of the path in quotes as shown below.
 pathToStudyFolder = os.path.join(os.sep, "projects", "sanlab", "shared", "studyName") # folder that contains bidsdir and pathToConversionFolder
 pathToDicomFolder = os.path.join(os.sep, "projects", "lcni", "dcm", "sanlab", "Berkman", "REV")
 bidsdir = os.path.join(pathToStudyFolder, "bids_data") # path to the folder where the niftis will be put
