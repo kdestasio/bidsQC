@@ -73,7 +73,7 @@ If you need the metadata to populate the `study_config.json` file, use the dcm2b
     $ cd /path/to/studyName/bidsQC/conversion/logs_helper
     $ ls 
 
-    errorlog_helper.txt  outputlog_helper.txt  REV027_20150518_102229_helper_error.txt  REV027_20150518_102229_helper_output.txt
+    errorlog_helper.txt  outputlog_helper.txt  subjectID_helper_error.txt  subjectID_helper_output.txt
     ```
 
     - In the `logs_helper` folder, you will find:
