@@ -35,11 +35,17 @@ An easy way to do this is to `cd` into your DICOM directory and use the command 
 The subject_list should be formatted such that each row consists of: the subject directory names (that contains the dicoms), desired subject ID, and data collection wave number. Each field is comma separated without spaces, e.g.:
 
 ```
-sub01_20150909,REV001,wave1  
-sub01_20150909,REV001,wave2
-sub02_20150909,REV001,wave1
+sub01_20150909,001,wave1  
+sub01_20150909,001,wave2
+sub02_20150909,002,wave1
 ```
 
+This would give you BIDS data labled:
+```
+sub-001_ses-wave1
+sub-001_ses-wave2
+sub-002_ses-wave1
+```
 ### 4. Edit `config_dcm2bids_batch.py` <a name="local4">
 
 Change the variables and/or paths in `config_dcm2bids_batch.py` script for your study and set `run_local = True`
@@ -59,4 +65,4 @@ Change the variables and/or paths in `config_dcm2bids_batch.py` script for your 
 
 If your data do not meet BIDS standards, see whether the scripts in the [bidsQC/qualityCheck folder](../qualityCheck) may be of use.
 
-<hr>
+### 7. `fmap_intendedfor.py`
