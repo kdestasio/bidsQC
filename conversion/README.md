@@ -12,10 +12,10 @@ The instructions below presuppose you have the bidsQC repository on your machine
 
 - [How to run on a cluster](#cluster)
   1. [Get dicom metadata](#clust1)
-  2. [Edit the study_config.json](#clust2)
-  3. [Create subject_list.txt](#clust3)
+  2. [Edit the `study_config.json`](#clust2)
+  3. [Create `subject_list.txt`](#clust3)
   4. [Edit `config_dcm2bids_batch.py`](#clust4)
-  5. [Run dcm2bids_batch.py](#clust5)
+  5. [Run `dcm2bids_batch.py`](#clust5)
 - [How to run locally](#local)
   1. [Use the Dcm2Bids helper](#local1)
   2. [Edit the `study_config.json` ](#local2)
