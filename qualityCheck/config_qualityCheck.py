@@ -12,7 +12,7 @@ group = "sanlab"
 # These variables are used in the main script and need to be defined here. 
 # They need to exist prior to running the qualityCheck.py
 pathToBidsFolder = os.path.join(os.sep, 'projects', "sanlab", 'shared', "studyName", 'bids_data')  # Where your subjects' nifti directories are
-logdir = os.path.join(os.getcwd(), 'logs_qualityCheck')  # Where log files will go
+logdir = os.path.join(pathToBidsFolder, 'logs_qualityCheck')  # Where log files will go
 
 # Create a dictionary (the thing below) for each timepoint in your study where the pairs are 'sequence_directory_name' : 'expected_number_runs'
 # Each unique version of a sequence gets its own entry, e.g. 'gng_acq-1' and 'gng_acq-2'
