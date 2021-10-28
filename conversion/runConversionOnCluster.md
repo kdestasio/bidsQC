@@ -106,3 +106,5 @@ Change the variables and/or paths in `config_dcm2bids_batch.py` script for your 
 If your data do not meet BIDS standards, see whether the scripts in the [bidsQC/qualityCheck folder](../qualityCheck) may be of use.
 
 ### 7. `fmap_intendedfor.py`
+
+If you are using fieldmaps, the `.json` file associated with each one must specify to which functional runs it is to be applied. 
