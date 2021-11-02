@@ -2,7 +2,7 @@
 
 These scripts will check whether each sequence has the correct number of runs within BIDS. The correct name and number of each sequence is specified in the configuration file for each timepoint. Results are output in log files.
 
-**`qualityCheck.py` will run on all subjects in BIDS folder specified."** 
+**`qualityCheck.py` will run on all subjects in BIDS folder specified.** 
 
 A second, optional feature is to reassign the run order, specified in the `task-#` portion of the file names. This can be useful if, for instance:  
 - multiple copies of a task file exist as a result of having to start and stop a task in the scanner multiple times due to problems with the task script, user error, or participant variables.
