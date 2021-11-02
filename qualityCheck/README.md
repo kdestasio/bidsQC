@@ -1,15 +1,24 @@
 # Overview
+1. [About qualityCheck](#about)
+2. [Instructions for using the scripts](#instructions)
+3. [Mock study example](#mock)
+
+## Basic quality checking<a name="about>
 
 These scripts will check whether each sequence has the correct number of runs within BIDS. The correct name and number of each sequence is specified in the configuration file for each timepoint. Results are output in log files.
 
 **`qualityCheck.py` will run on all subjects in BIDS folder specified.** 
+
+## Quality check and file rename
 
 A second, optional feature is to reassign the run order, specified in the `task-#` portion of the file names. This can be useful if, for instance:  
 - multiple copies of a task file exist as a result of having to start and stop a task in the scanner multiple times due to problems with the task script, user error, or participant variables.
 
 **If using the renaming feature, it is suggested that you copy one participant's data to a test folder and try running these scripts there first.**  
 
-## Renaming rules
+It is important to note that **in the case of duplicates, the earlier runs are discarded, moved to the `tmp_dcm2bids` folder.** The script looks for X number of runs, based on what is indicated in the `Sequence` object, and retains the latest X number of runs for a given sequence. This is because the expectation is a sequence would not have been re-run if earlier iterations were problem free, and that the final iteration was the successful one. **If this is not behavior you want applied to your study, set `order_sequences = False`. You will need to either edit the `qualityCheck.py` script directly to create the desired behavior, or find a different way to correct your specific naming issues.** 
+
+### Renaming rules
 
 If there are **more** runs than expected, and the expected number of runs is greater than 1, the runs with the highest run numbers will be retained (up to X number of runs specified in the config file).   
 
@@ -21,7 +30,7 @@ If there are **fewer** runs than expected, a warning will be printed to the erro
 
 See below for an example of the renaming function.
 
-# Instructions 
+# Instructions<a name="instructions">
 
 1. [Set-up `config_qualityCheck.py`](#config)
     1. [Change the paths](#paths)
@@ -114,14 +123,96 @@ If you're on a cluster, you may have to `module load python3` first.
 
 BIDS validator: [http://incf.github.io/bids-validator](http://incf.github.io/bids-validator/)
 
-## Mock study example
+## Mock study example<a name="mock">
 
-In this example:
-- The study has 2 time points, so we make 2 `TimePoint` objects composed of the appropriate "Sequence" objects
-- The two time points have different functional runs, so we'll make a "func" sequence for each time point
-- Both time points have anatomical images with the same name, so we can create one "anat" sequence for anat and use it in both time points
-- Both time points also have fieldmap images with the same name, so we can also create one "func" sequence to use at both time points
-- Once we've constructed our "TimePoint" objects with the correct contents, we put them into the "expected\_timepoints" object, and we're done!
+### Study details
 
-![file_structure](./images/example_config.png)
+Sequences with a `*` are functional runs that, while the same task, were counterbalanced and contained different images. We need to be able to differentiate them, but they are considered the same sequence for the purposes of appending the task `run-#`.  
 
+- There are two timepoints  
+    - Timepoint 1 should contain:
+        - 2 fieldmaps
+        ![files-fmap](./images/timepoint1-fmap.png)
+        - 1 anatomical sequence
+        ![files-anat](./images/timepoint1-anat.png)
+        - 4 functional tasks
+        ![files-func](./images/timepoint1-func.png)
+            - bart
+            - *gng1 & gng2
+            - *react1 & react2
+            - *sst1 & sst2
+            
+    - Timepoint 2 should contain:
+        - 2 fieldmaps
+        - 1 anatomical sequence
+        - 4 functional tasks
+            - bart
+            - *gng3 & gng4
+            - *react3 & react4
+            - *sst3 & sst4
+
+
+
+### Creating the Sequence objects
+
+- The two time points have different functional runs, so we'll make a `func` sequence for each time point
+- Both time points have anatomical images with the same name, so we can create one `anat` sequence and use it in both time points
+- Both time points also have the same fieldmap images with the same name, so we can also create one `fmap` sequence to use at both time points
+
+```
+sequence1 = Sequence("func", {"bart": 1, "gng1":1, "gng2":1, "react1":1, "react2":1, "sst1":1, "sst2":1})
+sequence2 = Sequence("func", {"bart": 1, "gng3":1, "gng4":1, "react3":1, "react4":1, "sst3":1, "sst4":1})
+sequence3 = Sequence("anat", {"T1w":1})
+sequence4 = Sequence("fmap", {"magnitude1":2, "magnitude2":2, "phasediff":2 })
+```
+
+### Creating the TimePoint objects
+
+- The study has 2 time points, so we make 2 `TimePoint` objects composed of the appropriate `Sequence` objects
+
+```
+timepoint1 = TimePoint("ses-wave1", [sequence1, sequence3, sequence4])
+timepoint2 = TimePoint("ses-wave2", [sequence2, sequence3, sequence4])
+expected_timepoints = [timepoint1, timepoint2]
+```
+
+- Once we've constructed our `TimePoint` objects with the correct contents, we put them into the `expected_timepoints` object.
+
+```
+expected_timepoints = [timepoint1, timepoint2]
+```
+
+
+### Setting script variables
+
+#### Our files are gzipped. 
+
+`gzipped = True`
+
+### order_sequences = True
+If we did not need to append the `run-#` tag, and/or if we did not have duplicate runs from difficulty during scanning, we would set `order_sequences = False`, run the script, and simply check the log files to check which participants were missing sequences and/or timepoints.  
+
+We do want to append the `run-#` tag to our functional files. Because our functional runs were named so as to indicate their version (e.g `gng1` vs. `gng2`), they were not recognized as multiple runs of the same task during the initial `dcm2bids` conversion.  
+
+We also want the sequences re-numbered because have multiples of some functional sequences due to issues during scanning.  
+
+Here's what we have:  
+![duplicate-files](./images/1a_post-dcm2bids_with-duplicate-runs.png)
+
+And here's what we want:  
+![corrected](./images/2b_results_QC_True_nonSpec.png)
+
+By entering the task names into `tasks_to_order` without the counterbalance tag (e.g. `gng` rather than `gng1`), we can instruct the script to consider them iterations of the same task and append the appropriate `run-#` according to the order in which they were collected.  
+
+```
+order_sequences = False
+tasks_to_order = 'gng', 'react', 'sst'
+```
+### An important note about renaming
+It is important to note that **in the case of duplicates, the earlier runs are discarded, moved to the `tmp_dcm2bids` folder.** The script looks for X number of runs, based on what is indicated in the `Sequence` object, and retains the last X number of runs for a given sequence. This is because the expectation is a sequence would not have been re-run if earlier iterations were problem free, and that the final iteration was the successful one. **If this is not behavior you want applied to your study, set `order_sequences = False`. You will need to either edit the `qualityCheck.py` script directly to create the desired behavior, or find a different way to correct your specific naming issues.** 
+
+### Here's what our completed config file looks like 
+
+![sample-config](./images/sample_config.png)
+
+Once we run the script, our files are properly named and the undesired runs are placed in the `tmp_dcm2bids` folder. An account of the actions performed, along with information on missing sequences and/or timepoints is stored in the log file.  
