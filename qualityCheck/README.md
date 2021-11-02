@@ -119,6 +119,8 @@ If you're on a cluster, you may have to `module load python3` first.
 
 ## Check output and error logs<a name="checkLogs">
 
+They indicate wherther a participant has all expected sequences and timepoints based on what the contents of `config_qualityCheck.py`.  
+
 ## Check the BIDS Conversion<a name="validator">
 
 BIDS validator: [http://incf.github.io/bids-validator](http://incf.github.io/bids-validator/)
