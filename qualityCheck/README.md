@@ -19,22 +19,28 @@ If there are **fewer** runs than expected, a warning will be printed to the erro
 
 See below for an example of the renaming function.
 
-## Instructions
+# Instructions 
 
-### The Configuration file
+- [Set-up `config_qualityCheck.py`](#config)
+    1. [Change the paths](#paths)
+    2. [Enter `Sequence` information](#sequence)
+    3. [Enter `TimePoint` information](#timepoint)
+    4. [Are files gzipped](#gzip)
+    5. [Set `order_sequences`](#order)
+- [Run `qualityCheck`](#qc)
 
-You will need to change some fields in the configuration file.  
+## Setting up the configuration file<a name="config">
 
-#### 1. Change the paths
+You will need to change some fields in the file `config_qualityCheck.py`.  
+
+### 1. Change the paths<a name="paths">
 
 `pathToBidsFolder` is the path to the folder that houses your subject data.  
 `logdir` is the path that sets where the logfiles are saved.  
 
-#### 2. Enter `Sequence` information
+### 2. Enter `Sequence` information<a name="sequence">
 
 Within the configuration file, you are asked to fill out a dictionary for each unique set of sequences and time points in your study. 
-
-#### 3.  Building sequences
  
 A `Sequence` object is composed of one folder name and an unspecified number of sequence names.  
 
@@ -44,16 +50,16 @@ The `key:value pairs` within the curly `{} `braces are `taskName:numberOfRuns`. 
 
 Create as many `Sequence` objects as you need. Then, assign them to the proper timepoint (see next step).  
 
-##### Example
+#### Example
 A completed `Sequence` object would looks something like this:  
 
 `sequence1 = Sequence('func', {'stopsignal': 2, 'react':1})`
 
 This indicates a functional sequence named stopsignal was completed twice and a functional task named react was completed once.  
 
-#### 4. Enter `TimePoint` information
+### 3. Enter `TimePoint` information<a name="timepoint">
 
-##### timepoint#
+#### timepoint#
 
 A `TimePoint` object consists of one folder name, indicating what session the data were collected in, and an unspecified number of `Sequence`s.  
 
@@ -63,12 +69,12 @@ Within the `Sequence` object, the first field entered is the name of the folder 
 
 Within the square `[]` brackets, list the sequences that should exist for that timepoint. A sequence can be used in more than one timepoint.  
 
-##### expected_timepoints
+#### expected_timepoints
 List all timepoints that should exist for your participants.
 
 e.g. `expected_timepoints = [timepoint1, timepoint2]`  
 
-##### Example
+#### Example
 
 A study with two timepoints. The timepoints had different functional runs, the names of which which were entered into `sequence1` and `sequence2`, respectively. Both timepoints had the same anatomical scan `sequence3` and the same fieldmaps `sequence4`:
 
@@ -77,12 +83,12 @@ timepoint1 = TimePoint("ses-wave1", [sequence1, sequence3, sequence4])
 timepoint2 = TimePoint("ses-wave2", [sequence2, sequence3, sequence4])
 ```
 
-#### 5. Indicate whether files are gzipped or not zipped
+### 4. Indicate whether files are gzipped or not zipped<a name="gzip">
 
 `gzipped = True` will look for the file extension `.nii.gz`  
 `gzipped = False` will look for the file extension `.nii`  
 
-#### 6. Set `order_sequences`
+### 5. Set `order_sequences`<a name="order">
 
 Indicate whether the tasks should be labeled by the order in which they were run by setting the `order_sequences` variable to `True` or `False`.  
 
@@ -92,7 +98,11 @@ Indicate whether the tasks should be labeled by the order in which they were run
     e.g. `tasks_to_order = 'gng', 'react', 'sst'`
     - Excess runs will be moved to the `tmp_dcm2bids` folder. The highest numbered runs for a given sequence are retained. The retained runs are given new run numbers (`run-#`) based on the order in which they were collected in the scanner, with the renaming starting at `run-1`.
 
-**Here's an example:**
+## Run the script<a name="qc">
+
+In the `bidsQC/qualityCheck` folder, run the file `qualityCheck.py` with the command `python3 qualityCheck.py`.  
+
+## Mock study example
 
 In this example:
 
