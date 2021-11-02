@@ -21,13 +21,15 @@ See below for an example of the renaming function.
 
 # Instructions 
 
-- [Set-up `config_qualityCheck.py`](#config)
+1. [Set-up `config_qualityCheck.py`](#config)
     1. [Change the paths](#paths)
     2. [Enter `Sequence` information](#sequence)
     3. [Enter `TimePoint` information](#timepoint)
     4. [Are files gzipped](#gzip)
     5. [Set `order_sequences`](#order)
-- [Run `qualityCheck`](#qc)
+2. [Run `qualityCheck`](#qc)
+3. [Check logs](#checkLogs)
+4. [Use the BIDS validator](#validator)
 
 ## Setting up the configuration file<a name="config">
 
@@ -102,6 +104,14 @@ Indicate whether the tasks should be labeled by the order in which they were run
 
 In the `bidsQC/qualityCheck` folder, run the file `qualityCheck.py` with the command `python3 qualityCheck.py`.  
 
+If you're on a cluster, you may have to `module load python3` first.
+
+## Check output and error logs<a name="checkLogs">
+
+## Check the BIDS Conversion<a name="validator">
+
+BIDS validator: [http://incf.github.io/bids-validator](http://incf.github.io/bids-validator/)
+
 ## Mock study example
 
 In this example:
@@ -114,35 +124,3 @@ In this example:
 
 ![file_structure](./images/example_config.png)
 
-## Run the script
-
-### On a Cluster
-
-- Log into Talapas
-```
-    ssh -X username@Talapas-ln1.uoregon.edu
-```
-- `cd` to the directory that has your code in it
-- Load the python3 module
-```
-    module load python3
-```
-- Run the `qualityCheck.py` script
-
-```
-    python3 qualityCheck.py
-```
-- Check your output and error logs
-
-## Locally
-
-- `cd` to the directory that has your code in it
-- Run the `qualityCheck.py` sciript
-```
-python3 qualityCheck.py
-```
-- Check your output and error logs
-
-# Check the BIDS Conversion
-
-BIDS validator: [http://incf.github.io/bids-validator](http://incf.github.io/bids-validator/)
