@@ -82,7 +82,7 @@ timepoint2 = TimePoint("ses-wave2", [sequence2, sequence3, sequence4])
 `gzipped = True` will look for the file extension `.nii.gz`  
 `gzipped = False` will look for the file extension `.nii`  
 
-#### 4. Set `order_sequences`
+#### 6. Set `order_sequences`
 
 Indicate whether the tasks should be labeled by the order in which they were run by setting the `order_sequences` variable to `True` or `False`.  
 
