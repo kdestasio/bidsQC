@@ -2,10 +2,12 @@
 
 These scripts will check whether each sequence has the correct number of runs within BIDS. The correct name and number of each sequence is specified in the configuration file for each timepoint. Results are output in log files.
 
-**`qualityCheck.py` will run on all subjects in BIDS folder specified."** If using the renaming feature, it is suggested that you copy one participant's data to a test folder and try running these scripts there first.
+**`qualityCheck.py` will run on all subjects in BIDS folder specified."** 
 
 A second, optional feature is to reassign the run order, specified in the `task-#` portion of the file names. This can be useful if, for instance:  
 - multiple copies of a task file exist as a result of having to start and stop a task in the scanner multiple times due to problems with the task script, user error, or participant variables.
+
+**If using the renaming feature, it is suggested that you copy one participant's data to a test folder and try running these scripts there first.**  
 
 ## Renaming rules
 
@@ -53,7 +55,7 @@ The `key:value pairs` within the curly `{} `braces are `taskName:numberOfRuns`. 
 Create as many `Sequence` objects as you need. Then, assign them to the proper timepoint (see next step).  
 
 #### Example
-A completed `Sequence` object would looks something like this:  
+A completed `Sequence` object would look something like this:  
 
 `sequence1 = Sequence('func', {'stopsignal': 2, 'react':1})`
 
@@ -115,8 +117,7 @@ BIDS validator: [http://incf.github.io/bids-validator](http://incf.github.io/bid
 ## Mock study example
 
 In this example:
-
-- The study has 2 time points, so we will make 2 "TimePoint" objects composed of the appropriate "Sequence" objects
+- The study has 2 time points, so we make 2 `TimePoint` objects composed of the appropriate "Sequence" objects
 - The two time points have different functional runs, so we'll make a "func" sequence for each time point
 - Both time points have anatomical images with the same name, so we can create one "anat" sequence for anat and use it in both time points
 - Both time points also have fieldmap images with the same name, so we can also create one "func" sequence to use at both time points
