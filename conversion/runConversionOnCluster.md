@@ -16,8 +16,6 @@ I find it easiest to edit scripts using a code editor with syntax highlighting (
 
 To check if Python 3, dcm2niix, or other packages are available on a Linux cluster, type module avail [packageName] at the command line, e.g. module avail Python3
 
-***Important:** when you copy the container, you either need to name it `Dcm2Bids-master.simg` or change the image name in the `config_dcm2bids_batch.py` script.
-
 ## Steps to convert DICOMS to BIDS
   
   1. [Get dicom metadata](#clust1)
