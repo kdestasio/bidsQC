@@ -107,7 +107,7 @@ If your data do not meet BIDS standards, see whether the scripts in the [bidsQC/
 
 If you are using fieldmaps, the `.json` file associated with each one must specify to which functional runs it is to be applied.  
 
-If the `qualityCheck.py` script is to be used to alter run numbers, that must be done **BEFORE** running `fmap_intededfor.py`.  
+If the `qualityCheck.py` script is to be used to alter run numbers, that must be done **BEFORE** running `fmap_intendedfor.py`.  
 
 #### Running the script
 
