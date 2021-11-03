@@ -66,3 +66,50 @@ Change the variables and/or paths in `config_dcm2bids_batch.py` script for your 
 If your data do not meet BIDS standards, see whether the scripts in the [bidsQC/qualityCheck folder](../qualityCheck) may be of use.
 
 ### 7. `fmap_intendedfor.py`
+
+If you are using fieldmaps, the `.json` file associated with each one must specify to which functional runs it is to be applied.  
+
+If the `qualityCheck.py` script is to be used to alter run numbers, that must be done **BEFORE** running `fmap_intededfor.py`.  
+
+#### Running the script
+
+#####  1. Edit the following
+  
+`pathToBidsFolder`: This should be the path to the folder containing your BIDS data.  
+`include_echo_time`: Set to `True` or `False` based on whether you want the echo times in the .json files.  
+`echo_time1`: You need to look-up what the echo time is for your specific fieldmap. Enter the value here.  
+`echo_time2`: You need to look-up what the echo time is for your specific fieldmap. Enter the value here.  
+
+##### 2. Run the script
+
+Via the command line, navigate to the directory that houses the file `fmap_intendedfor.py`.  
+Run the command `python3 fmap_intendedfor.py`.  
+  
+#### Details
+
+In order to meet the BIDS specifications, the following fields are inserted into the .json file for each fieldmap:  
+
+`"IntendedFor"`  
+Followed by a list of all the functional runs in the func folder associated with the matching subject and session.  
+
+`"EchoTime1"`  
+Followed by a list of the echo time you enter in the script. You need to look-up what the echo time is for your specific fieldmap. You can set `include_echo_time = False` if you do not want to include the echo time in the .json file.  
+
+`"EchoTime2"`  
+Followed by a list of the echo time you enter in the script. You need to look-up what the echo time is for your specific fieldmap. You can set `include_echo_time = False` if you do not want to include the echo time in the .json file.  
+
+Here is an example of what the output would look like:
+
+```
+    "IntendedFor": [
+        "func/sub-REV001_ses-wave1_task-react_acq-2_run-02_bold.nii.gz",
+        "func/sub-REV001_ses-wave1_task-sst_acq-1_run-01_bold.nii.gz",
+        "func/sub-REV001_ses-wave1_task-bart_acq-1_bold.nii.gz",
+        "func/sub-REV001_ses-wave1_task-gng_acq-1_run-02_bold.nii.gz",
+        "func/sub-REV001_ses-wave1_task-react_acq-1_run-01_bold.nii.gz",
+        "func/sub-REV001_ses-wave1_task-sst_acq-2_run-02_bold.nii.gz",
+        "func/sub-REV001_ses-wave1_task-gng_acq-2_run-01_bold.nii.gz"
+    ],
+    "EchoTime1": "0.00437",
+    "EchoTime2": "0.00683"
+```
