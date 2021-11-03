@@ -43,7 +43,7 @@ The scripts in this repo are a combination of wrappers and quality checking scri
   - Get via the [rordenlab github](https://github.com/rordenlab/dcm2niix)
 - `dcm2Bids` **If it is not already available on your machine or cluster, install it.**
   - Available from [UNFmontreal](https://github.com/UNFmontreal/Dcm2Bids) for your local machine.
-  - [Here are instructions](/conversion/README.md#dependencies) for getting a singularity image for use on a cluster. 
+  - [Here are instructions](https://unfmontreal.github.io/Dcm2Bids/docs/1-usage/#containers) for getting a singularity image for use on a cluster. 
 
 **Note:** to check if Python 3, dcm2niix, or other packages are available on a Linux cluster, type `module avail [packageName]` at the command line, e.g. `module avail Python3`
 
