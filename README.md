@@ -42,6 +42,7 @@ The scripts in this repo are a combination of wrappers and quality checking scri
 - `dcm2niix` conversion tool. **If it is not already available on your machine or cluster, install it.**
   - Get via the [rordenlab github](https://github.com/rordenlab/dcm2niix)
 - `dcm2Bids` **If it is not already available on your machine or cluster, install it.**
+  - bidsQC is confirmed compatible with `dcm2bids v2.1.6`.
   - Available from [UNFmontreal](https://github.com/UNFmontreal/Dcm2Bids) for your local machine.
   - [Here are instructions](https://unfmontreal.github.io/Dcm2Bids/docs/1-usage/#containers) for getting a singularity image for use on a cluster. You will need to `module load singularity` prior to running the singularity command.
 
