@@ -125,6 +125,8 @@ They indicate wherther a participant has all expected sequences and timepoints b
 
 BIDS validator: [http://incf.github.io/bids-validator](http://incf.github.io/bids-validator/)
 
+If you need to add fieldmap information to the .json sidecar files, see the `bidsQC/conversion` folder README for instructions on using `fmap_intendedfor.py` either [locally](https://github.com/kdestasio/bidsQC/blob/main/conversion/runConversionLocally.md#7-fmap_intendedforpy) or on a [cluster](https://github.com/kdestasio/bidsQC/blob/main/conversion/runConversionOnCluster.md#7-fmap_intendedforpy).  
+    
 ## Mock study example<a name="mock">
 
 ### Study details
