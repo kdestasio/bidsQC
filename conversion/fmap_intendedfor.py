@@ -1,12 +1,12 @@
 import os
 import json
 
-# Change these to your own paths/times/etc.
-pathToBidsFolder = os.path.join(os.sep, 'projects', 'sanlab', 'shared', 'REV', 'bids_data')
+####################### Change these to your own paths/times/etc.#######################
+pathToBidsFolder = os.path.join(os.sep, 'projects', 'sanlab', 'shared', 'studyName', 'bids_data')
 include_echo_time = True
 echo_time1 = '0.00437'
 echo_time2 = '0.00683'
-
+########################################################################################
 
 def main():
     subjectdirs = get_subjectdirs()
