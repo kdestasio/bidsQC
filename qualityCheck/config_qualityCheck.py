@@ -3,12 +3,6 @@ from datetime import datetime
 from sequence import Sequence
 from timepoint import TimePoint
 
-# Required that should not be changed
-tempdir = os.path.join(pathToBidsFolder, 'tmp_dcm2bids')  # holding folder for undesired files
-outputlog = os.path.join(logdir, 'outputlog_qualityCheck' + datetime.now().strftime('%Y%m%d-%H%M%S') + '.txt')
-errorlog = os.path.join(logdir, 'errorlog_qualityCheck' + datetime.now().strftime('%Y%m%d-%H%M%S') + '.txt')
-derivatives = os.path.join(pathToBidsFolder, 'derivatives')  # Where processed data will go
-
 ######################## CONFIGURABLE PART BELOW ########################
 
 # Set directories (Check these for your study)
@@ -42,3 +36,10 @@ gzipped = True
 # List them below to have the 'run-#' field appended to indicate the order in which they were run.
 order_sequences = True
 tasks_to_order = 'stopsignal'    # comma seperated if multiple
+
+
+######################## DO NOT CHANGE ########################
+tempdir = os.path.join(pathToBidsFolder, 'tmp_dcm2bids')  # holding folder for undesired files
+outputlog = os.path.join(logdir, 'outputlog_qualityCheck' + datetime.now().strftime('%Y%m%d-%H%M%S') + '.txt')
+errorlog = os.path.join(logdir, 'errorlog_qualityCheck' + datetime.now().strftime('%Y%m%d-%H%M%S') + '.txt')
+derivatives = os.path.join(pathToBidsFolder, 'derivatives')  # Where processed data will go
