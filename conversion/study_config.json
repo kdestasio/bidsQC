@@ -133,7 +133,7 @@
             "criteria": {
                 "SidecarFilename": "*fieldmap1_*_e2*",
                 "ProtocolName": "fieldmap1",
-                "ImageType": "P"
+                "ImageType": ["ORIGINAL", "PRIMARY", "P", "ND"]
             },
             "intendedFor": 0
         },
@@ -167,7 +167,7 @@
             "customLabels": "",
             "criteria": {
                 "ProtocolName": "fieldmap2",
-                "ImageType": ["ORIGINAL", "PRIMARY", "P", "ND", "PHASE"]
+                "ImageType": ["ORIGINAL", "PRIMARY", "P", "ND"]
             },
             "intendedFor": 0
         },
@@ -200,7 +200,7 @@
             "customLabels": "",
             "criteria": {
                 "ProtocolName": "fieldmap3",
-                "ImageType": ["ORIGINAL", "PRIMARY", "P", "ND", "PHASE"]
+                "ImageType": ["ORIGINAL", "PRIMARY", "P", "ND"]
             },
             "intendedFor": 0
         },
@@ -233,7 +233,7 @@
             "customLabels": "",
             "criteria": {
                 "ProtocolName": "fieldmap4",
-                "ImageType": ["ORIGINAL", "PRIMARY", "P", "ND", "PHASE"]
+                "ImageType": ["ORIGINAL", "PRIMARY", "P", "ND"]
             },
             "intendedFor": 0
         },
@@ -245,7 +245,7 @@
                 "ProtocolName": "fieldmap4",
                 "EchoNumber": 2,
                 "EchoTime": 0.00683,
-                "ImageType": "M"
+                "ImageType": ["ORIGINAL", "PRIMARY", "M", "ND", "NORM"]
             },
             "intendedFor": 0
         },
@@ -256,7 +256,7 @@
             "criteria": {
                 "ProtocolName": "fieldmap4",
                 "EchoTime": 0.00437,
-                "ImageType": "M"
+                "ImageType": ["ORIGINAL", "PRIMARY", "M", "ND", "NORM"]
             },
             "intendedFor": 0
         }
