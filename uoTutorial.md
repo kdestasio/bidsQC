@@ -34,9 +34,10 @@ e.g. `cd /projects/sanlab/shared/studyDir`
     - Name the repository EXACTLY what your study folder is named (e.g. if your folder is called Tardis-blue, your repo must also be named Tardis-blue)
     - Do NOT initialize the repository with a README, .gitignore, or license.
     - Click "Create repository"
-    - Make sure you are in your study directory. If you are not `cd` into it. 
+    - At the your command line, make sure you are in your study directory. If you are not `cd` into it. 
     - Follow the instructions to "create a new repository on the command line" by copy and pasting each command into your terminal.
     - Be sure to add, commit, and push the bidsQC directory and contents as well.
+        `git add bidsQC/; git commit -m "Add bidsQC directory. Contents from https://github.com/kdestasio/bidsQC.git"; git push`
     - You may need to generate a Personal access token if you haven't yet done so. This is what you use when asked for a password when pushing a repo. To generate a token, click your User icon in the top right of the github page. Then select Settings > Developer settings > Personal access tokens > Generate new token. See the [github documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) on setting the token scope. Be sure to save the token somewhere secure where you can look it up later, like a password manager, or you will have to recreate it.
 
 
@@ -44,6 +45,9 @@ e.g. `cd /projects/sanlab/shared/studyDir`
 ***NOTE:** If you take the option of using version control at the level of the `studyName` folder, you will want to familiarize yourself with the `.gitignore` file to ensure you are not commiting any participant data or other sensitive information to your repository. The likelihood is that you will need to use a `.gitignore` file regardless, but it's essential if you will have participant data in your folder.
 
 ## Accessing the tutorial data
+
+There are sample DICOMS available on Talapas. The path is:  
+`/projects/lcni/dcm/repository/REV_examples`
 
 ## DICOM to Nifti conversion
 
