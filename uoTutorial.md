@@ -17,7 +17,7 @@ Decide whether you want to use version control to:
 1. Fork the bidsQC repo to your own account.
 2. `cd` into the directory where you would like to store the bidsQC scripts (usually a study specific directory)  
 e.g. `cd /projects/sanlab/shared/studyDir`  
-3. [`git clone`](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) that repo and update it as you make changes.  
+3. [git clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) that repo and update it as you make changes.  
 
 #### If you want to track your study directory
 
@@ -25,7 +25,8 @@ If you want to track changes for other scripts, files, etc. that you are using f
 
 1. `cd` into the directory where you would like to store the bidsQC scripts (usually a study specific directory)  
 e.g. `cd /projects/sanlab/shared/studyDir`  
-2. [`git clone`](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) the bidsQC repository into your folder  
+2. [git clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) the bidsQC repository into your folder  
+    `git clone https://github.com/kdestasio/bidsQC.git`
 3. `cd` into the `bidsQC` directory and remove the `.git` directory  
     `cd bidsQC; rm -rf .git` 
 4. Create a new repo one level up in your `studyName` directory.
