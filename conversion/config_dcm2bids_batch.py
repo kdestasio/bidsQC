@@ -5,6 +5,8 @@ from datetime import datetime
 
 # Set your Talapas user group
 group = "sanlab"
+partition = "ctn" # Set to NA if running locally
+dcm2bidsImageName = "dcm2bids_latest_2021-11-18.sif" # Set to NA if running locally
 
 # Set directories
 # These variables are used in the main script and need to be defined here.
@@ -13,7 +15,7 @@ pathToStudyFolder = os.path.join(os.sep, "projects", "sanlab", "shared", "studyN
 pathToDicomFolder = os.path.join(os.sep, "projects", "lcni", "dcm", "sanlab", "Berkman", "REV")
 pathToConversionFolder = os.path.join(pathToStudyFolder, "bidsQC", "conversion")  # Contains subject_list.txt, config file, and dcm2bids_batch.py
 pathToConfigFile = os.path.join(pathToConversionFolder, "study_config.json")  # path to and name of config file
-singularity_image = os.path.join(os.sep, "projects", "sanlab", "shared", "containers", "Dcm2Bids-master.simg") # Set equal to "NA" if you are running the script locally
+singularity_image = os.path.join(os.sep, "projects", "sanlab", "shared", "containers", dcm2bidsImageName) # Set equal to "NA" if you are running the script locally
 
 # These variables are also used in the main script and need to be defined here.
 # If they don't exist, they will be created by the script
