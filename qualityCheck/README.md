@@ -1,9 +1,9 @@
 # Overview
 1. [About qualityCheck](#about)
 2. [Instructions for using the scripts](#instructions)
-3. [Mock study example](#mock)
+3. [Mock study example](#mock) with step-by-step examples
 
-## Basic quality checking<a name="about>
+## Basic quality checking<a name="about">
 
 These scripts will check whether each sequence has the correct number of runs within BIDS. The correct name and number of each sequence is specified in the configuration file for each timepoint. Results are output in log files.
 
