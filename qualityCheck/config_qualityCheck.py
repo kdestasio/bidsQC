@@ -9,7 +9,7 @@ from timepoint import TimePoint
 # These variables are used in the main script and need to be defined here. 
 # They need to exist prior to running the qualityCheck.py
 pathToBidsFolder = os.path.join(os.sep, 'projects', "sanlab", 'shared', "studyName", 'bids_data')  # Where your subjects' nifti directories are
-logdir = os.path.join(os.getcwd, 'logs_qualityCheck')  # Log files will go in the folder from which this script is run
+logdir = os.path.join(os.getcwd(), 'logs_qualityCheck')  # Log files will go in the folder from which this script is run
 
 # Create a dictionary (the thing below) for each timepoint in your study.
 # The first entry after Sequence is the directory name
