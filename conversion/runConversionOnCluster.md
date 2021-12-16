@@ -113,7 +113,7 @@ If the `qualityCheck.py` script is to be used to alter run numbers, that must be
 
 #####  1. Edit the following
   
-`pathToBidsFolder`: This should be the path to the folder containing your BIDS data.  
+`path_bidsdata`: This should be the path to the folder containing your BIDS data.  
 `include_echo_time`: Set to `True` or `False` based on whether you want the echo times in the .json files.  
 `echo_time1`: You need to look-up what the echo time is for your specific fieldmap. Enter the value here.  
 `echo_time2`: You need to look-up what the echo time is for your specific fieldmap. Enter the value here.  

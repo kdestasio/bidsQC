@@ -12,7 +12,7 @@ def main():
     """
     Run the things.
     """
-    folders_tocheck = cfg.pathToBidsFolder, cfg.derivatives, cfg.logdir, cfg.tempdir
+    folders_tocheck = cfg.path_bidsdata, cfg.derivatives, cfg.logdir, cfg.tempdir
     check_dirs(folders_tocheck)
     logfile_fullpaths = cfg.errorlog, cfg.outputlog
     create_logfiles(logfile_fullpaths)
@@ -180,14 +180,14 @@ def write_to_errorlog(message):
 # Check for subject directories
 def get_subjectdirs() -> list:
     """
-    Returns subject directory names (not full path) based on the pathToBidsFolder (bids_data directory).
+    Returns subject directory names (not full path) based on the path_bidsdata (bids_data directory).
 
     @rtype:  list
-    @return: list of subdirectories in pathToBidsFolder that start with the prefix sub
+    @return: list of subdirectories in path_bidsdata that start with the prefix sub
     """
-    bidsdir_contents = os.listdir(cfg.pathToBidsFolder)
+    bidsdir_contents = os.listdir(cfg.path_bidsdata)
     has_sub_prefix = [subdir for subdir in bidsdir_contents if subdir.startswith('sub-')]
-    subjectdirs = [subdir for subdir in has_sub_prefix if os.path.isdir(os.path.join(cfg.pathToBidsFolder, subdir))]
+    subjectdirs = [subdir for subdir in has_sub_prefix if os.path.isdir(os.path.join(cfg.path_bidsdata, subdir))]
     subjectdirs.sort()
     return subjectdirs
 
@@ -202,7 +202,7 @@ def get_timepoints(subject: str) -> list:
     @rtype:  list
     @return: list of ses-wave folders in the subject directory
     """
-    subject_fullpath = os.path.join(cfg.pathToBidsFolder, subject)
+    subject_fullpath = os.path.join(cfg.path_bidsdata, subject)
     subjectdir_contents = os.listdir(subject_fullpath)
     return [f for f in subjectdir_contents if not f.startswith('.')]
 
@@ -238,7 +238,7 @@ def get_sequences(subject: str, timepoint: str) -> list:
     @rtype:                     list
     @return:                    list of sequence folders that exist in the subject directory
     """
-    timepoint_fullpath = os.path.join(cfg.pathToBidsFolder, subject, timepoint)
+    timepoint_fullpath = os.path.join(cfg.path_bidsdata, subject, timepoint)
     timepoint_contents = os.listdir(timepoint_fullpath)
     return [f for f in timepoint_contents if not f.startswith('.')]
 
@@ -279,7 +279,7 @@ def check_sequence_files(subject: str, timepoint: str, sequence: str, expected_s
     """
     extension_json = "json"
     extension_nifti = "nii.gz" if cfg.gzipped else ".nii"
-    sequence_fullpath = os.path.join(cfg.pathToBidsFolder, subject, timepoint, sequence)
+    sequence_fullpath = os.path.join(cfg.path_bidsdata, subject, timepoint, sequence)
     if not os.path.isdir(sequence_fullpath):
         write_to_errorlog("\n FOLDER WARNING! %s folder missing for %s \n" % (sequence, subject))
     else:

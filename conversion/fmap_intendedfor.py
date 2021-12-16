@@ -2,7 +2,7 @@ import os
 import json
 
 ####################### Change these to your own paths/times/etc.#######################
-pathToBidsFolder = os.path.join(os.sep, 'projects', 'sanlab', 'shared', 'studyName', 'bids_data')
+path_bidsdata = os.path.join(os.sep, 'projects', 'sanlab', 'shared', 'studyName', 'bids_data')
 include_echo_time = True
 echo_time1 = '0.00437'
 echo_time2 = '0.00683'
@@ -13,8 +13,8 @@ def main():
     for subjectdir in subjectdirs:
         timepoints = get_timepoints(subjectdir)
         for timepoint in timepoints:
-            func_dir_path = os.path.join(pathToBidsFolder, subjectdir, timepoint, 'func')
-            fmap_dir_path = os.path.join(pathToBidsFolder, subjectdir, timepoint, 'fmap')
+            func_dir_path = os.path.join(path_bidsdata, subjectdir, timepoint, 'func')
+            fmap_dir_path = os.path.join(path_bidsdata, subjectdir, timepoint, 'fmap')
             if os.path.isdir(func_dir_path):
                 func_niftis_partialpath = get_funcdir_niftis(func_dir_path, timepoint)
                 if os.path.isdir(fmap_dir_path):
@@ -26,14 +26,14 @@ def main():
 
 def get_subjectdirs() -> list:
     """
-    Returns subject directory names (not full path) based on the pathToBidsFolder (bids_data directory).
+    Returns subject directory names (not full path) based on the path_bidsdata (bids_data directory).
 
     @rtype:  list
     @return: list of subdirectories in bids_data that start with the prefix sub
     """
-    bidsdir_contents = os.listdir(pathToBidsFolder)
+    bidsdir_contents = os.listdir(path_bidsdata)
     has_sub_prefix = [subdir for subdir in bidsdir_contents if subdir.startswith('sub-')]
-    subjectdirs = [subdir for subdir in has_sub_prefix if os.path.isdir(os.path.join(pathToBidsFolder, subdir))]
+    subjectdirs = [subdir for subdir in has_sub_prefix if os.path.isdir(os.path.join(path_bidsdata, subdir))]
     subjectdirs.sort()
     return subjectdirs
 
@@ -48,7 +48,7 @@ def get_timepoints(subject: str) -> list:
     @rtype:  list
     @return: list of ses-wave folders in the subject directory
     """
-    subject_fullpath = os.path.join(pathToBidsFolder, subject)
+    subject_fullpath = os.path.join(path_bidsdata, subject)
     subjectdir_contents = os.listdir(subject_fullpath)
     return [f for f in subjectdir_contents if not f.startswith('.')]
 

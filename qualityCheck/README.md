@@ -48,7 +48,7 @@ You will need to change some fields in the file `config_qualityCheck.py`.
 
 ### 1. Change the paths<a name="paths">
 
-`pathToBidsFolder` is the path to the folder that houses your subject data.  
+`path_bidsdata` is the path to the folder that houses your subject data.  
 `logdir` is the path that sets where the logfiles are saved.  
 
 ### 2. Enter `Sequence` information<a name="sequence">

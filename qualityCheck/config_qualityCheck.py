@@ -8,7 +8,7 @@ from timepoint import TimePoint
 # Set directories (Check these for your study)
 # These variables are used in the main script and need to be defined here. 
 # They need to exist prior to running the qualityCheck.py
-pathToBidsFolder = os.path.join(os.sep, 'projects', "sanlab", 'shared', "studyName", 'bids_data')  # Where your subjects' nifti directories are
+path_bidsdata = os.path.join(os.sep, 'projects', "sanlab", 'shared', "studyName", 'bids_data')  # Where your subjects' nifti directories are
 logdir = os.path.join(os.getcwd(), 'logs_qualityCheck')  # Log files will go in the folder from which this script is run
 
 # Create a dictionary (the thing below) for each timepoint in your study.
@@ -39,7 +39,7 @@ tasks_to_order = 'stopsignal'    # comma seperated if multiple
 
 
 ######################## DO NOT CHANGE ########################
-tempdir = os.path.join(pathToBidsFolder, 'tmp_dcm2bids')  # holding folder for undesired files
+tempdir = os.path.join(path_bidsdata, 'tmp_dcm2bids')  # holding folder for undesired files
 outputlog = os.path.join(logdir, 'outputlog_qualityCheck' + datetime.now().strftime('%Y%m%d-%H%M%S') + '.txt')
 errorlog = os.path.join(logdir, 'errorlog_qualityCheck' + datetime.now().strftime('%Y%m%d-%H%M%S') + '.txt')
-derivatives = os.path.join(pathToBidsFolder, 'derivatives')  # Where processed data will go
+derivatives = os.path.join(path_bidsdata, 'derivatives')  # Where processed data will go

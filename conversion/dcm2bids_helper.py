@@ -7,19 +7,19 @@ def main():
     """
     Run the things.
     """
-    dir_fullpaths = cfg.logdir, cfg.pathToBidsFolder
+    dir_fullpaths = cfg.logdir, cfg.path_bidsdata
     check_dirs_make(dir_fullpaths)
     logfile_fullpaths = cfg.outputlog, cfg.errorlog
     create_logfiles(logfile_fullpaths)
-    dirs_and_messages = {cfg.pathToDicomFolder:"Incorrect dicom directory specified", os.path.join(cfg.pathToDicomFolder, cfg.test_subject):"Test participant's folder does not exist - %s " % (cfg.test_subject)}
+    dirs_and_messages = {cfg.path_dicoms:"Incorrect dicom directory specified", os.path.join(cfg.path_dicoms, cfg.test_subject):"Test participant's folder does not exist - %s " % (cfg.test_subject)}
     check_dirs(dirs_and_messages)
-    if os.path.isdir(cfg.pathToDicomFolder):
+    if os.path.isdir(cfg.path_dicoms):
         write_to_outputlog(cfg.test_subject + os.linesep)
         # Create a job to submit to the HPC with sbatch
         if cfg.run_local:
-            cmd = 'dcm2bids_helper -d {pathToDicomFolder}/{test_subject} -b {pathToBidsFolder}'.format(pathToDicomFolder=cfg.pathToDicomFolder, test_subject=cfg.test_subject, pathToBidsFolder=cfg.pathToBidsFolder)
+            cmd = 'dcm2bids_helper -d {path_dicoms}/{test_subject} -b {path_bidsdata}'.format(path_dicoms=cfg.path_dicoms, test_subject=cfg.test_subject, path_bidsdata=cfg.path_bidsdata)
         else:
-            cmd = 'module load singularity; sbatch --job-name helper_{test_subject} -A {account} --partition=short --time 00:60:00 --mem-per-cpu=2G --cpus-per-task=1 -o {logdir}/{test_subject}_helper_output.txt -e {logdir}/{test_subject}_helper_error.txt --wrap="singularity exec -B {pathToDicomFolder} -B {pathToStudyFolder} {image} dcm2bids_helper -d {pathToDicomFolder}/{test_subject} -o {pathToBidsFolder}"'.format(pathToDicomFolder=cfg.pathToDicomFolder, test_subject=cfg.test_subject, pathToBidsFolder=cfg.pathToBidsFolder, account=cfg.group, image=cfg.singularity_image, logdir=cfg.logdir, pathToStudyFolder=cfg.pathToStudyFolder)
+            cmd = 'module load singularity; sbatch --job-name helper_{test_subject} -A {account} --partition=short --time 00:60:00 --mem-per-cpu=2G --cpus-per-task=1 -o {logdir}/{test_subject}_helper_output.txt -e {logdir}/{test_subject}_helper_error.txt --wrap="singularity exec -B {path_dicoms} -B {path_toplevel} {image} dcm2bids_helper -d {path_dicoms}/{test_subject} -o {path_bidsdata}"'.format(path_dicoms=cfg.path_dicoms, test_subject=cfg.test_subject, path_bidsdata=cfg.path_bidsdata, account=cfg.group, image=cfg.singularity_image, logdir=cfg.logdir, path_toplevel=cfg.path_toplevel)
         subprocess.call([cmd], shell=True)
     else:
         write_to_errorlog(cfg.test_subject+os.linesep)
