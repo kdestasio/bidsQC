@@ -53,4 +53,23 @@ There are sample DICOMS available on Talapas. The path is:
 
 Follow the instructions in the [`bidsQC/conversion/README.md`](/conversion/README.md#running-the-scripts-on-a-linux-cluster).  
 
+## BIDS Validator on Talapas
 
+We will create a singularity image of the [BIDS-validator tool](https://github.com/bids-standard/bids-validator) to use on Talapas. Once the image is created, we can submitted instructions via the command line to validate out dataset.
+
+### Pull the singularity image
+
+`cd` into the directory where you would like to store your singularity image.  
+Then create the image with the following command, changing the date in the image name to today's.  
+
+```
+singularity pull bids-validator_2021-12-28.sif docker://bids/validator
+```
+
+### Run validation
+
+From within the directory that contains the singularity image, run the following command from the command line. First change the paths so they point to your data and change the bids-validator image name to match the name you gave yours in the step above.  
+```
+singularity exec -B /projects/sanlab/shared/ctnTutorial/bids_data:/projects/sanlab/shared/ctnTutorial/bids_data:ro bids-validator_2021-12-28.sif \bids-validator /projects/sanlab/shared/ctnTutorial/bids_data
+```
+The validation results will be output in your terminal window.  
