@@ -9,10 +9,12 @@ I find it easiest to edit scripts using a code editor with syntax highlighting (
 - SLURM (already available on the UO cluster)
 - Python3
 - Dcm2Bids singularity container*. You need to download it if you don't have access to a copy on Talapas.
-  - Instructions for getting the singularity container are available here: https://unfmontreal.github.io/Dcm2Bids/docs/1-usage/#containers
-  - If the above link doesn't get you what you need, try:
-    - instructions on copying singularity containers, see [Containers: Docker & Singularity](https://uoregonctn.atlassian.net/wiki/spaces/FSS/pages/138248203/Containers+Docker+Singularity)
-    - Follow the [instructions](https://uoregonctn.atlassian.net/wiki/spaces/FSS/pages/138248203/Containers+Docker+Singularity#Containers:Docker&Singularity-trueFromgithub) to build the singularity container on Talapas 
+  - Instructions for getting the singularity container are available here: https://unfmontreal.github.io/Dcm2Bids/docs/1-usage/#containers  
+  - The basic command is:
+    ```
+    module load singularity; singularity build dcm2bids_latest_2021-12-08.sif docker://unfmontreal/dcm2bids:latest
+    ```
+    Change the date in the container name to today's.
 
 To check if Python 3, dcm2niix, or other packages are available on a Linux cluster, type module avail [packageName] at the command line, e.g. module avail Python3
 

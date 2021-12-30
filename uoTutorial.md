@@ -21,6 +21,8 @@ e.g. `cd /projects/sanlab/shared/studyDir`
 
 #### If you want to track your study directory
 
+***NOTE:** If you take the option of using version control at the level of the `studyName` folder, you will want to familiarize yourself with the `.gitignore` file to ensure you are not commiting any participant data or other sensitive information to your repository. The likelihood is that you will need to use a `.gitignore` file regardless, but it's essential if you will have participant data in your folder.
+
 If you want to track changes for other scripts, files, etc. that you are using for your analyses:  
 
 1. `cd` into the directory where you would like to store the bidsQC scripts (usually a study specific directory)  
@@ -40,14 +42,24 @@ e.g. `cd /projects/sanlab/shared/studyDir`
     - Click "Create repository"
     - At the command line, make sure you are in your study directory. If you are not `cd` into it. 
     - Follow the GitHub instructions to "create a new repository on the command line" by copy and pasting each command into your terminal.
-    - Be sure to add, commit, and push the bidsQC directory and contents as well.
+    - This is a good time to create your .gitignore file. Let's initialize it to ignore the folder that will contain our bids data, as well as our pycache.  
         ```
-        git add bidsQC/; git commit -m "Add bidsQC directory. Contents from https://github.com/kdestasio/bidsQC.git"; git push
+        cat > .gitignore
         ```
-    - You may need to generate a Personal access token if you haven't yet done so. This is what you use when asked for a password when pushing a repo. To generate a token, click your User icon in the top right of the github page. Then select Settings > Developer settings > Personal access tokens > Generate new token. See the [github documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) on setting the token scope. Be sure to save the token somewhere secure where you can look it up later, like a password manager, or you will have to recreate it.
+        Then press enter. Now your cursor should be on the next line. Type the following on two seperate lines.
+        ```
+        bids_data/
+        __pycache__/
+        ```
+        Press Ctrl+D when finished.
 
-        
-***NOTE:** If you take the option of using version control at the level of the `studyName` folder, you will want to familiarize yourself with the `.gitignore` file to ensure you are not commiting any participant data or other sensitive information to your repository. The likelihood is that you will need to use a `.gitignore` file regardless, but it's essential if you will have participant data in your folder.
+    - Be sure to add, commit, and push the .gitignore file nad the bidsQC directory and contents using the following commands.
+        ```
+        git add .gitignore bidsQC/
+        git commit -m "Add bidsQC directory. Contents from https://github.com/kdestasio/bidsQC.git"
+        git push
+        ```
+    - You may need to generate a Personal access token if you haven't yet done so. This is what you use when asked for a password when pushing a repo. To generate a token, click your User icon in the top right of the github page. Then select **Settings > Developer settings > Personal access tokens > Generate new token**. See the [github documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) on setting the token scope. Be sure to save the token somewhere secure where you can look it up later, like a password manager, or you will have to recreate it.
 
 ## Accessing the tutorial data
 
