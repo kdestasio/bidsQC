@@ -42,16 +42,17 @@ e.g. `cd /projects/sanlab/shared/studyDir`
     - Click "Create repository"
     - At the command line, make sure you are in your study directory. If you are not `cd` into it. 
     - Follow the GitHub instructions to "create a new repository on the command line" by copy and pasting each command into your terminal.
-    - This is a good time to create your .gitignore file. Let's initialize it to ignore the folder that will contain our bids data, as well as our pycache.  
+    - This is a good time to create your .gitignore file. Let's initialize it to ignore the folder that will contain our bids data, as well as our pycache and our logs directories.  
         ```
         cat > .gitignore
         ```
         Then press enter. Now your cursor should be on the next line. Type the following on two seperate lines.
         ```
         bids_data/
+        log*/
         __pycache__/
         ```
-        Press Ctrl+D when finished.
+        Press `Ctrl+D` when finished.
 
     - Be sure to add, commit, and push the .gitignore file nad the bidsQC directory and contents using the following commands.
         ```
@@ -64,7 +65,7 @@ e.g. `cd /projects/sanlab/shared/studyDir`
 ## Accessing the tutorial data
 
 There are sample DICOMS available on Talapas. The path is:  
-`/projects/lcni/dcm/repository/REV_examples`
+`/projects/sanlab/shared/REV_examples`
 
 ## DICOM to Nifti conversion
 
