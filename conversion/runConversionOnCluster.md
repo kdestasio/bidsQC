@@ -40,8 +40,8 @@ If you need the metadata to populate the `study_config.json` file, use the dcm2b
 5. Run the helper script by typing:   
 `python3 dcm2bids_helper.py`  
     - This will run Dcm2Bids on your test subject, creating the nifti and `.json` files needed to construct the `study_config.json` file.
-    - It may take some time for the job to complete. You can check the status using `squeue` with either the `-j` flag to specify the jobn number or the `-u` flag to specufy your username.  
-    e.g. `squeue -j 16534789`
+    - It may take some time for the job to complete. You can check the status using `squeue` with either the `-j` flag to specify the job number or the `-u` flag to specify your username.  
+    e.g. `squeue -j 16534789` or `squeue -u myusername`
 6. `cd` to the `conversion` folder where there should now be a new folder called `logs_helper`.
 
     ```{bash}
