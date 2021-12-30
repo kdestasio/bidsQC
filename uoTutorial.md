@@ -1,4 +1,4 @@
-# bidsQC Tutuorial: University of Oregon
+# bidsQC Tutorial: University of Oregon
 
 ## Setup
 ### Create a github account
