@@ -102,12 +102,13 @@ Change the variables and/or paths in `config_dcm2bids_batch.py` script for your 
 
 - Check the [specification.](https://bids.neuroimaging.io/)
 - Use the [BIDS validator](http://incf.github.io/bids-validator)
+  - Instructions for using the validator on Talapas are [here](https://github.com/kdestasio/bidsQC/blob/main/uoTutorial.md#bids-validator-on-talapas).
 
 If your data do not meet BIDS standards, see whether the scripts in the [bidsQC/qualityCheck folder](../qualityCheck) may be of use.
 
 ### 7. `fmap_intendedfor.py`
 
-If you are using fieldmaps, the `.json` file associated with each one must specify to which functional runs it is to be applied.  
+If you are using fieldmaps, the `.json` file associated with each one must specify to which functional runs it is to be applied. This may be specified in the `study_config.json` file, or may be added later using the `fmap_intendedfor.py` script. This script is particularly useful in cases of multiple fieldmaps and counterbalanced tasks where the task name and fieldmap name pairings vary.  
 
 If the `qualityCheck.py` script is to be used to alter run numbers, that must be done **BEFORE** running `fmap_intendedfor.py`.  
 
