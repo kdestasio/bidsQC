@@ -69,13 +69,25 @@ There are sample DICOMS available on Talapas. The path is:
 
 ## DICOM to Nifti conversion
 
-Follow the instructions in the [`bidsQC/conversion/README.md`](/conversion/README.md#running-the-scripts-on-a-linux-cluster).  
+Follow the instructions in the [`bidsQC/conversion/README.md`](/conversion/README.md#running-the-scripts-on-a-linux-cluster).
+
+## Create metadata files
+
+Adherence to the BIDS standard requires certain metadata files exist within the top level of the dataset. 
+
+### dataset_description.json
+
+This [dataset_description.json](https://bids-specification.readthedocs.io/en/stable/03-modality-agnostic-files.html#dataset_descriptionjson) **must** exist. See the official BIDS specification for an example.  
+
+### README
+
+The [README](https://bids-specification.readthedocs.io/en/stable/03-modality-agnostic-files.html#readme) file must be in either ASCII or UTF-8 encoding and should not have a file extension.
 
 ## BIDS Validator on Talapas
 
 We will create a singularity image of the [BIDS-validator tool](https://github.com/bids-standard/bids-validator) to use on Talapas. Once the image is created, we can submitted instructions via the command line to validate out dataset.
 
-### Pull the singularity image
+### Create the singularity image
 
 `cd` into the directory where you would like to store your singularity image.  
 Then create the image with the following command, changing the date in the image name to today's.  
@@ -84,10 +96,18 @@ Then create the image with the following command, changing the date in the image
 singularity pull bids-validator_2021-12-28.sif docker://bids/validator
 ```
 
+### .bidsignore
+
+The [.bidsignore](https://www.npmjs.com/package/bids-validator#bidsignore) file should be created within the top level of our dataset. This file indicates directories and files to be ignored by the BIDS validator. Inclusion of this file streamlines the validator output and makes it easier to identify real issues with dataset adherence to BIDS.  
+
 ### Run validation
 
-From within the directory that contains the singularity image, run the following command from the command line. First change the paths so they point to your data and change the bids-validator image name to match the name you gave yours in the step above.  
+From within the directory that contains the bids-validator singularity image, run the following command from the command line.  
+
+First change the paths so they point to your data and change the bids-validator image name to match the name you gave yours in the step above.  
+
 ```
 singularity exec -B /projects/sanlab/shared/ctnTutorial/bids_data:/projects/sanlab/shared/ctnTutorial/bids_data:ro bids-validator_2021-12-28.sif \bids-validator /projects/sanlab/shared/ctnTutorial/bids_data
 ```
-The validation results will be output in your terminal window.  
+
+The validation results will be output in your terminal window. Make any necessary changes and repeat the validation process if necesary.  
