@@ -1,11 +1,58 @@
 # bidsQC Tutorial: University of Oregon
 
+Table of contents
+
+- Setup
+  - Get a high performance cluster account(#talapas-account)
+  - Get a GitHub account(#github-account)
+  - Create dcm2bids singularity image(#dcm2bids-image)
+  - Create BIDS validator singularity image(#validator-image)
+  - Pull the bidsQC repository(#pull-bidsqc)
+- Accessing the tutorial data(#get-data)
+- Convert dicoms to niftis(#dcm-nii))
+- Create metadata files(#metadata)
+  - dataset-desctription.json(#dataset-description)
+  - README(#readme)
+- Use the BIDS validator(#bids-validator)
+  - Create a .bidsignore file(#bids-ignore)
+  - Validate the dataset(#validate)
+
 ## Setup
-### Create a github account
+### Request an account on the UO high performance cluster (Talapas)<a name="talapas-account">
+
+If you do not already have one, request an account on Talapas. If you do have an account, make sure you know how to log on. See [the Talapas wiki](https://hpcrcf.atlassian.net/wiki/spaces/TCP/pages/7312376/Quick+Start+Guide) for account creation and login instructions.  
+
+### Create a github account<a name="github-account">
 
 [Create a github account](https://github.com/) if you don't already have one.
+    
+## Get the dcm2bids tools as a singularity image<a name="dcm2bids-image">
 
-### Get the bidsQC repository for your study
+You will need a singularity image of the dcm2bids tools on Talapas. To do so, create a singularity image using the following steps:  
+
+1. `cd` into the directory where you would like to store the image. One suggestion is to create a folder called `containers` at in your group's shared folder and store all singularity images together. For example:
+    ```
+    mkdir /projects/sanlab/shared/containers
+    cd /projects/sanlab/shared/containers
+    ```
+2. Then create the image with the following command, changing the date in the image name to today's.  
+    
+    ```
+    singularity pull dcm2bids_2021-12-30.sif docker://unfmontreal/dcm2bids:latest
+    ```
+    
+We will create a singularity image of the [BIDS-validator tool](https://github.com/bids-standard/bids-validator) to use on Talapas. Once the image is created, we can submitted instructions via the command line to validate out dataset.
+
+## Get the BIDS validator tools as a singularity image<a name="validator-image">
+
+1. `cd` into the directory where you would like to store your singularity image.  
+2.  Then create the image with the following command, changing the date in the image name to today's.  
+
+```
+singularity pull bids-validator_2021-12-28.sif docker://bids/validator
+```
+
+### Get the bidsQC repository for your study<a name="pull-bidsqc">
 
 Decide whether you want to use version control to:  
 
@@ -62,45 +109,38 @@ e.g. `cd /projects/sanlab/shared/studyDir`
         ```
     - You may need to generate a Personal access token if you haven't yet done so. This is what you use when asked for a password when pushing a repo. To generate a token, click your User icon in the top right of the github page. Then select **Settings > Developer settings > Personal access tokens > Generate new token**. See the [github documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) on setting the token scope. Be sure to save the token somewhere secure where you can look it up later, like a password manager, or you will have to recreate it.
 
-## Accessing the tutorial data
+## Accessing the tutorial data<a name="get-data">
 
 There are sample DICOMS available on Talapas. The path is:  
 `/projects/sanlab/shared/REV_examples`
 
-## DICOM to Nifti conversion
+## DICOM to Nifti conversion<a name="dcm-nii">
 
-Follow the instructions in the [`bidsQC/conversion/README.md`](/conversion/README.md#running-the-scripts-on-a-linux-cluster).
+We will use a singularity image of the dcm2bids tools to convert the data from dicom files to nifti files. See the steps at the [top of this page](#dcm2bids-image) to create the singularity image if you have not done so already.  
 
-## Create metadata files
+To convert the data, follow the instructions in the [`bidsQC/conversion/README.md`](/conversion/README.md#running-the-scripts-on-a-linux-cluster). Within the README, follow the appropriate link for conversion on a local machine or high performance cluster.  
+
+## Create metadata files<a name="metadata">
 
 Adherence to the BIDS standard requires certain metadata files exist within the top level of the dataset. 
 
-### dataset_description.json
+### dataset_description.json<a name="dataset-description">
 
 This [dataset_description.json](https://bids-specification.readthedocs.io/en/stable/03-modality-agnostic-files.html#dataset_descriptionjson) **must** exist. See the official BIDS specification for an example.  
 
-### README
+### README<a name="readme">
 
 The [README](https://bids-specification.readthedocs.io/en/stable/03-modality-agnostic-files.html#readme) file must be in either ASCII or UTF-8 encoding and should not have a file extension.
 
-## BIDS Validator on Talapas
+## BIDS Validator on Talapas<a name="bids-validator">
 
-We will create a singularity image of the [BIDS-validator tool](https://github.com/bids-standard/bids-validator) to use on Talapas. Once the image is created, we can submitted instructions via the command line to validate out dataset.
+We will use a singularity image of the BIDS validator to verify the data are BIDS compliant. See the steps at the [top of this page](#validator-image) to create the singularity image if you have not done so already.    
 
-### Create the singularity image
-
-`cd` into the directory where you would like to store your singularity image.  
-Then create the image with the following command, changing the date in the image name to today's.  
-
-```
-singularity pull bids-validator_2021-12-28.sif docker://bids/validator
-```
-
-### .bidsignore
+### .bidsignore<a name="bidsignore">
 
 The [.bidsignore](https://www.npmjs.com/package/bids-validator#bidsignore) file should be created within the top level of our dataset. This file indicates directories and files to be ignored by the BIDS validator. Inclusion of this file streamlines the validator output and makes it easier to identify real issues with dataset adherence to BIDS.  
 
-### Run validation
+### Run validation<a name="validate">
 
 From within the directory that contains the bids-validator singularity image, run the following command from the command line.  
 
