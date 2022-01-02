@@ -9,7 +9,7 @@ Table of contents
   - [Create BIDS validator singularity image](#validator-image)
   - [Pull the bidsQC repository](#pull-bidsqc)
 - [Accessing the tutorial data](#get-data)
-- [Convert dicoms to niftis](#dcm-nii))
+- [Convert dicoms to niftis](#dcm-nii)
 - [Create metadata files](#metadata)
   - [dataset-desctription.json](#dataset-description)
   - [README](#readme)
