@@ -30,7 +30,7 @@ If you do not already have one, request an account on Talapas. If you do have an
 
 You will need a singularity image of the dcm2bids tools on Talapas. To do so, create a singularity image using the following steps:  
 
-1. `cd` into the directory where you would like to store the image. One suggestion is to create a folder called `containers` at in your group's shared folder and store all singularity images together. For example:
+1. `cd` into the directory where you would like to store the image. One suggestion is to create a folder called `containers` within your group's shared folder and store all singularity images together. For example:
     ```
     mkdir /projects/sanlab/shared/containers
     cd /projects/sanlab/shared/containers
