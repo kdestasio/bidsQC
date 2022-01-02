@@ -17,7 +17,7 @@
   - [Create a .bidsignore file](#bids-ignore)
   - [Validate the dataset](#validate)
 
-## Setup(<a name="setup")
+## Setup<a name="setup">
 ### Request an account on the UO high performance cluster (Talapas)<a name="talapas-account">
 
 If you do not already have one, request an account on Talapas. If you do have an account, make sure you know how to log on. See [the Talapas wiki](https://hpcrcf.atlassian.net/wiki/spaces/TCP/pages/7312376/Quick+Start+Guide) for account creation and login instructions.  
