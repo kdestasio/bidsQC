@@ -3,19 +3,19 @@
 Table of contents
 
 - Setup
-  - Get a high performance cluster account(#talapas-account)
-  - Get a GitHub account(#github-account)
-  - Create dcm2bids singularity image(#dcm2bids-image)
-  - Create BIDS validator singularity image(#validator-image)
-  - Pull the bidsQC repository(#pull-bidsqc)
-- Accessing the tutorial data(#get-data)
-- Convert dicoms to niftis(#dcm-nii))
-- Create metadata files(#metadata)
-  - dataset-desctription.json(#dataset-description)
-  - README(#readme)
-- Use the BIDS validator(#bids-validator)
-  - Create a .bidsignore file(#bids-ignore)
-  - Validate the dataset(#validate)
+  - [Get a high performance cluster account](#talapas-account)
+  - [Get a GitHub account](#github-account)
+  - [Create dcm2bids singularity image](#dcm2bids-image)
+  - [Create BIDS validator singularity image](#validator-image)
+  - [Pull the bidsQC repository](#pull-bidsqc)
+- [Accessing the tutorial data](#get-data)
+- [Convert dicoms to niftis](#dcm-nii))
+- [Create metadata files](#metadata)
+  - [dataset-desctription.json](#dataset-description)
+  - [README](#readme)
+- [Use the BIDS validator](#bids-validator)
+  - [Create a .bidsignore file](#bids-ignore)
+  - [Validate the dataset](#validate)
 
 ## Setup
 ### Request an account on the UO high performance cluster (Talapas)<a name="talapas-account">
