@@ -65,7 +65,7 @@ You may need to generate a Personal access token if you haven't yet done so. Thi
 
 The resulting folder structure will look something like the following, with `ctnTutorial` being the name of your study folder. Note the location of the `.git` directory.  
 
-![bidsQC-only-repo](./images/bidsQC-only-repo.png)  
+<img src="./images/bidsQC-only-repo.png" alt="bidsQC-only-repo" width="400px">
 
 ##### Steps
 
@@ -80,7 +80,7 @@ e.g. `cd /projects/sanlab/shared/studyDir`
 
 This structure acan be useful if you want to track changes for other scripts, files, etc. that you are using for your analyses. The resulting folder structure will look something like the following, with ctnTutorial being the name of your study folder. Note the location of the `.git` directory.  
 
-![study-level-repo](./images/study-level-repo.png)  
+<img src="./images/study-level-repo.png" alt="study-level-repo" width="400px">
   
 ##### Steps
 1. `cd` into the directory where you would like to store the bidsQC scripts (usually a study specific directory)  
