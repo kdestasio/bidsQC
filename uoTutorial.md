@@ -3,11 +3,11 @@
 ## Table of contents
 
 - [Setup](#setup)
-  - [Get a high performance cluster account](#talapas-account)
-  - [Get a GitHub account](#github-account)
-  - [Create dcm2bids singularity image](#dcm2bids-image)
-  - [Create BIDS validator singularity image](#validator-image)
-  - [Pull the bidsQC repository](#pull-bidsqc)
+  - [1. Get a high performance cluster account](#talapas-account)
+  - [2. Get a GitHub account](#github-account)
+  - [3. Create dcm2bids singularity image](#dcm2bids-image)
+  - [4. Create BIDS validator singularity image](#validator-image)
+  - [5. Pull the bidsQC repository](#pull-bidsqc)
 - [Accessing the tutorial data](#get-data)
 - [Convert dicoms to niftis](#dcm-nii)
 - [Create metadata files](#metadata)
@@ -18,15 +18,15 @@
   - [Validate the dataset](#validate)
 
 ## Setup<a name="setup">
-### Request an account on the UO high performance cluster (Talapas)<a name="talapas-account">
+### 1. Request an account on the UO high performance cluster (Talapas)<a name="talapas-account">
 
 If you do not already have one, request an account on Talapas. If you do have an account, make sure you know how to log on. See [the Talapas wiki](https://hpcrcf.atlassian.net/wiki/spaces/TCP/pages/7312376/Quick+Start+Guide) for account creation and login instructions.  
 
-### Create a github account<a name="github-account">
+### 2. Create a github account<a name="github-account">
 
 [Create a github account](https://github.com/) if you don't already have one.
     
-## Get the dcm2bids tools as a singularity image<a name="dcm2bids-image">
+### 3. Get the dcm2bids tools as a singularity image<a name="dcm2bids-image">
 
 You will need a singularity image of the dcm2bids tools on Talapas. To do so, create a singularity image using the following steps:  
 
@@ -43,7 +43,7 @@ You will need a singularity image of the dcm2bids tools on Talapas. To do so, cr
     
 We will create a singularity image of the [BIDS-validator tool](https://github.com/bids-standard/bids-validator) to use on Talapas. Once the image is created, we can submitted instructions via the command line to validate out dataset.
 
-## Get the BIDS validator tools as a singularity image<a name="validator-image">
+### 4. Get the BIDS validator tools as a singularity image<a name="validator-image">
 
 1. `cd` into the directory where you would like to store your singularity image.  
 2.  Then create the image with the following command, changing the date in the image name to today's.  
@@ -52,7 +52,7 @@ We will create a singularity image of the [BIDS-validator tool](https://github.c
 singularity pull bids-validator_2021-12-28.sif docker://bids/validator
 ```
 
-### Get the bidsQC repository for your study<a name="pull-bidsqc">
+### 5. Get the bidsQC repository for your study<a name="pull-bidsqc">
 
 Decide whether you want to use version control to:  
 
