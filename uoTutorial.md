@@ -63,6 +63,12 @@ You may need to generate a Personal access token if you haven't yet done so. Thi
 
 #### If you want to track only the bidsQC scripts
 
+The resulting folder structure will look something like the following, with `ctnTutorial` being the name of your study folder. Note the location of the `.git` directory.  
+
+![bidsQC-only-repo](./images/bidsQC-only-repo.png)  
+
+##### Steps
+
 1. Fork the bidsQC repo to your own account.
 2. `cd` into the directory where you would like to store the bidsQC scripts (usually a study specific directory)  
 e.g. `cd /projects/sanlab/shared/studyDir`  
@@ -70,10 +76,13 @@ e.g. `cd /projects/sanlab/shared/studyDir`
 
 #### If you want to track your study directory
 
-***NOTE:** If you take the option of using version control at the level of the `studyName` folder, you will want to familiarize yourself with the `.gitignore` file to ensure you are not commiting any participant data or other sensitive information to your repository. The likelihood is that you will need to use a `.gitignore` file regardless, but it's essential if you will have participant data in your folder.
+***NOTE:** If you take the option of using version control at the level of the `studyName` folder, you will want to immediately familiarize yourself with the `.gitignore` file to ensure you are not commiting any participant data or other sensitive information to your repository. The likelihood is that you will need to use a `.gitignore` file regardless, but it's essential if you will have participant data in your folder.
 
-If you want to track changes for other scripts, files, etc. that you are using for your analyses:  
+This structure acan be useful if you want to track changes for other scripts, files, etc. that you are using for your analyses. The resulting folder structure will look something like the following, with ctnTutorial being the name of your study folder. Note the location of the `.git` directory.  
 
+![study-level-repo](./images/study-level-repo.png)  
+  
+##### Steps
 1. `cd` into the directory where you would like to store the bidsQC scripts (usually a study specific directory)  
 e.g. `cd /projects/sanlab/shared/studyDir`  
 2. [git clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) the bidsQC repository into your folder  
