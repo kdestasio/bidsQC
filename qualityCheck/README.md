@@ -139,11 +139,11 @@ Sequences with a `*` are functional runs that, while the same task, were counter
 - There are two timepoints  
     - Timepoint 1 should contain:
         - 2 fieldmaps
-        ![files-fmap](./images/timepoint1-fmap.png)
+        ![files-fmap](../images/timepoint1-fmap.png)
         - 1 anatomical sequence
-        ![files-anat](./images/timepoint1-anat.png)
+        ![files-anat](../images/timepoint1-anat.png)
         - 4 functional tasks
-        ![files-func](./images/timepoint1-func.png)
+        ![files-func](../images/timepoint1-func.png)
             - bart
             - *gng1 & gng2
             - *react1 & react2
@@ -204,10 +204,10 @@ We do want to append the `run-#` tag to our functional files. Because our functi
 We also want the sequences re-numbered because have multiples of some functional sequences due to issues during scanning.  
 
 Here's what we have:  
-![duplicate-files](./images/1a_post-dcm2bids_with-duplicate-runs.png)
+![duplicate-files](../images/1a_post-dcm2bids_with-duplicate-runs.png)
 
 And here's what we want:  
-![corrected](./images/2b_results_QC_True_nonSpec.png)
+![corrected](../images/2b_results_QC_True_nonSpec.png)
 
 By entering the task names into `tasks_to_order` without the counterbalance tag (e.g. `gng` rather than `gng1`), we can instruct the script to consider them iterations of the same task and append the appropriate `run-#` according to the order in which they were collected.  
 
@@ -220,6 +220,6 @@ It is important to note that **in the case of duplicates, the earlier runs are d
 
 ### Here's what our completed config file looks like 
 
-![sample-config](./images/sample_config.png)
+![sample-config](../images/sample_config.png)
 
 Once we run the script, our files are properly named and the undesired runs are placed in the `tmp_dcm2bids` folder. An account of the actions performed, along with information on missing sequences and/or timepoints is stored in the log file.  
