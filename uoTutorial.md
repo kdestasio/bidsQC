@@ -1,5 +1,6 @@
 # bidsQC Tutorial: University of Oregon
 
+This page provides detailed steps specific for running bidsQC on the University of Oregon high performance cluster, Talapas.  
 ## Table of contents
 
 - [Setup](#setup)
