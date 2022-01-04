@@ -8,7 +8,9 @@
   - [3. Create dcm2bids singularity image](#dcm2bids-image)
   - [4. Create BIDS validator singularity image](#validator-image)
   - [5. Pull the bidsQC repository](#pull-bidsqc)
-- [Accessing the tutorial data](#get-data)
+- [CTN BIDS Workshop participants](#ctn-workshop)
+  - [Optionally pull the ctnTutorial repo](#ctnTutorial)
+  - [Accessing CTN BIDS Workshop data](#get-data)
 - [Convert dicoms to niftis](#dcm-nii)
 - [Create metadata files](#metadata)
   - [dataset-desctription.json](#dataset-description)
@@ -119,7 +121,14 @@ e.g. `cd /projects/sanlab/shared/studyDir`
         git push
         ```
 
-## Accessing the tutorial data<a name="get-data">
+## CTN BIDS Workshop participants<a name="ctn-workshop">
+### Optionally pull the ctnTutorial repository<a name="ctnTutorial">
+
+The [ctnTutorial repo on GitHub](https://github.com/kdestasio/ctnTutorial) contains scripts that have been customized to work with the CTN BIDS Workshop data. While participants are encouraged to attempt tailoring the bidsQC scripts to the data themselves during the workshop, it may be useful to have the completed examples for comparison. The only components of the scripts in the ctnTutorial repo that will need to be changed by users are the paths in the configuration files.  
+
+If you want a copy of the repo that tracks your own changes, first fork it into your github account and then pull the repo contents from there.  
+
+### Accessing CTN BIDS Workshop data<a name="get-data">
 
 There are sample DICOMS available on Talapas. The path is:  
 `/projects/sanlab/shared/REV_examples`
