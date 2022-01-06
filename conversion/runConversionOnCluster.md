@@ -100,11 +100,22 @@ Change the variables and/or paths in `config_dcm2bids_batch.py` script for your 
 
 ### 6. Check that your data are in BIDS <a name="clust6">
 
-- Check the [specification.](https://bids.neuroimaging.io/)
-- Use the [BIDS validator](http://incf.github.io/bids-validator)
-  - Instructions for using the validator on Talapas are [here](https://github.com/kdestasio/bidsQC/blob/main/uoTutorial.md#bids-validator-on-talapas).
+#### Adherence to the BIDS standard requires certain metadata files exist within the top level of the dataset.
 
-If your data do not meet BIDS standards, see whether the scripts in the [bidsQC/qualityCheck folder](../qualityCheck) may be of use.
+1. dataset_description.json
+   - This dataset_description.json must exist. See the official BIDS specification for an example.
+2. README
+   - The README file must be in either ASCII or UTF-8 encoding and should not have a file extension.
+  
+Additional metadata files may be required depending upon your modality. Check the [specification.](https://bids.neuroimaging.io/). 
+  
+#### BIDS validator 
+  
+To check your files with an automated tool, use the [BIDS validator](http://incf.github.io/bids-validator).
+
+Instructions for using the validator on Talapas are [here](https://github.com/kdestasio/bidsQC/blob/main/uoTutorial.md#bids-validator-on-talapas).
+
+**If your data do not meet BIDS standards, see whether the scripts in the [bidsQC/qualityCheck folder](../qualityCheck) may be of use.**
 
 ### 7. `fmap_intendedfor.py`
 
