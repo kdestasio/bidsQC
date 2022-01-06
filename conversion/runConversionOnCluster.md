@@ -54,7 +54,7 @@ If you need the metadata to populate the `study_config.json` file, use the dcm2b
     - In the `logs_helper` folder, you will find:
       - `errorlog_helper.txt`: lists any subjects for which there was an error during the job.
       - `outputlog_helper.txt`: lists the subjects for which the job was successfully run.
-      -`subjectID_helper_output.txt`: gives you the path to where the Nifti and .json files were put.
+      - `subjectID_helper_output.txt`: gives you the path to where the Nifti and .json files were put.
       - `subjectID_helper_error.txt`: gives you the errors for that subject.
 7. Navigate to the folder indicated in the file `subjectID_helper_output.txt`. View the`.json` files and use that info to edit the fields of the `study_config.json` file. 
 
