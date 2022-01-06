@@ -175,7 +175,7 @@
             "criteria": {
                 "SidecarFilename": "*fieldmap1_*_e2*",
                 "ProtocolName": "fieldmap1",
-                "ImageType": ["ORIGINAL", "PRIMARY", "P", "ND"]
+                "ImageType": ["ORIGINAL", "PRIMARY", "P", "ND", "PHASE"]
             },
             "intendedFor": 0
         },
@@ -209,7 +209,7 @@
             "customLabels": "",
             "criteria": {
                 "ProtocolName": "fieldmap2",
-                "ImageType": ["ORIGINAL", "PRIMARY", "P", "ND"]
+                "ImageType": ["ORIGINAL", "PRIMARY", "P", "ND", "PHASE"]
             },
             "intendedFor": 0
         },
@@ -242,7 +242,7 @@
             "customLabels": "",
             "criteria": {
                 "ProtocolName": "fieldmap3",
-                "ImageType": ["ORIGINAL", "PRIMARY", "P", "ND"]
+                "ImageType": ["ORIGINAL", "PRIMARY", "P", "ND", "PHASE"]
             },
             "intendedFor": 0
         },
@@ -275,7 +275,7 @@
             "customLabels": "",
             "criteria": {
                 "ProtocolName": "fieldmap4",
-                "ImageType": ["ORIGINAL", "PRIMARY", "P", "ND"]
+                "ImageType": ["ORIGINAL", "PRIMARY", "P", "ND", "PHASE"]
             },
             "intendedFor": 0
         },
