@@ -17,7 +17,7 @@ This page provides detailed steps specific for running bidsQC on the University 
   - [dataset-desctription.json](#dataset-description)
   - [README](#readme)
 - [Use the BIDS validator](#bids-validator)
-  - [Create a .bidsignore file](#bids-ignore)
+  - [Create a .bidsignore file](#bidsignore)
   - [Validate the dataset](#validate)
 
 ## Setup<a name="setup">
@@ -41,12 +41,13 @@ You will need a singularity image of the dcm2bids tools on Talapas. To do so, cr
 2. Then create the image with the following command, changing the date in the image name to today's.  
     
     ```
+    module load singularity
     singularity pull dcm2bids_2021-12-30.sif docker://unfmontreal/dcm2bids:latest
     ```
-    
-We will create a singularity image of the [BIDS-validator tool](https://github.com/bids-standard/bids-validator) to use on Talapas. Once the image is created, we can submitted instructions via the command line to validate out dataset.
 
 ### 4. Get the BIDS validator tools as a singularity image<a name="validator-image">
+
+We will create a singularity image of the [BIDS-validator tool](https://github.com/bids-standard/bids-validator) to use on Talapas. Once the image is created, we can submitted instructions via the command line to validate out dataset.
 
 1. `cd` into the directory where you would like to store your singularity image.  
 2.  Then create the image with the following command, changing the date in the image name to today's.  
@@ -62,7 +63,7 @@ Decide whether you want to use version control to:
 - track only your changes to the bidsQC scripts, or  
 - track changes to your bidsQC AND other scripts, files, etc. that you are using for your analyses
   
-You may need to generate a Personal access token if you haven't yet done so. This is what you use when asked for a password when pushing a repo. To generate a token, click your User icon in the top right of the github page. Then select **Settings > Developer settings > Personal access tokens > Generate new token**. See the [github documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) on setting the token scope. Be sure to save the token somewhere secure where you can look it up later, like a password manager, or you will have to recreate it.
+You may need to generate a personal access token if you haven't yet done so. This is what you use when asked for a password when pushing a repo. To generate a token, click your User icon in the top right of the github page. Then select **Settings > Developer settings > Personal access tokens > Generate new token**. See the [github documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) on setting the token scope. Be sure to save the token somewhere secure where you can look it up later, like a password manager, or you will have to recreate it.
 
 #### If you want to track only the bidsQC scripts
 
@@ -103,6 +104,7 @@ e.g. `cd /projects/sanlab/shared/studyDir`
     - Click "Create repository"
     - At the command line, make sure you are in your study directory. If you are not `cd` into it. 
     - Follow the GitHub instructions to "create a new repository on the command line" by copy and pasting each command into your terminal.
+      - Note that when prompted for your password the first time you attempt to push your new repository, what is needed is your [personal access token)[#pull-bidsqc].  
     - This is a good time to create your .gitignore file. Let's initialize it to ignore the folder that will contain our bids data, as well as our pycache and our logs directories.  
         ```
         cat > .gitignore
