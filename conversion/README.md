@@ -42,7 +42,7 @@ Requires you to edit it. This script will convert all of the dicoms in the sourc
 
 #### `fmap_intendedfor.py`
 
-**If the `qualityCheck.py` script is to be used to alter run numbers, that must be done BEFORE running `fmap_intendedfor.py`. **
+**If the `qualityCheck.py` script is to be used to alter run numbers, that must be done BEFORE running `fmap_intendedfor.py`.**
 
 This script requires you to edit it. It will insert the following fields into the `.json` file for each fieldmap:
 
