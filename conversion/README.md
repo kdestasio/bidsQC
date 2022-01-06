@@ -42,12 +42,12 @@ Requires you to edit it. This script will convert all of the dicoms in the sourc
 
 #### `fmap_intendedfor.py`
 
-If the `qualityCheck.py` script is to be used to alter run numbers, that must be done BEFORE running `fmap_intendedfor.py`. 
+**If the `qualityCheck.py` script is to be used to alter run numbers, that must be done BEFORE running `fmap_intendedfor.py`. **
 
-This script requires you to edit it. In order to meet the BIDS specifications, the following fields are inserted into the `.json` file for each fieldmap:
+This script requires you to edit it. It will insert the following fields into the `.json` file for each fieldmap:
 
 - `"IntendedFor"`
-  - Followed by a list of all the functional runs in the `func` folder associated with the matching subject and session.
+  - Followed by a list of all the functional runs in the `func` folder that matches the subject ID and session number.
 - `"EchoTime1"`
   - Followed by a list of the echo time you enter in the script. You need to look-up what the echo time is for your specific fieldmap. You can set `include_echo_time = False` if you do not want to include the echo time in the `.json` file.
 - `"EchoTime2"`
