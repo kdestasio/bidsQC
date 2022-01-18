@@ -63,7 +63,7 @@ Decide whether you want to use version control to:
 1. Track changes to your bidsQC AND other scripts, files, etc. that you are using for your analyses
 2. Track only your changes to the bidsQC scripts
   
- **For the tutorial, we will create be following option 1, creating and tracking a fake study directory.**
+ **For the tutorial, we will use option 1, creating and tracking a fake study directory.**
   
 You may need to generate a personal access token if you haven't yet done so. This is what you use when asked for a password when pushing a repo. To generate a token, click your User icon in the top right of the github page. Then select **Settings > Developer settings > Personal access tokens > Generate new token**. See the [github documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) on setting the token scope. Be sure to save the token somewhere secure where you can look it up later, like a password manager, or you will have to recreate it.
 
