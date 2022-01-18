@@ -60,23 +60,12 @@ singularity pull bids-validator_2021-12-28.sif docker://bids/validator
 
 Decide whether you want to use version control to:  
 
-- track only your changes to the bidsQC scripts, or  
-- track changes to your bidsQC AND other scripts, files, etc. that you are using for your analyses
+1. Track changes to your bidsQC AND other scripts, files, etc. that you are using for your analyses
+2. Track only your changes to the bidsQC scripts
+  
+ **For the tutorial, we will create be following option 1, creating and tracking a fake study directory.**
   
 You may need to generate a personal access token if you haven't yet done so. This is what you use when asked for a password when pushing a repo. To generate a token, click your User icon in the top right of the github page. Then select **Settings > Developer settings > Personal access tokens > Generate new token**. See the [github documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) on setting the token scope. Be sure to save the token somewhere secure where you can look it up later, like a password manager, or you will have to recreate it.
-
-#### If you want to track only the bidsQC scripts
-
-The resulting folder structure will look something like the following, with `ctnTutorial` being the name of your study folder. Note the location of the `.git` directory.  
-
-<img src="./images/bidsQC-only-repo.png" alt="bidsQC-only-repo" width="400px">
-
-##### Steps
-
-1. Fork the bidsQC repo to your own account.
-2. `cd` into the directory where you would like to store the bidsQC scripts (usually a study specific directory)  
-e.g. `cd /projects/sanlab/shared/studyDir`  
-3. [git clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) that repo and update it as you make changes.  
 
 #### If you want to track your study directory
 
@@ -123,6 +112,19 @@ e.g. `cd /projects/sanlab/shared/studyDir`
         git commit -m "Add bidsQC directory. Contents from https://github.com/kdestasio/bidsQC.git"
         git push
         ```
+  
+#### If you want to track only the bidsQC scripts
+
+The resulting folder structure will look something like the following, with `ctnTutorial` being the name of your study folder. Note the location of the `.git` directory.  
+
+<img src="./images/bidsQC-only-repo.png" alt="bidsQC-only-repo" width="400px">
+
+##### Steps
+
+1. Fork the bidsQC repo to your own account.
+2. `cd` into the directory where you would like to store the bidsQC scripts (usually a study specific directory)  
+e.g. `cd /projects/sanlab/shared/studyDir`  
+3. [git clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) that repo and update it as you make changes.  
 
 ## CTN BIDS Workshop participants<a name="ctn-workshop">
 ### Optionally pull the ctnTutorial repository<a name="ctnTutorial">
