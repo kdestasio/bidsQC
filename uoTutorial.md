@@ -8,10 +8,8 @@ This page provides detailed steps specific for running bidsQC on the University 
   - [2. Get a GitHub account](#github-account)
   - [3. Create dcm2bids singularity image](#dcm2bids-image)
   - [4. Create BIDS validator singularity image](#validator-image)
-  - [5. Pull the bidsQC repository](#pull-bidsqc)
-- [CTN BIDS Workshop participants](#ctn-workshop)
-  - [Optionally pull the ctnTutorial repo](#ctnTutorial)
-  - [Accessing CTN BIDS Workshop data](#get-data)
+  - [5. Set up your study repository](#pull-bidsqc)
+  - [6. Accessing CTN BIDS Workshop data](#get-data)
 - [Convert dicoms to niftis](#dcm-nii)
 - [Create metadata files](#metadata)
   - [dataset-desctription.json](#dataset-description)
@@ -56,37 +54,53 @@ We will create a singularity image of the [BIDS-validator tool](https://github.c
 singularity pull bids-validator_2021-12-28.sif docker://bids/validator
 ```
 
-### 5. Get the bidsQC repository for your study<a name="pull-bidsqc">
+### 5. Set-up your study repository<a name="pull-bidsqc">
 
-Decide whether you want to use version control to:  
-
-1. Track changes to your bidsQC AND other scripts, files, etc. that you are using for your analyses
-2. Track only your changes to the bidsQC scripts
-  
- **For the tutorial, we will use option 1, creating and tracking a fake study directory.**
+We will use version control to track changes to your bidsQC files AND other scripts, files, etc. that you are using for your analyses
   
 You may need to generate a personal access token if you haven't yet done so. This is what you use when asked for a password when pushing a repo. To generate a token, click your User icon in the top right of the github page. Then select **Settings > Developer settings > Personal access tokens > Generate new token**. See the [github documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) on setting the token scope. Be sure to save the token somewhere secure where you can look it up later, like a password manager, or you will have to recreate it.
 
-#### If you want to track your study directory
-
-***NOTE:** If you take the option of using version control at the level of the `studyName` folder, you will want to immediately familiarize yourself with the `.gitignore` file to ensure you are not commiting any participant data or other sensitive information to your repository. The likelihood is that you will need to use a `.gitignore` file regardless, but it's essential if you will have participant data in your folder.
+***NOTE:** When using version control at the level of the `studyName` folder, you will want to immediately familiarize yourself with the `.gitignore` file to ensure you are not commiting any participant data or other sensitive information to your repository. The likelihood is that you will need to use a `.gitignore` file regardless, but it's essential if you will have participant data in your folder.
 
 This structure acan be useful if you want to track changes for other scripts, files, etc. that you are using for your analyses. The resulting folder structure will look something like the following, with ctnTutorial being the name of your study folder. Note the location of the `.git` directory.  
 
 <img src="./images/study-level-repo.png" alt="study-level-repo" width="400px">
   
+For the purposes of this tutorial, we will also be using scripts from the [ctnTutorial repo on GitHub](https://github.com/kdestasio/ctnTutorial). This repository contains scripts that have been customized to work with the CTN BIDS Workshop data. While participants are encouraged to attempt tailoring the bidsQC scripts to the data themselves during the workshop, it will be useful to have the completed examples for comparison. The only components of the scripts in the ctnTutorial repo that will need to be changed by users are the paths in the configuration files.  
+  
 ##### Steps
+  
 1. `cd` into the directory where you would like to store the bidsQC scripts (usually a study specific directory)  
-e.g. `cd /projects/sanlab/shared/studyDir`  
+    e.g. `cd /projects/sanlab/shared/studyName`  
 2. [git clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) the bidsQC repository into your folder  
     ```
     git clone https://github.com/kdestasio/bidsQC.git
     ```
-3. `cd` into the `bidsQC` directory and remove the `.git` directory  
+3. Ensuring you are in yout study directory, clone the ctnTutorial repository
     ```
-    cd bidsQC; rm -rf .git
+    git clone https://github.com/kdestasio/ctnTutorial.git
+    ```  
+4.  `cd` into the `bidsQC` directory and remove the `.git` directory and the `.gitignore` file. From the study directory:  
     ```
-4. Create a new repo one level up in your `studyName` directory.
+    cd bidsQC; rm -rf .git .gitignore
+    ```
+5.  `cd` into the `ctnTutorial` directory and remove the `.git` directory. From the study directory:  
+    ```
+    cd bidsQC; rm -rf .git .gitignore
+    ```
+6. Create a new `.gitignore` file in your study directory. Let's initialize it to ignore the folder that will contain our bids data, as well as our pycache and our logs directories.  
+    ```
+    cat > .gitignore
+    ```
+    Then press enter. Now your cursor should be on the next line. Type the following on two seperate lines.
+    ```
+    bids_data/
+    log*/
+    __pycache__/
+    ```
+    Press `Ctrl+D` when finished.
+
+7. Initiate a new repository one level up in your `studyName` directory.
     - On github, go to the "Repositories" tab. Click the green button "New" in the upper right-hand corner to create a new repository.
     - Name the repository EXACTLY what your study folder is named (e.g. if your folder is called Study-name, your repo must also be named Study-name)
     - Do NOT initialize the repository with a README, .gitignore, or license.
@@ -94,46 +108,28 @@ e.g. `cd /projects/sanlab/shared/studyDir`
     - At the command line, make sure you are in your study directory. If you are not `cd` into it. 
     - Follow the GitHub instructions to "create a new repository on the command line" by copy and pasting each command into your terminal.
       - Note that when prompted for your password the first time you attempt to push your new repository, what is needed is your [personal access token)[#pull-bidsqc].  
-    - This is a good time to create your .gitignore file. Let's initialize it to ignore the folder that will contain our bids data, as well as our pycache and our logs directories.  
-        ```
-        cat > .gitignore
-        ```
-        Then press enter. Now your cursor should be on the next line. Type the following on two seperate lines.
-        ```
-        bids_data/
-        log*/
-        __pycache__/
-        ```
-        Press `Ctrl+D` when finished.
+8. Add, commit, and push the .gitignore file, ctnTutorial directory, and the bidsQC directory using the following commands.
+    ```
+    git add .gitignore bidsQC/ ctnTutorial/
+    git commit -m "Add bidsQC directory. Contents from https://github.com/kdestasio/bidsQC.git and https://github.com/kdestasio/ctnTutorial.git"
+    git push
+    ```
 
-    - Be sure to add, commit, and push the .gitignore file nad the bidsQC directory and contents using the following commands.
-        ```
-        git add .gitignore bidsQC/
-        git commit -m "Add bidsQC directory. Contents from https://github.com/kdestasio/bidsQC.git"
-        git push
-        ```
+Your study directory should now look like this:
+```
+studyName/
+├── bidsQC
+│   ├── conversion
+│   └── qualityCheck
+├── ctnTutorial
+│   └── bidsQC
+│       ├── conversion
+│       └── qualityCheck
+├── .gitignore
+└── .git 
+```
   
-#### If you want to track only the bidsQC scripts
-
-The resulting folder structure will look something like the following, with `ctnTutorial` being the name of your study folder. Note the location of the `.git` directory.  
-
-<img src="./images/bidsQC-only-repo.png" alt="bidsQC-only-repo" width="400px">
-
-##### Steps
-
-1. Fork the bidsQC repo to your own account.
-2. `cd` into the directory where you would like to store the bidsQC scripts (usually a study specific directory)  
-e.g. `cd /projects/sanlab/shared/studyDir`  
-3. [git clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) that repo and update it as you make changes.  
-
-## CTN BIDS Workshop participants<a name="ctn-workshop">
-### Optionally pull the ctnTutorial repository<a name="ctnTutorial">
-
-The [ctnTutorial repo on GitHub](https://github.com/kdestasio/ctnTutorial) contains scripts that have been customized to work with the CTN BIDS Workshop data. While participants are encouraged to attempt tailoring the bidsQC scripts to the data themselves during the workshop, it may be useful to have the completed examples for comparison. The only components of the scripts in the ctnTutorial repo that will need to be changed by users are the paths in the configuration files.  
-
-If you want a copy of the repo that tracks your own changes, first fork it into your github account and then pull the repo contents from there.  
-
-### Accessing CTN BIDS Workshop data<a name="get-data">
+### 6. Accessing CTN BIDS Workshop data<a name="get-data">
 
 There are sample DICOMS available on Talapas. The path is:  
 `/projects/sanlab/shared/REV_examples`
