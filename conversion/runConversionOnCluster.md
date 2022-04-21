@@ -82,6 +82,8 @@ sub-001_ses-wave1
 sub-001_ses-wave2
 sub-002_ses-wave1
 ```
+For single session data, simply omit the 3rd column in the subject_list and set `multiple_sessions = False` in the `config_dcm2bids_batch.py` script.  
+
 ### 4. Edit `config_dcm2bids_batch.py` <a name="clust4">
 
 Change the variables and/or paths in `config_dcm2bids_batch.py` script for your study and set `run_local = False`
