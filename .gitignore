@@ -1,7 +1,7 @@
 #Files
 .vscode
 .DS_Store
-
+.idea
 
 # Folders
 **/__pycache__/
