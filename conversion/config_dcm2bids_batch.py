@@ -30,3 +30,7 @@ subjectlist = "subject_list.txt"
 
 # Run on local machine (run_local = True) or high performance cluster with slurm (run_local = False)
 run_local = False
+
+# If subject data are collected across multiple sessions, set to True. If single session, set to False.
+# https://bids-specification.readthedocs.io/en/v1.1.2/05-longitudinal-and-multi-site-studies.html
+multiple_sessions = False
