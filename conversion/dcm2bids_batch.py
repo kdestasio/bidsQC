@@ -27,6 +27,7 @@ def batch_jobs(subject_list, path_dicoms, path_config, path_bidsdata):
         subject = entry.split(",")[1]
         subjectpath = os.path.join(path_dicoms, subjectdir)
         if os.path.isdir(subjectpath):
+            time.sleep(10)
             write_to_outputlog(subjectdir + os.linesep)
             if cfg.multiple_sessions:
                 wave = entry.split(",")[2]
@@ -46,11 +47,12 @@ def batch_jobs(subject_list, path_dicoms, path_config, path_bidsdata):
                         subjectpath=subjectpath, subject=subject, path_config=path_config,
                         path_bidsdata=path_bidsdata)
                 else:
-                    batch_cmd = 'dcm2bids -d {subjectpath} -p {subject} -c {path_config} -o {path_bidsdata}  --forceDcm2niix --clobber'.format(
-                        subjectpath=subjectpath, subject=subject, path_config=path_config,
-                        path_bidsdata=path_bidsdata)
+                    batch_cmd = 'module load singularity; sbatch --job-name dcm2bids_{subjectdir} -A {account} --partition={partition} --time 00:60:00 --mem-per-cpu=2G --cpus-per-task=1 -o {logdir}/{subjectdir}_dcm2bids_output.txt -e {logdir}/{subjectdir}_dcm2bids_error.txt --wrap="singularity exec -B {path_dicoms} -B {path_bidsdata} -B {path_conversionfolder} {singularity_image} dcm2bids -d {subjectpath} -p {subject} -c {path_config} -o {path_bidsdata}  --forceDcm2niix --clobber"'.format(
+                        partition=cfg.partition, logdir=cfg.logdir, subjectdir=subjectdir, path_dicoms=cfg.path_dicoms,
+                        path_conversionfolder=cfg.path_conversionfolder, path_config=cfg.path_config,
+                        subject=subject, path_bidsdata=cfg.path_bidsdata, subjectpath=subjectpath,
+                        singularity_image=cfg.singularity_image, account=cfg.group)
             subprocess.call([batch_cmd], shell=True)
-            time.sleep(10)
         else:
             write_to_errorlog(subjectdir + os.linesep)
 
